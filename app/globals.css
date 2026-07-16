@@ -7,9 +7,11 @@ html, body {
   background: #0b0d0a;
   font-family: "Segoe UI", system-ui, sans-serif;
   user-select: none;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-canvas { display: block; }
+canvas { display: block; touch-action: none; }
 
 /* ---------- HUD (flat, no glow) ---------- */
 #hud {

@@ -814,6 +814,35 @@ export function startGame(container: HTMLElement): () => void {
   };
   window.addEventListener("keydown", onKeyDown);
 
+  // touch: swipe = one roll in the dominant direction (mirrors one keypress)
+  let touchX = 0,
+    touchY = 0,
+    touchId: number | null = null;
+  const onTouchStart = (e: TouchEvent) => {
+    const t = e.changedTouches[0];
+    touchX = t.clientX;
+    touchY = t.clientY;
+    touchId = t.identifier;
+    audio();
+  };
+  const onTouchEnd = (e: TouchEvent) => {
+    if (touchId === null) return;
+    const t = Array.from(e.changedTouches).find(
+      (c) => c.identifier === touchId,
+    );
+    touchId = null;
+    if (!t) return;
+    const dx = t.clientX - touchX,
+      dy = t.clientY - touchY;
+    const adx = Math.abs(dx),
+      ady = Math.abs(dy);
+    if (Math.max(adx, ady) < 24) return; // tap, not a swipe (lets buttons work)
+    if (adx > ady) tryRoll(dx > 0 ? 1 : -1, 0);
+    else tryRoll(0, dy > 0 ? 1 : -1); // swipe up (dy<0) => rolls away (-z)
+  };
+  window.addEventListener("touchstart", onTouchStart, { passive: true });
+  window.addEventListener("touchend", onTouchEnd, { passive: true });
+
   /* ---------- main loop ---------- */
   placeCube();
   updateWorld();
@@ -956,6 +985,8 @@ export function startGame(container: HTMLElement): () => void {
     cancelAnimationFrame(rafId);
     window.removeEventListener("keydown", onKeyDown);
     window.removeEventListener("resize", onResize);
+    window.removeEventListener("touchstart", onTouchStart);
+    window.removeEventListener("touchend", onTouchEnd);
     startBtn.removeEventListener("click", onStart);
     restartBtn.removeEventListener("click", onRestart);
     renderer.domElement.remove();
