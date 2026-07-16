@@ -37,6 +37,8 @@ const HEART_LIFE = 30; // seconds solid on the map
 const HEART_BLINK = 3; // then blinks this long before vanishing
 const GROUND_SIZE = 60;
 const CAM_OFFSET = new THREE.Vector3(0, 11, 8.5);
+const SUN_OFFSET = new THREE.Vector3(6, 14, 4);
+const UP = new THREE.Vector3(0, 1, 0);
 
 /* ================= pure helpers ================= */
 const tileToWorld = (ix: number, iz: number) =>
@@ -134,6 +136,17 @@ function makeHeartMesh(): THREE.Group {
   g.add(point);
   g.scale.set(0.85, 0.85, 0.85);
   return g;
+}
+
+// free GPU resources of an object we're done with for good (not pooled ones)
+function disposeObject(o: THREE.Object3D) {
+  o.traverse((c) => {
+    const m = c as THREE.Mesh;
+    if (m.geometry) m.geometry.dispose();
+    const mat = m.material as THREE.Material | THREE.Material[] | undefined;
+    if (Array.isArray(mat)) mat.forEach((x) => x.dispose());
+    else mat?.dispose();
+  });
 }
 
 /* ================= types ================= */
@@ -243,6 +256,10 @@ export function startGame(container: HTMLElement): () => void {
     heartCooldown: 25,
   };
 
+  // reusable scratch vectors — avoid per-frame allocation in the hot loop
+  const _v1 = new THREE.Vector3();
+  const _v2 = new THREE.Vector3();
+
   /* ---------- scene ---------- */
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x0b0d0a);
@@ -257,7 +274,9 @@ export function startGame(container: HTMLElement): () => void {
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(innerWidth, innerHeight);
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  // cap DPR lower on phones — huge fill-rate/thermal saving, imperceptible
+  const DPR_CAP = matchMedia("(pointer: coarse)").matches ? 1.5 : 2;
+  renderer.setPixelRatio(Math.min(devicePixelRatio, DPR_CAP));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   container.appendChild(renderer.domElement);
@@ -430,6 +449,27 @@ export function startGame(container: HTMLElement): () => void {
   }
 
   /* ---------- parasites: spawn & movement ---------- */
+  // parasite mesh pool by type — bugs spawn/despawn constantly; reuse the
+  // Groups instead of rebuilding (and leaking) their meshes+materials each time
+  const parasitePools: Record<ParasiteType, THREE.Group[]> = {
+    worm: [],
+    bug: [],
+    spider: [],
+    scorpion: [],
+    beetle: [],
+  };
+  function acquireParasiteMesh(type: ParasiteType): THREE.Group {
+    const m = parasitePools[type].pop() ?? makeParasiteMesh(type);
+    m.visible = true;
+    m.rotation.set(0, 0, 0);
+    m.scale.setScalar(1);
+    return m;
+  }
+  function releaseParasiteMesh(type: ParasiteType, mesh: THREE.Group) {
+    scene.remove(mesh);
+    parasitePools[type].push(mesh);
+  }
+
   // weighted pick from the current level's spawn mix
   function pickType(): ParasiteType {
     const w = LEVELS[S.level].weights;
@@ -461,7 +501,7 @@ export function startGame(container: HTMLElement): () => void {
     } while (isObstacle(ix, iz) && tries < 8);
     if (isObstacle(ix, iz)) return;
 
-    const mesh = makeParasiteMesh(type);
+    const mesh = acquireParasiteMesh(type);
     const p = tileToWorld(ix, iz);
     mesh.position.copy(p);
     scene.add(mesh);
@@ -565,7 +605,7 @@ export function startGame(container: HTMLElement): () => void {
   }
 
   function removeParasite(pz: Parasite) {
-    scene.remove(pz.mesh);
+    releaseParasiteMesh(pz.type, pz.mesh);
     S.parasites.splice(S.parasites.indexOf(pz), 1);
   }
 
@@ -578,13 +618,31 @@ export function startGame(container: HTMLElement): () => void {
   const splatGeo = new THREE.PlaneGeometry(1, 1);
   splatGeo.rotateX(-Math.PI / 2);
 
+  // particle pool: one shared unit-sphere geometry, meshes reused across kills
+  const particleGeo = new THREE.SphereGeometry(1, 6, 5);
+  const particlePool: THREE.Mesh[] = [];
+  function acquireParticle(): THREE.Mesh {
+    return (
+      particlePool.pop() ??
+      new THREE.Mesh(
+        particleGeo,
+        new THREE.MeshBasicMaterial({ transparent: true }),
+      )
+    );
+  }
+  function releaseParticle(m: THREE.Mesh) {
+    scene.remove(m);
+    particlePool.push(m);
+  }
+
   function splat(worldPos: THREE.Vector3, color: number, big = false) {
     const n = big ? 20 : 13;
     for (let i = 0; i < n; i++) {
-      const m = new THREE.Mesh(
-        new THREE.SphereGeometry(0.03 + Math.random() * 0.05, 6, 5),
-        new THREE.MeshBasicMaterial({ color, transparent: true }),
-      );
+      const m = acquireParticle();
+      const mat = m.material as THREE.MeshBasicMaterial;
+      mat.color.setHex(color);
+      mat.opacity = 1;
+      m.scale.setScalar(0.03 + Math.random() * 0.05);
       m.position.copy(worldPos);
       m.position.y = 0.15;
       scene.add(m);
@@ -623,6 +681,7 @@ export function startGame(container: HTMLElement): () => void {
     if (S.decals.length > 36) {
       const old = S.decals.shift()!;
       scene.remove(old.mesh);
+      (old.mesh.material as THREE.Material).dispose(); // shared geo/tex kept
     }
   }
 
@@ -761,6 +820,7 @@ export function startGame(container: HTMLElement): () => void {
   function removeHeart() {
     if (!S.heart) return;
     scene.remove(S.heart.mesh);
+    disposeObject(S.heart.mesh);
     S.heart = null;
     S.heartCooldown = 20 + Math.random() * 15; // rare: ~20–35s until next
   }
@@ -809,7 +869,7 @@ export function startGame(container: HTMLElement): () => void {
   function grindLatchedAfterRoll() {
     const crushed = S.parasites.filter((p) => {
       if (p.state !== "attached") return false;
-      const worldN = p.localN.clone().applyQuaternion(cubeMesh.quaternion);
+      const worldN = _v1.copy(p.localN).applyQuaternion(cubeMesh.quaternion);
       return worldN.y < -0.5; // its face is now against the ground
     });
     crushList(crushed, true);
@@ -876,9 +936,12 @@ export function startGame(container: HTMLElement): () => void {
   /* ---------- game flow ---------- */
   function resetGame() {
     for (const pz of [...S.parasites]) removeParasite(pz);
-    for (const pt of S.particles) scene.remove(pt.mesh);
-    for (const d of S.decals) scene.remove(d.mesh);
-    if (S.heart) scene.remove(S.heart.mesh);
+    for (const pt of S.particles) releaseParticle(pt.mesh);
+    for (const d of S.decals) {
+      scene.remove(d.mesh);
+      (d.mesh.material as THREE.Material).dispose();
+    }
+    removeHeart();
     S.particles = [];
     S.decals = [];
     pauseScreen.classList.add("hidden");
@@ -1087,7 +1150,8 @@ export function startGame(container: HTMLElement): () => void {
       updateRoll(dt);
 
       const spd = LEVELS[S.level].speed; // parasite speed ramps with level
-      for (const pz of [...S.parasites]) {
+      for (let i = S.parasites.length - 1; i >= 0; i--) {
+        const pz = S.parasites[i];
         pz.animT += dt;
         if (pz.state === "crawl") {
           if (pz.moveT < 1) {
@@ -1115,12 +1179,9 @@ export function startGame(container: HTMLElement): () => void {
         } else {
           anyAttached = true;
           pz.biteTimer -= dt;
-          const worldN = pz.localN.clone().applyQuaternion(cubeMesh.quaternion);
+          const worldN = _v1.copy(pz.localN).applyQuaternion(cubeMesh.quaternion);
           pz.mesh.position.copy(cubeMesh.position).addScaledVector(worldN, 0.56);
-          pz.mesh.quaternion.setFromUnitVectors(
-            new THREE.Vector3(0, 1, 0),
-            worldN,
-          );
+          pz.mesh.quaternion.setFromUnitVectors(UP, worldN);
           pz.mesh.userData.animate(pz.animT * 1.6);
           // gnashing pulse in the final moment before the bite lands
           if (pz.biteTimer < 0.4) {
@@ -1163,8 +1224,9 @@ export function startGame(container: HTMLElement): () => void {
 
     biteGlow.style.opacity = String(S.glow);
 
-    // particles
-    for (const pt of [...S.particles]) {
+    // particles (reverse loop = safe in-place removal, no array copy)
+    for (let i = S.particles.length - 1; i >= 0; i--) {
+      const pt = S.particles[i];
       pt.t += dt;
       pt.vel.y -= 12 * dt;
       pt.mesh.position.addScaledVector(pt.vel, dt);
@@ -1174,13 +1236,14 @@ export function startGame(container: HTMLElement): () => void {
       }
       (pt.mesh.material as THREE.MeshBasicMaterial).opacity = 1 - pt.t / pt.life;
       if (pt.t >= pt.life) {
-        scene.remove(pt.mesh);
-        S.particles.splice(S.particles.indexOf(pt), 1);
+        releaseParticle(pt.mesh);
+        S.particles.splice(i, 1);
       }
     }
 
     // decals fade
-    for (const d of [...S.decals]) {
+    for (let i = S.decals.length - 1; i >= 0; i--) {
+      const d = S.decals[i];
       d.t += dt;
       if (d.t > d.life * 0.5) {
         (d.mesh.material as THREE.MeshBasicMaterial).opacity =
@@ -1188,24 +1251,25 @@ export function startGame(container: HTMLElement): () => void {
       }
       if (d.t >= d.life) {
         scene.remove(d.mesh);
-        S.decals.splice(S.decals.indexOf(d), 1);
+        (d.mesh.material as THREE.Material).dispose();
+        S.decals.splice(i, 1);
       }
     }
 
     // ground + light follow the cube
     snapGround();
-    sun.position.copy(cubeMesh.position).add(new THREE.Vector3(6, 14, 4));
+    sun.position.copy(cubeMesh.position).add(SUN_OFFSET);
     sun.target.position.copy(cubeMesh.position);
 
     // camera follow + shake
-    const target = cubeMesh.position.clone();
-    camera.position.lerp(target.clone().add(CAM_OFFSET), 0.08);
+    _v2.copy(cubeMesh.position).add(CAM_OFFSET);
+    camera.position.lerp(_v2, 0.08);
     if (S.shake > 0) {
       S.shake = Math.max(0, S.shake - dt * 1.8);
       camera.position.x += (Math.random() - 0.5) * S.shake * 0.4;
       camera.position.y += (Math.random() - 0.5) * S.shake * 0.4;
     }
-    camera.lookAt(target.x, 0, target.z);
+    camera.lookAt(cubeMesh.position.x, 0, cubeMesh.position.z);
 
     renderer.render(scene, camera);
   }
