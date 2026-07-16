@@ -272,19 +272,25 @@ innerWidth / innerHeight,
 100,
 );
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(innerWidth, innerHeight);
 // cap DPR lower on phones — huge fill-rate/thermal saving, imperceptible
 const DPR_CAP = matchMedia("(pointer: coarse)").matches ? 1.5 : 2;
-renderer.setPixelRatio(Math.min(devicePixelRatio, DPR_CAP));
+const dpr = Math.min(devicePixelRatio, DPR_CAP);
+// MSAA is redundant at high DPR (pixel density already hides jaggies) and
+// costs serious fill-rate — only enable it on low-DPI screens
+const renderer = new THREE.WebGLRenderer({
+antialias: dpr < 1.5,
+powerPreference: "high-performance",
+});
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(dpr);
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.type = THREE.PCFShadowMap;
 container.appendChild(renderer.domElement);
 
 scene.add(new THREE.HemisphereLight(0xb8c8d8, 0x2c2418, 0.65));
 const sun = new THREE.DirectionalLight(0xffe6c0, 1.35);
 sun.castShadow = true;
-sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.mapSize.set(1024, 1024);
 sun.shadow.camera.left = -14;
 sun.shadow.camera.right = 14;
 sun.shadow.camera.top = 14;
@@ -375,12 +381,17 @@ p.x + (hash2(ix + 99, iz) - 0.5) * 0.6,
 p.z + (hash2(ix, iz + 99) - 0.5) * 0.6,
 );
 pb.scale.y = 0.6;
-pb.castShadow = true;
 g.add(pb);
 } else {
 return null;
 }
 }
+// props never move — freeze matrices so the renderer skips recomposing
+// them every frame
+g.traverse((o) => {
+o.updateMatrix();
+o.matrixAutoUpdate = false;
+});
 return g;
 }
 
