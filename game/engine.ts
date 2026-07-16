@@ -529,47 +529,16 @@ export function startGame(container: HTMLElement): () => void {
     return !isObstacle(ix, iz);
   }
 
-  // seconds until a freshly-latched parasite bites; a level's `bite` rating
-  // makes bites land sooner as well as harder (rate grows with the multiplier)
-  function biteDelay() {
-    const bite = LEVELS[S.level].bite;
-    const rate = 1 + (bite - 1) * 0.5;
-    return (1 + Math.random()) / rate;
-  }
-
   function stepParasite(pz: Parasite) {
     const dx = S.cube.ix - pz.ix;
     const dz = S.cube.iz - pz.iz;
-    const stick = LEVELS[S.level].stick;
-
-    // sticky grab: when orthogonally adjacent to an idle cube, the parasite can
-    // reach out and latch onto the facing face instead of stepping in. Scales
-    // with the level's stick rating so high levels feel clingy. Never latches
-    // while the cube is mid-roll — that's the crush window, and latching there
-    // would let the insect evade being squashed and corrupt its cube-local
-    // normal (the original "crushed bug survives" bug).
-    if (
-      !S.rolling &&
-      Math.abs(dx) + Math.abs(dz) === 1 &&
-      Math.random() < stick * 0.5
-    ) {
-      pz.state = "attached";
-      pz.biteTimer = biteDelay();
-      const worldN = new THREE.Vector3(-dx, 0, -dz).normalize();
-      pz.localN.copy(worldN).applyQuaternion(cubeMesh.quaternion.clone().invert());
-      playLatch();
-      return;
-    }
 
     let sx = 0,
       sz = 0;
     const preferX =
       Math.abs(dx) > Math.abs(dz) ||
       (Math.abs(dx) === Math.abs(dz) && Math.random() < 0.5);
-    // beeline: spiders/scorpions wander sideways less as stick rises, so they
-    // path straight for the cube at high levels
-    const sidestep = 0.35 * (1 - stick) + 0.05 * stick;
-    if ((pz.type === "spider" || pz.type === "scorpion") && Math.random() < sidestep) {
+    if ((pz.type === "spider" || pz.type === "scorpion") && Math.random() < 0.35) {
       if (preferX) sz = Math.sign(dz) || (Math.random() < 0.5 ? 1 : -1);
       else sx = Math.sign(dx) || (Math.random() < 0.5 ? 1 : -1);
     } else {
@@ -615,9 +584,8 @@ export function startGame(container: HTMLElement): () => void {
 
     // stepping into the cube's tile => latch onto that face and start climbing
     if (nx === S.cube.ix && nz === S.cube.iz) {
-      if (S.rolling) return; // cube is mid-roll: don't latch, stay put and get crushed
       pz.state = "attached";
-      pz.biteTimer = biteDelay(); // bites 1–2s after latching (sooner at high bite)
+      pz.biteTimer = 1 + Math.random(); // bites 1–2s after latching
       // world-side normal it grabbed, stored in cube-local space so it rides the face
       const worldN = new THREE.Vector3(-sx, 0, -sz).normalize();
       pz.localN.copy(worldN).applyQuaternion(cubeMesh.quaternion.clone().invert());
@@ -810,10 +778,9 @@ export function startGame(container: HTMLElement): () => void {
     comboBar.style.width = "0%";
   }
 
-  // a latched parasite bites: chip health + escalating red glow. Higher levels
-  // drain more per bite (LEVELS[].bite multiplier).
+  // a latched parasite bites: chip 25% of an icon + escalating red glow
   function applyBite() {
-    S.lives = Math.max(0, S.lives - BITE_DAMAGE * LEVELS[S.level].bite);
+    S.lives = Math.max(0, S.lives - BITE_DAMAGE);
     S.streak = 0;
     endCombo();
     playBite();
