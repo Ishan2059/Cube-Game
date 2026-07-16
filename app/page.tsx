@@ -7,6 +7,7 @@ export default function Home() {
         <div id="hud-left">
           <div id="score">0</div>
           <div id="best">BEST 0</div>
+          <div id="level">LVL 1 · SPROUT</div>
           <div id="combo-wrap">
             <div id="combo-label"></div>
             <div id="combo-bar-outer">
@@ -24,9 +25,12 @@ export default function Home() {
         </div>
       </div>
 
+      <button id="pause-btn" aria-label="Pause">❚❚</button>
+
       <div id="vignette"></div>
       <div id="damage-flash"></div>
       <div id="popups"></div>
+      <div id="levelup"></div>
 
       <div id="start-screen" className="overlay">
         <div className="hero">
@@ -57,6 +61,12 @@ export default function Home() {
         </div>
 
         <button id="start-btn">ROLL OUT</button>
+      </div>
+
+      <div id="pause-screen" className="overlay hidden">
+        <h1>PAUSED</h1>
+        <p className="tagline">Take a breath. The horde waits.</p>
+        <button id="resume-btn">RESUME</button>
       </div>
 
       <div id="gameover-screen" className="overlay hidden">

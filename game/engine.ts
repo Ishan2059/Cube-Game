@@ -15,6 +15,7 @@ import {
   playHurt,
   playRampage,
 } from "./audio";
+import { LEVELS, type Level } from "./levels";
 
 /* ================= constants ================= */
 const TILE = 1;
@@ -147,9 +148,11 @@ interface Decal {
 
 interface GameState {
   running: boolean;
+  paused: boolean;
   time: number;
   score: number;
   best: number;
+  level: number;
   lives: number;
   combo: number;
   comboTimer: number;
@@ -173,9 +176,11 @@ export function startGame(container: HTMLElement): () => void {
   /* ---------- state ---------- */
   const S: GameState = {
     running: false,
+    paused: false,
     time: 0,
     score: 0,
     best: Number(localStorage.getItem("crush-best") || 0),
+    level: 0,
     lives: 3,
     combo: 0,
     comboTimer: 0,
@@ -379,15 +384,22 @@ export function startGame(container: HTMLElement): () => void {
   }
 
   /* ---------- parasites: spawn & movement ---------- */
+  // weighted pick from the current level's spawn mix
+  function pickType(): ParasiteType {
+    const w = LEVELS[S.level].weights;
+    let total = 0;
+    for (const k in w) total += w[k as ParasiteType]!;
+    let r = Math.random() * total;
+    for (const k in w) {
+      r -= w[k as ParasiteType]!;
+      if (r < 0) return k as ParasiteType;
+    }
+    return "worm";
+  }
+
   function spawnParasite() {
     if (S.parasites.length >= MAX_PARASITES) return;
-    const roll = Math.random();
-    let type: ParasiteType;
-    if (roll < Math.max(0.35, 0.8 - S.time * 0.01)) type = "worm";
-    else if (roll < 0.82) type = "bug";
-    else if (roll < 0.95) type = "spider";
-    else if (roll < 0.985) type = "scorpion"; // rare (~3.5%)
-    else type = "beetle"; // very rare (~1.5%)
+    const type = pickType();
     const def = TYPES[type];
 
     // spawn in a ring around the cube, outside the fog-lit area's centre
@@ -575,7 +587,26 @@ export function startGame(container: HTMLElement): () => void {
     livesEl = $("lives"),
     flash = $("damage-flash"),
     popups = $("popups"),
-    warning = $("warning");
+    warning = $("warning"),
+    levelEl = $("level"),
+    levelupEl = $("levelup");
+
+  function applyLevel(idx: number) {
+    S.level = idx;
+    const L = LEVELS[idx];
+    const mat = cubeMesh.material as THREE.MeshStandardMaterial;
+    mat.color.set(L.skin);
+    mat.emissive.set(L.emissive ?? 0x000000);
+    levelEl.textContent = `LVL ${idx + 1} · ${L.name}`;
+  }
+
+  function announceLevel(L: Level) {
+    levelupEl.textContent = `LEVEL ${S.level + 1} — ${L.name}`;
+    levelupEl.classList.remove("show");
+    void levelupEl.offsetWidth;
+    levelupEl.classList.add("show");
+    playRampage();
+  }
 
   function updateHUD() {
     scoreEl.textContent = String(S.score);
@@ -614,6 +645,13 @@ export function startGame(container: HTMLElement): () => void {
     scoreEl.classList.add("pop");
     setTimeout(() => scoreEl.classList.remove("pop"), 90);
     popup(atPos, `+${pts}`, S.rampage ? "rampage big" : mult > 2 ? "big" : "");
+    // level up (a big combo can cross several thresholds at once)
+    let leveled = false;
+    while (LEVELS[S.level + 1] && S.score >= LEVELS[S.level + 1].at) {
+      applyLevel(S.level + 1);
+      leveled = true;
+    }
+    if (leveled) announceLevel(LEVELS[S.level]);
     updateHUD();
   }
 
@@ -679,7 +717,7 @@ export function startGame(container: HTMLElement): () => void {
 
   /* ---------- rolling ---------- */
   function tryRoll(dx: number, dz: number) {
-    if (!S.running) return;
+    if (!S.running || S.paused) return;
     if (S.rolling) {
       S.queuedDir = [dx, dz];
       return;
@@ -741,10 +779,14 @@ export function startGame(container: HTMLElement): () => void {
     for (const d of S.decals) scene.remove(d.mesh);
     S.particles = [];
     S.decals = [];
+    pauseScreen.classList.add("hidden");
+    pauseBtn.textContent = "❚❚";
     Object.assign(S, {
       running: true,
+      paused: false,
       time: 0,
       score: 0,
+      level: 0,
       lives: 3,
       combo: 0,
       comboTimer: 0,
@@ -758,6 +800,7 @@ export function startGame(container: HTMLElement): () => void {
       shake: 0,
     });
     endCombo();
+    applyLevel(0);
     placeCube();
     updateWorld();
     updateHUD();
@@ -769,12 +812,23 @@ export function startGame(container: HTMLElement): () => void {
     localStorage.setItem("crush-best", String(S.best));
     $("final-score").textContent = S.score + " POINTS";
     $("final-best").textContent = "BEST " + S.best;
-    $("final-stats").textContent = `${S.totalKills} parasites crushed`;
+    $("final-stats").textContent = `${S.totalKills} parasites crushed · reached LVL ${S.level + 1} ${LEVELS[S.level].name}`;
     $("gameover-screen").classList.remove("hidden");
     endCombo();
   }
 
   /* ---------- input & buttons ---------- */
+  const pauseBtn = $("pause-btn");
+  const pauseScreen = $("pause-screen");
+
+  function setPause(p: boolean) {
+    if (!S.running) return;
+    S.paused = p;
+    pauseScreen.classList.toggle("hidden", !p);
+    pauseBtn.textContent = p ? "▶" : "❚❚";
+  }
+  const togglePause = () => setPause(!S.paused);
+
   const onStart = () => {
     audio();
     $("start-screen").classList.add("hidden");
@@ -786,8 +840,12 @@ export function startGame(container: HTMLElement): () => void {
   };
   const startBtn = $("start-btn");
   const restartBtn = $("restart-btn");
+  const resumeBtn = $("resume-btn");
   startBtn.addEventListener("click", onStart);
   restartBtn.addEventListener("click", onRestart);
+  const onResume = () => setPause(false);
+  pauseBtn.addEventListener("click", togglePause);
+  resumeBtn.addEventListener("click", onResume);
 
   const KEYMAP: Record<string, [number, number]> = {
     ArrowUp: [0, -1],
@@ -800,6 +858,10 @@ export function startGame(container: HTMLElement): () => void {
     KeyD: [1, 0],
   };
   const onKeyDown = (e: KeyboardEvent) => {
+    if ((e.code === "KeyP" || e.code === "Escape") && S.running) {
+      togglePause();
+      return;
+    }
     if (KEYMAP[e.code]) {
       e.preventDefault();
       audio();
@@ -859,7 +921,7 @@ export function startGame(container: HTMLElement): () => void {
 
     let anyAttached = false;
 
-    if (S.running) {
+    if (S.running && !S.paused) {
       S.time += dt;
 
       S.spawnTimer -= dt;
@@ -879,15 +941,19 @@ export function startGame(container: HTMLElement): () => void {
 
       updateRoll(dt);
 
+      const spd = LEVELS[S.level].speed; // parasite speed ramps with level
       for (const pz of [...S.parasites]) {
         pz.animT += dt;
         if (pz.state === "crawl") {
           if (pz.moveT < 1) {
-            pz.moveT = Math.min(1, pz.moveT + dt / (pz.def.interval * 0.55));
+            pz.moveT = Math.min(
+              1,
+              pz.moveT + (dt * spd) / (pz.def.interval * 0.55),
+            );
             pz.mesh.position.lerpVectors(pz.fromPos, pz.toPos, pz.moveT);
           }
           pz.moveTimer += dt;
-          if (pz.moveTimer >= pz.def.interval) {
+          if (pz.moveTimer >= pz.def.interval / spd) {
             pz.moveTimer = 0;
             stepParasite(pz);
           }
@@ -991,6 +1057,8 @@ export function startGame(container: HTMLElement): () => void {
     window.removeEventListener("touchend", onTouchEnd);
     startBtn.removeEventListener("click", onStart);
     restartBtn.removeEventListener("click", onRestart);
+    pauseBtn.removeEventListener("click", togglePause);
+    resumeBtn.removeEventListener("click", onResume);
     renderer.domElement.remove();
     renderer.dispose();
   };

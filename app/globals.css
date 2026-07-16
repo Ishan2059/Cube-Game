@@ -42,6 +42,37 @@ canvas { display: block; touch-action: none; }
   margin-top: 2px;
 }
 
+#level {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #8fbf6a;
+  margin-top: 3px;
+}
+
+/* ---------- level-up banner ---------- */
+#levelup {
+  position: fixed;
+  top: 38%; left: 50%;
+  transform: translate(-50%, -50%) scale(0.7);
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: 6px;
+  color: #a3d977;
+  text-shadow: 0 4px 26px rgba(143, 191, 106, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 15;
+  white-space: nowrap;
+}
+#levelup.show { animation: levelup 1.7s ease-out; }
+@keyframes levelup {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+  14%  { opacity: 1; transform: translate(-50%, -50%) scale(1.06); }
+  72%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -62%) scale(1); }
+}
+
 #combo-wrap { margin-top: 10px; height: 40px; }
 #combo-label {
   font-size: 18px;
@@ -104,6 +135,28 @@ canvas { display: block; touch-action: none; }
 
 #lives { font-size: 26px; letter-spacing: 5px; color: #d84a55; }
 #lives .lost { opacity: 0.18; }
+
+/* ---------- pause button ---------- */
+#pause-btn {
+  position: fixed;
+  bottom: 20px; right: 20px;
+  z-index: 12;
+  width: 46px; height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  letter-spacing: 2px;
+  color: #e8e8e0;
+  background: rgba(20, 24, 18, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: background 0.1s, transform 0.1s;
+}
+#pause-btn:hover { background: rgba(40, 48, 36, 0.75); transform: scale(1.06); }
+#pause-btn:active { transform: scale(0.94); }
 
 /* ---------- screen effects ---------- */
 #vignette {
