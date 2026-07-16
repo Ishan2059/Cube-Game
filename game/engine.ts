@@ -150,6 +150,8 @@ interface Parasite {
   mesh: THREE.Group;
   ix: number;
   iz: number;
+  prevIx: number; // tile it's sliding out of (occupied until moveT reaches 1)
+  prevIz: number;
   fromPos: THREE.Vector3;
   toPos: THREE.Vector3;
   moveT: number;
@@ -470,6 +472,8 @@ export function startGame(container: HTMLElement): () => void {
       mesh,
       ix,
       iz,
+      prevIx: ix,
+      prevIz: iz,
       fromPos: p.clone(),
       toPos: p.clone(),
       moveT: 1,
@@ -549,6 +553,8 @@ export function startGame(container: HTMLElement): () => void {
       return;
     }
 
+    pz.prevIx = pz.ix;
+    pz.prevIz = pz.iz;
     pz.ix = nx;
     pz.iz = nz;
     pz.fromPos.copy(pz.mesh.position);
@@ -781,10 +787,32 @@ export function startGame(container: HTMLElement): () => void {
   }
 
   function squashAt(ix: number, iz: number) {
-    const victims = S.parasites.filter(
-      (p) => p.state === "crawl" && p.ix === ix && p.iz === iz,
-    );
+    // A crawling bug occupies BOTH tiles it's sliding between: it sets ix/iz to
+    // the destination the instant it starts a step, then slides over ~interval
+    // seconds while still leaving `prev`. At high levels the slide is fast, so a
+    // single snapshot can miss it — instead crush if the landing tile is its
+    // destination, the tile it's sliding out of, or it's visually on top.
+    const c = tileToWorld(ix, iz);
+    const victims = S.parasites.filter((p) => {
+      if (p.state !== "crawl") return false;
+      if (p.ix === ix && p.iz === iz) return true;
+      if (p.moveT < 1 && p.prevIx === ix && p.prevIz === iz) return true;
+      const dx = p.mesh.position.x - c.x;
+      const dz = p.mesh.position.z - c.z;
+      return dx * dx + dz * dz < 0.6 * 0.6;
+    });
     crushList(victims, victims.some((v) => v.type === "spider"));
+  }
+
+  // Roll toward the side a bug latched on → that face rotates to the ground and
+  // grinds it. Rolling other ways just lets it keep riding (and biting).
+  function grindLatchedAfterRoll() {
+    const crushed = S.parasites.filter((p) => {
+      if (p.state !== "attached") return false;
+      const worldN = p.localN.clone().applyQuaternion(cubeMesh.quaternion);
+      return worldN.y < -0.5; // its face is now against the ground
+    });
+    crushList(crushed, true);
   }
 
   /* ---------- rolling ---------- */
@@ -834,6 +862,7 @@ export function startGame(container: HTMLElement): () => void {
       playThud(false);
       S.shake = Math.max(S.shake, 0.06);
       squashAt(r.nx, r.nz);
+      grindLatchedAfterRoll();
       if (S.heart && S.heart.ix === r.nx && S.heart.iz === r.nz) collectHeart();
       updateWorld();
       if (S.queuedDir) {
