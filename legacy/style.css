@@ -1,0 +1,183 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0b0d0a;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  user-select: none;
+}
+
+canvas { display: block; }
+
+/* ---------- HUD (flat, no glow) ---------- */
+#hud {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 18px 24px;
+  pointer-events: none;
+  z-index: 10;
+  color: #e8e8e0;
+}
+
+#score {
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transition: transform 0.08s;
+}
+#score.pop { transform: scale(1.15); }
+
+#best {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #8d8d82;
+  margin-top: 2px;
+}
+
+#combo-wrap { margin-top: 10px; height: 40px; }
+#combo-label {
+  font-size: 18px;
+  font-weight: 700;
+  color: #e0b64e;
+}
+#combo-label.rampage { color: #e05a6e; }
+#combo-bar-outer {
+  width: 130px; height: 4px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 2px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+#combo-bar {
+  height: 100%; width: 0%;
+  background: #e0b64e;
+  border-radius: 2px;
+}
+
+#hud-center { text-align: center; }
+#rampage-banner {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 5px;
+  color: #e05a6e;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.15s, transform 0.15s;
+}
+#rampage-banner.on {
+  opacity: 1;
+  transform: scale(1);
+  animation: rampage-pulse 0.5s infinite alternate;
+}
+@keyframes rampage-pulse {
+  from { transform: scale(1); }
+  to   { transform: scale(1.06); }
+}
+#streak {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #8fbf6a;
+  margin-top: 4px;
+}
+#warning {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #e0b64e;
+  margin-top: 6px;
+  opacity: 0;
+}
+#warning.on { animation: warn-blink 0.6s infinite alternate; }
+@keyframes warn-blink {
+  from { opacity: 1; }
+  to   { opacity: 0.35; }
+}
+
+#lives { font-size: 26px; letter-spacing: 5px; color: #d84a55; }
+#lives .lost { opacity: 0.18; }
+
+/* ---------- screen effects ---------- */
+#vignette {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  background: radial-gradient(ellipse at center, transparent 52%, rgba(6, 8, 5, 0.9) 100%);
+}
+
+#damage-flash {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 6;
+  background: rgba(200, 40, 45, 0.32);
+  opacity: 0;
+}
+#damage-flash.on { animation: dmg 0.4s ease-out; }
+@keyframes dmg { from { opacity: 1; } to { opacity: 0; } }
+
+/* ---------- score popups ---------- */
+#popups { position: fixed; inset: 0; pointer-events: none; z-index: 8; }
+.popup {
+  position: absolute;
+  font-size: 21px;
+  font-weight: 800;
+  color: #a3d977;
+  animation: popup-rise 0.8s ease-out forwards;
+  white-space: nowrap;
+}
+.popup.big { font-size: 28px; color: #e0b64e; }
+.popup.rampage { color: #e05a6e; }
+@keyframes popup-rise {
+  0%   { transform: translate(-50%, 0) scale(0.6); opacity: 0; }
+  15%  { transform: translate(-50%, -10px) scale(1.12); opacity: 1; }
+  100% { transform: translate(-50%, -58px) scale(1); opacity: 0; }
+}
+
+/* ---------- overlays ---------- */
+.overlay {
+  position: fixed; inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: rgba(9, 11, 8, 0.85);
+  z-index: 20;
+  color: #e8e8e0;
+  text-align: center;
+  padding: 20px;
+}
+.overlay.hidden { display: none; }
+.overlay h1 {
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: 8px;
+}
+.tagline { font-size: 17px; color: #b5b5a8; }
+.controls { font-size: 14px; color: #8d8d82; max-width: 480px; }
+.controls.warn { color: #cf9d9d; }
+#final-score { font-size: 28px; font-weight: 700; }
+#final-best { font-size: 14px; color: #e0b64e; letter-spacing: 2px; }
+#final-stats { font-size: 14px; color: #8d8d82; }
+
+.overlay button {
+  margin-top: 12px;
+  padding: 13px 36px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #10140e;
+  background: #8fbf6a;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.1s;
+}
+.overlay button:hover { transform: scale(1.04); background: #a3d977; }
+.overlay button:active { transform: scale(0.97); }
