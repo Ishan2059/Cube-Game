@@ -29,15 +29,33 @@ export default function Home() {
       <div id="popups"></div>
 
       <div id="start-screen" className="overlay">
-        <h1>CRUSH</h1>
-        <p className="tagline">Parasites climb. You are heavy. Do the math.</p>
-        <p className="controls">
-          Arrow keys / WASD to roll &nbsp;·&nbsp; land on parasites to squash them
-        </p>
-        <p className="controls warn">
-          If one latches onto a side of you, roll TOWARD that side to grind it
-          into the ground.
-        </p>
+        <div className="hero">
+          <h1>CRUSH</h1>
+          <p className="tagline">Parasites climb. You are heavy. Do the math.</p>
+        </div>
+
+        <div className="how">
+          <div className="hint">
+            <span className="keys">
+              <kbd>←</kbd>
+              <kbd>↑</kbd>
+              <kbd>↓</kbd>
+              <kbd>→</kbd>
+            </span>
+            <span>
+              Roll to move — land on parasites to squash them.
+              <span className="sub">On mobile, swipe to roll.</span>
+            </span>
+          </div>
+          <div className="hint">
+            <span className="hint-icon">⚠</span>
+            <span>
+              If one latches onto a side, roll <b>toward</b> that side to grind
+              it into the ground.
+            </span>
+          </div>
+        </div>
+
         <button id="start-btn">ROLL OUT</button>
       </div>
 
