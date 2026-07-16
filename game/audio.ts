@@ -97,6 +97,44 @@ export function playHurt() {
   o.stop(t + 0.35);
 }
 
+export function playBite() {
+  const ac = audio(),
+    t = ac.currentTime;
+  if (!NOISE) NOISE = noiseBuffer();
+  // wet chomp: noise burst through a closing lowpass
+  const src = ac.createBufferSource();
+  src.buffer = NOISE;
+  const f = ac.createBiquadFilter();
+  f.type = "lowpass";
+  f.frequency.setValueAtTime(1300, t);
+  f.frequency.exponentialRampToValueAtTime(300, t + 0.1);
+  src.connect(f);
+  env(f, t, 0.32, 0.12);
+  src.start(t);
+  src.stop(t + 0.14);
+  // low crunch under it
+  const o = ac.createOscillator();
+  o.type = "square";
+  o.frequency.setValueAtTime(95, t);
+  o.frequency.exponentialRampToValueAtTime(48, t + 0.1);
+  env(o, t, 0.18, 0.12);
+  o.start(t);
+  o.stop(t + 0.14);
+}
+
+export function playHeal() {
+  const ac = audio(),
+    t = ac.currentTime;
+  [660, 880, 1174].forEach((freq, i) => {
+    const o = ac.createOscillator();
+    o.type = "sine";
+    o.frequency.value = freq;
+    env(o, t + i * 0.08, 0.2, 0.2);
+    o.start(t + i * 0.08);
+    o.stop(t + i * 0.08 + 0.22);
+  });
+}
+
 export function playRampage() {
   const ac = audio(),
     t = ac.currentTime;

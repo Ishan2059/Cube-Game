@@ -18,7 +18,7 @@ export default function Home() {
         <div id="hud-center">
           <div id="rampage-banner">RAMPAGE!</div>
           <div id="streak"></div>
-          <div id="warning">LATCHED! Roll toward that side to crush it</div>
+          <div id="warning">BITTEN! Grab a ♥ to heal</div>
         </div>
         <div id="hud-right">
           <div id="lives"></div>
@@ -29,6 +29,7 @@ export default function Home() {
 
       <div id="vignette"></div>
       <div id="damage-flash"></div>
+      <div id="bite-glow"></div>
       <div id="popups"></div>
       <div id="levelup"></div>
 
@@ -54,8 +55,8 @@ export default function Home() {
           <div className="hint">
             <span className="hint-icon">⚠</span>
             <span>
-              If one latches onto a side, roll <b>toward</b> that side to grind
-              it into the ground.
+              If one latches on, it <b>bites</b> after a moment — chipping your
+              health. Grab the rare <b>♥</b> that appears on the map to heal.
             </span>
           </div>
         </div>

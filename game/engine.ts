@@ -12,7 +12,8 @@ import {
   playSplat,
   playKnock,
   playLatch,
-  playHurt,
+  playBite,
+  playHeal,
   playRampage,
 } from "./audio";
 import { LEVELS, type Level } from "./levels";
@@ -20,7 +21,7 @@ import { LEVELS, type Level } from "./levels";
 /* ================= constants ================= */
 const TILE = 1;
 const ROLL_TIME = 0.14; // seconds per roll
-const BITE_TIME = 5.0; // seconds a latched parasite takes to bite
+const BITE_DAMAGE = 0.25; // fraction of one health icon lost per bite
 const COMBO_WINDOW = 2.5; // seconds to keep a combo alive
 const RAMPAGE_AT = 4; // combo count that triggers rampage
 const MAX_PARASITES = 24;
@@ -28,6 +29,12 @@ const VIEW_R = 14; // world generation radius (tiles)
 const SPAWN_R_MIN = 9,
   SPAWN_R_MAX = 12;
 const DESPAWN_R = 18;
+// health pickups (hearts)
+const HEART_SPAWN_MIN = 6,
+  HEART_SPAWN_MAX = 11;
+const HEART_DESPAWN_R = 16; // roll past this and it's gone
+const HEART_LIFE = 30; // seconds solid on the map
+const HEART_BLINK = 3; // then blinks this long before vanishing
 const GROUND_SIZE = 60;
 const CAM_OFFSET = new THREE.Vector3(0, 11, 8.5);
 
@@ -107,7 +114,36 @@ function makeSplatTexture(seed: number) {
   return new THREE.CanvasTexture(cv);
 }
 
+function makeHeartMesh(): THREE.Group {
+  const g = new THREE.Group();
+  const mat = new THREE.MeshStandardMaterial({
+    color: 0xff4d6a,
+    emissive: 0x7a1526,
+    emissiveIntensity: 0.8,
+    roughness: 0.3,
+  });
+  const lobeGeo = new THREE.SphereGeometry(0.13, 14, 12);
+  for (const sx of [-0.09, 0.09]) {
+    const lobe = new THREE.Mesh(lobeGeo, mat);
+    lobe.position.set(sx, 0.09, 0);
+    g.add(lobe);
+  }
+  const point = new THREE.Mesh(new THREE.ConeGeometry(0.19, 0.3, 16), mat);
+  point.position.set(0, -0.15, 0);
+  point.rotation.x = Math.PI; // apex down
+  g.add(point);
+  g.scale.set(0.85, 0.85, 0.85);
+  return g;
+}
+
 /* ================= types ================= */
+interface Heart {
+  mesh: THREE.Group;
+  ix: number;
+  iz: number;
+  t: number;
+}
+
 interface Parasite {
   type: ParasiteType;
   def: ParasiteDef;
@@ -119,7 +155,7 @@ interface Parasite {
   moveT: number;
   moveTimer: number;
   state: "crawl" | "attached";
-  climb: number;
+  biteTimer: number; // seconds until this latched parasite bites
   localN: THREE.Vector3;
   animT: number;
 }
@@ -167,6 +203,10 @@ interface GameState {
   particles: Particle[];
   decals: Decal[];
   shake: number;
+  glow: number; // current red bite-glow opacity
+  glowHold: number; // seconds to hold the glow before it decays
+  heart: Heart | null;
+  heartCooldown: number; // seconds until the next heart may spawn
 }
 
 /* ================= entry point ================= */
@@ -195,6 +235,10 @@ export function startGame(container: HTMLElement): () => void {
     particles: [],
     decals: [],
     shake: 0,
+    glow: 0,
+    glowHold: 0,
+    heart: null,
+    heartCooldown: 25,
   };
 
   /* ---------- scene ---------- */
@@ -431,7 +475,7 @@ export function startGame(container: HTMLElement): () => void {
       moveT: 1,
       moveTimer: Math.random() * 0.5,
       state: "crawl", // crawl | attached
-      climb: 0,
+      biteTimer: 0,
       localN: new THREE.Vector3(), // cube-local normal of the face it clings to
       animT: Math.random() * 10,
     });
@@ -497,7 +541,7 @@ export function startGame(container: HTMLElement): () => void {
     // stepping into the cube's tile => latch onto that face and start climbing
     if (nx === S.cube.ix && nz === S.cube.iz) {
       pz.state = "attached";
-      pz.climb = 0;
+      pz.biteTimer = 1 + Math.random(); // bites 1–2s after latching
       // world-side normal it grabbed, stored in cube-local space so it rides the face
       const worldN = new THREE.Vector3(-sx, 0, -sz).normalize();
       pz.localN.copy(worldN).applyQuaternion(cubeMesh.quaternion.clone().invert());
@@ -589,7 +633,9 @@ export function startGame(container: HTMLElement): () => void {
     popups = $("popups"),
     warning = $("warning"),
     levelEl = $("level"),
-    levelupEl = $("levelup");
+    levelupEl = $("levelup"),
+    biteGlow = $("bite-glow");
+  void flash; // kept for markup compatibility; bites use the glow overlay now
 
   function applyLevel(idx: number) {
     S.level = idx;
@@ -611,8 +657,12 @@ export function startGame(container: HTMLElement): () => void {
   function updateHUD() {
     scoreEl.textContent = String(S.score);
     bestEl.textContent = "BEST " + Math.max(S.best, S.score);
+    // fractional hearts: each icon fills 0–100% (bites cost 25% of an icon)
     livesEl.innerHTML = [0, 1, 2]
-      .map((i) => `<span class="${i < S.lives ? "" : "lost"}">&#10084;</span>`)
+      .map((i) => {
+        const fill = Math.max(0, Math.min(1, S.lives - i));
+        return `<span class="heart"><span class="heart-bg">&#10084;</span><span class="heart-fill" style="width:${fill * 100}%">&#10084;</span></span>`;
+      })
       .join("");
     streakEl.textContent = S.streak >= 3 ? `${S.streak} STREAK` : "";
   }
@@ -663,17 +713,58 @@ export function startGame(container: HTMLElement): () => void {
     comboBar.style.width = "0%";
   }
 
-  function takeDamage() {
-    S.lives--;
+  // a latched parasite bites: chip 25% of an icon + escalating red glow
+  function applyBite() {
+    S.lives = Math.max(0, S.lives - BITE_DAMAGE);
     S.streak = 0;
     endCombo();
-    playHurt();
-    S.shake = 0.5;
-    flash.classList.remove("on");
-    void flash.offsetWidth;
-    flash.classList.add("on");
+    playBite();
+    S.shake = Math.max(S.shake, 0.28);
+    // the lower your health, the stronger and longer the glow lingers
+    const missing = (3 - S.lives) / 3; // 0 (full) → 1 (near dead)
+    S.glow = Math.max(S.glow, 0.32 + missing * 0.5);
+    S.glowHold = 0.12 + missing * 1.4;
     updateHUD();
     if (S.lives <= 0) gameOver();
+  }
+
+  /* ---------- health pickups (hearts) ---------- */
+  function spawnHeart() {
+    // place on a free tile in a reachable ring around the cube
+    let ix = 0,
+      iz = 0,
+      ok = false;
+    for (let tries = 0; tries < 12 && !ok; tries++) {
+      const a = Math.random() * Math.PI * 2;
+      const r = HEART_SPAWN_MIN + Math.random() * (HEART_SPAWN_MAX - HEART_SPAWN_MIN);
+      ix = S.cube.ix + Math.round(Math.cos(a) * r);
+      iz = S.cube.iz + Math.round(Math.sin(a) * r);
+      ok = !isObstacle(ix, iz) && !(ix === S.cube.ix && iz === S.cube.iz);
+    }
+    if (!ok) {
+      S.heartCooldown = 3; // no spot, retry soon
+      return;
+    }
+    const mesh = makeHeartMesh();
+    const p = tileToWorld(ix, iz);
+    mesh.position.set(p.x, 0.5, p.z);
+    scene.add(mesh);
+    S.heart = { mesh, ix, iz, t: 0 };
+  }
+
+  function removeHeart() {
+    if (!S.heart) return;
+    scene.remove(S.heart.mesh);
+    S.heart = null;
+    S.heartCooldown = 20 + Math.random() * 15; // rare: ~20–35s until next
+  }
+
+  function collectHeart() {
+    S.lives = Math.min(3, S.lives + 1); // heal one full icon
+    playHeal();
+    popup(cubeMesh.position.clone(), "+1 ♥", "big");
+    removeHeart();
+    updateHUD();
   }
 
   /* ---------- squash ---------- */
@@ -694,25 +785,6 @@ export function startGame(container: HTMLElement): () => void {
       (p) => p.state === "crawl" && p.ix === ix && p.iz === iz,
     );
     crushList(victims, victims.some((v) => v.type === "spider"));
-  }
-
-  // after a roll: faces that ended up on the ground crush their riders;
-  // faces that ended up on top mean the parasite made it — you get bitten.
-  function resolveAttachedAfterRoll() {
-    const crushed: Parasite[] = [],
-      reachedTop: Parasite[] = [];
-    for (const pz of S.parasites) {
-      if (pz.state !== "attached") continue;
-      const worldN = pz.localN.clone().applyQuaternion(cubeMesh.quaternion);
-      if (worldN.y < -0.5) crushed.push(pz);
-      else if (worldN.y > 0.5) reachedTop.push(pz);
-    }
-    crushList(crushed, true);
-    for (const pz of reachedTop) {
-      splat(cubeMesh.position.clone().setY(0), 0xc23a3a, false);
-      removeParasite(pz);
-      takeDamage();
-    }
   }
 
   /* ---------- rolling ---------- */
@@ -762,7 +834,7 @@ export function startGame(container: HTMLElement): () => void {
       playThud(false);
       S.shake = Math.max(S.shake, 0.06);
       squashAt(r.nx, r.nz);
-      resolveAttachedAfterRoll();
+      if (S.heart && S.heart.ix === r.nx && S.heart.iz === r.nz) collectHeart();
       updateWorld();
       if (S.queuedDir) {
         const [dx, dz] = S.queuedDir;
@@ -777,6 +849,7 @@ export function startGame(container: HTMLElement): () => void {
     for (const pz of [...S.parasites]) removeParasite(pz);
     for (const pt of S.particles) scene.remove(pt.mesh);
     for (const d of S.decals) scene.remove(d.mesh);
+    if (S.heart) scene.remove(S.heart.mesh);
     S.particles = [];
     S.decals = [];
     pauseScreen.classList.add("hidden");
@@ -798,7 +871,12 @@ export function startGame(container: HTMLElement): () => void {
       rolling: null,
       queuedDir: null,
       shake: 0,
+      glow: 0,
+      glowHold: 0,
+      heart: null,
+      heartCooldown: 25,
     });
+    biteGlow.style.opacity = "0";
     endCombo();
     applyLevel(0);
     placeCube();
@@ -969,7 +1047,7 @@ export function startGame(container: HTMLElement): () => void {
           }
         } else {
           anyAttached = true;
-          pz.climb += dt / BITE_TIME;
+          pz.biteTimer -= dt;
           const worldN = pz.localN.clone().applyQuaternion(cubeMesh.quaternion);
           pz.mesh.position.copy(cubeMesh.position).addScaledVector(worldN, 0.56);
           pz.mesh.quaternion.setFromUnitVectors(
@@ -977,21 +1055,46 @@ export function startGame(container: HTMLElement): () => void {
             worldN,
           );
           pz.mesh.userData.animate(pz.animT * 1.6);
-          // panic pulse as it gets close to biting
-          if (pz.climb > 0.55) {
-            const p = 1 + Math.sin(pz.animT * 16) * 0.12 * pz.climb;
+          // gnashing pulse in the final moment before the bite lands
+          if (pz.biteTimer < 0.4) {
+            const p = 1 + Math.sin(pz.animT * 18) * 0.14;
             pz.mesh.scale.set(p, p, p);
           }
-          if (pz.climb >= 1) {
-            splat(cubeMesh.position.clone().setY(0), 0xc23a3a, false);
-            removeParasite(pz);
-            takeDamage();
+          if (pz.biteTimer <= 0) {
+            splat(cubeMesh.position.clone().setY(0), pz.def.goo, false);
+            removeParasite(pz); // it feeds and drops off
+            applyBite();
           }
         }
       }
 
       warning.classList.toggle("on", anyAttached);
+
+      // bite glow: hold at peak while hurt, then decay
+      if (S.glowHold > 0) S.glowHold -= dt;
+      else if (S.glow > 0) S.glow = Math.max(0, S.glow - dt * 1.4);
+
+      // heart pickup lifecycle
+      if (S.heart) {
+        const h = S.heart;
+        h.t += dt;
+        h.mesh.rotation.y += dt * 1.6;
+        h.mesh.position.y = 0.5 + Math.sin(h.t * 3) * 0.09;
+        const dist = Math.max(
+          Math.abs(h.ix - S.cube.ix),
+          Math.abs(h.iz - S.cube.iz),
+        );
+        if (h.t > HEART_LIFE) h.mesh.visible = Math.floor(h.t * 6) % 2 === 0;
+        if (h.t > HEART_LIFE + HEART_BLINK || dist > HEART_DESPAWN_R) {
+          removeHeart();
+        }
+      } else {
+        S.heartCooldown -= dt;
+        if (S.heartCooldown <= 0) spawnHeart();
+      }
     }
+
+    biteGlow.style.opacity = String(S.glow);
 
     // particles
     for (const pt of [...S.particles]) {
