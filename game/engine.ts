@@ -956,34 +956,52 @@ export function startGame(container: HTMLElement): () => void {
   };
   window.addEventListener("keydown", onKeyDown);
 
-  // touch: swipe = one roll in the dominant direction (mirrors one keypress)
+  // touch: hold & drag from the first-touch point like a virtual d-pad.
+  // Keeps rolling in the held direction until the finger lifts (no tapping).
   let touchX = 0,
     touchY = 0,
     touchId: number | null = null;
+  let touchDir: [number, number] | null = null; // held roll direction, or null
+  const TOUCH_DEADZONE = 18; // px from origin before a direction registers
+  const updateTouchDir = (t: Touch) => {
+    const dx = t.clientX - touchX,
+      dy = t.clientY - touchY;
+    const adx = Math.abs(dx),
+      ady = Math.abs(dy);
+    if (Math.max(adx, ady) < TOUCH_DEADZONE) {
+      touchDir = null; // finger near origin = neutral, stand still
+      return;
+    }
+    touchDir = adx > ady ? [dx > 0 ? 1 : -1, 0] : [0, dy > 0 ? 1 : -1];
+  };
   const onTouchStart = (e: TouchEvent) => {
     const t = e.changedTouches[0];
     touchX = t.clientX;
     touchY = t.clientY;
     touchId = t.identifier;
+    touchDir = null;
     audio();
   };
-  const onTouchEnd = (e: TouchEvent) => {
+  const onTouchMove = (e: TouchEvent) => {
     if (touchId === null) return;
     const t = Array.from(e.changedTouches).find(
       (c) => c.identifier === touchId,
     );
-    touchId = null;
-    if (!t) return;
-    const dx = t.clientX - touchX,
-      dy = t.clientY - touchY;
-    const adx = Math.abs(dx),
-      ady = Math.abs(dy);
-    if (Math.max(adx, ady) < 24) return; // tap, not a swipe (lets buttons work)
-    if (adx > ady) tryRoll(dx > 0 ? 1 : -1, 0);
-    else tryRoll(0, dy > 0 ? 1 : -1); // swipe up (dy<0) => rolls away (-z)
+    if (t) updateTouchDir(t);
+  };
+  const onTouchEnd = (e: TouchEvent) => {
+    if (
+      touchId !== null &&
+      Array.from(e.changedTouches).some((c) => c.identifier === touchId)
+    ) {
+      touchId = null;
+      touchDir = null; // released: stop
+    }
   };
   window.addEventListener("touchstart", onTouchStart, { passive: true });
+  window.addEventListener("touchmove", onTouchMove, { passive: true });
   window.addEventListener("touchend", onTouchEnd, { passive: true });
+  window.addEventListener("touchcancel", onTouchEnd, { passive: true });
 
   /* ---------- main loop ---------- */
   placeCube();
@@ -1016,6 +1034,9 @@ export function startGame(container: HTMLElement): () => void {
         comboBar.style.width = (S.comboTimer / COMBO_WINDOW) * 100 + "%";
         if (S.comboTimer <= 0) endCombo();
       }
+
+      // held touch: keep rolling in the dragged direction while idle
+      if (touchDir && !S.rolling) tryRoll(touchDir[0], touchDir[1]);
 
       updateRoll(dt);
 
@@ -1157,7 +1178,9 @@ export function startGame(container: HTMLElement): () => void {
     window.removeEventListener("keydown", onKeyDown);
     window.removeEventListener("resize", onResize);
     window.removeEventListener("touchstart", onTouchStart);
+    window.removeEventListener("touchmove", onTouchMove);
     window.removeEventListener("touchend", onTouchEnd);
+    window.removeEventListener("touchcancel", onTouchEnd);
     startBtn.removeEventListener("click", onStart);
     restartBtn.removeEventListener("click", onRestart);
     pauseBtn.removeEventListener("click", togglePause);
