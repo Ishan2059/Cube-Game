@@ -384,8 +384,10 @@ export function startGame(container: HTMLElement): () => void {
     const roll = Math.random();
     let type: ParasiteType;
     if (roll < Math.max(0.35, 0.8 - S.time * 0.01)) type = "worm";
-    else if (roll < 0.85) type = "bug";
-    else type = "spider";
+    else if (roll < 0.82) type = "bug";
+    else if (roll < 0.95) type = "spider";
+    else if (roll < 0.985) type = "scorpion"; // rare (~3.5%)
+    else type = "beetle"; // very rare (~1.5%)
     const def = TYPES[type];
 
     // spawn in a ring around the cube, outside the fog-lit area's centre
@@ -436,7 +438,7 @@ export function startGame(container: HTMLElement): () => void {
     const preferX =
       Math.abs(dx) > Math.abs(dz) ||
       (Math.abs(dx) === Math.abs(dz) && Math.random() < 0.5);
-    if (pz.type === "spider" && Math.random() < 0.35) {
+    if ((pz.type === "spider" || pz.type === "scorpion") && Math.random() < 0.35) {
       if (preferX) sz = Math.sign(dz) || (Math.random() < 0.5 ? 1 : -1);
       else sx = Math.sign(dx) || (Math.random() < 0.5 ? 1 : -1);
     } else {

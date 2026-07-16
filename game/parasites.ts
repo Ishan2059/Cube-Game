@@ -5,6 +5,9 @@ export const TYPES = {
   worm: { points: 10, interval: 1.15, goo: 0x77c04a, name: "worm" },
   bug: { points: 25, interval: 0.62, goo: 0xc46a3a, name: "bug" },
   spider: { points: 40, interval: 0.85, goo: 0x8a5aa8, name: "spider" },
+  // rare — show up only sometimes (see spawn weights in engine.ts)
+  scorpion: { points: 80, interval: 0.5, goo: 0xc4903a, name: "scorpion" },
+  beetle: { points: 120, interval: 0.8, goo: 0x4a8a3a, name: "beetle" },
 } as const;
 
 export type ParasiteType = keyof typeof TYPES;
@@ -182,10 +185,147 @@ export function makeSpiderMesh(): THREE.Group {
   return g;
 }
 
+export function makeScorpionMesh(): THREE.Group {
+  const g = new THREE.Group();
+  const bodyMat = new THREE.MeshStandardMaterial({
+    color: 0x6e2c2c,
+    roughness: 0.45,
+  });
+  const darkMat = new THREE.MeshStandardMaterial({
+    color: 0x3a1818,
+    roughness: 0.55,
+  });
+  // segmented body
+  for (let i = 0; i < 3; i++) {
+    const s = new THREE.Mesh(
+      new THREE.SphereGeometry(0.1 - i * 0.01, 10, 8),
+      bodyMat,
+    );
+    s.position.set(-i * 0.11, 0.1, 0);
+    s.castShadow = true;
+    g.add(s);
+  }
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.08, 10, 8), bodyMat);
+  head.position.set(0.14, 0.1, 0);
+  g.add(head);
+  makeEyes(g, 0.19, 0.12, 0, 0.03, 0.02);
+  // pincers
+  for (const sdir of [-1, 1]) {
+    const arm = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.014, 0.02, 0.16),
+      darkMat,
+    );
+    arm.position.set(0.22, 0.09, sdir * 0.07);
+    arm.rotation.z = Math.PI / 2;
+    arm.rotation.y = sdir * 0.4;
+    g.add(arm);
+    const claw = new THREE.Mesh(new THREE.SphereGeometry(0.045, 8, 6), darkMat);
+    claw.scale.set(1.4, 0.7, 0.7);
+    claw.position.set(0.31, 0.09, sdir * 0.1);
+    g.add(claw);
+  }
+  // tail curled up and over, gold stinger
+  for (let i = 0; i < 5; i++) {
+    const a = i * 0.5;
+    const t = new THREE.Mesh(
+      new THREE.SphereGeometry(0.04 - i * 0.004, 8, 6),
+      darkMat,
+    );
+    t.position.set(-0.33 + Math.sin(a) * 0.16, 0.12 + (1 - Math.cos(a)) * 0.22, 0);
+    g.add(t);
+  }
+  const sting = new THREE.Mesh(
+    new THREE.ConeGeometry(0.03, 0.09, 8),
+    new THREE.MeshStandardMaterial({ color: 0xe0b64e, emissive: 0x3a2a08 }),
+  );
+  const la = 5 * 0.5;
+  sting.position.set(
+    -0.33 + Math.sin(la) * 0.16,
+    0.12 + (1 - Math.cos(la)) * 0.22,
+    0,
+  );
+  sting.rotation.z = Math.PI;
+  g.add(sting);
+  // legs
+  const legs: { m: THREE.Mesh; ph: number; s: number }[] = [];
+  for (let i = 0; i < 3; i++) {
+    for (const s of [-1, 1]) {
+      const leg = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.01, 0.006, 0.18),
+        darkMat,
+      );
+      leg.position.set(i * 0.08 - 0.08, 0.08, s * 0.11);
+      leg.rotation.x = s * 0.9;
+      g.add(leg);
+      legs.push({ m: leg, ph: i + (s > 0 ? 0.5 : 0), s });
+    }
+  }
+  g.userData.legs = legs;
+  g.userData.animate = (t: number) => {
+    for (const l of legs)
+      l.m.rotation.x = l.s * 0.9 + Math.sin(t * 16 + l.ph * 2) * 0.28;
+  };
+  return g;
+}
+
+export function makeBeetleMesh(): THREE.Group {
+  const g = new THREE.Group();
+  const shellMat = new THREE.MeshStandardMaterial({
+    color: 0x243a2a,
+    roughness: 0.25,
+    metalness: 0.3,
+  });
+  const darkMat = new THREE.MeshStandardMaterial({
+    color: 0x141a12,
+    roughness: 0.4,
+  });
+  const shell = new THREE.Mesh(new THREE.SphereGeometry(0.18, 14, 12), shellMat);
+  shell.scale.set(1.2, 0.85, 1.1);
+  shell.position.y = 0.14;
+  shell.castShadow = true;
+  g.add(shell);
+  // shell seam
+  const seam = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.02, 0.012), darkMat);
+  seam.position.y = 0.28;
+  g.add(seam);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.08, 10, 8), darkMat);
+  head.position.set(0.2, 0.1, 0);
+  g.add(head);
+  // rhino horn
+  const horn = new THREE.Mesh(new THREE.ConeGeometry(0.03, 0.16, 8), darkMat);
+  horn.position.set(0.26, 0.16, 0);
+  horn.rotation.z = -0.7;
+  g.add(horn);
+  makeEyes(g, 0.24, 0.11, 0, 0.045, 0.02);
+  const legs: { m: THREE.Mesh; ph: number; s: number }[] = [];
+  for (let i = -1; i <= 1; i++) {
+    for (const s of [-1, 1]) {
+      const leg = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.015, 0.01, 0.16),
+        darkMat,
+      );
+      leg.position.set(i * 0.1, 0.06, s * 0.16);
+      leg.rotation.x = s * 0.7;
+      g.add(leg);
+      legs.push({ m: leg, ph: i + (s > 0 ? 0.5 : 0), s });
+    }
+  }
+  g.userData.legs = legs;
+  g.userData.animate = (t: number) => {
+    for (const l of legs)
+      l.m.rotation.x = l.s * 0.7 + Math.sin(t * 12 + l.ph * 2) * 0.25;
+  };
+  return g;
+}
+
+const BUILDERS: Record<ParasiteType, () => THREE.Group> = {
+  worm: makeWormMesh,
+  bug: makeBugMesh,
+  spider: makeSpiderMesh,
+  scorpion: makeScorpionMesh,
+  beetle: makeBeetleMesh,
+};
+
 export function makeParasiteMesh(type: ParasiteType): THREE.Group {
-  return type === "worm"
-    ? makeWormMesh()
-    : type === "bug"
-      ? makeBugMesh()
-      : makeSpiderMesh();
+  return BUILDERS[type]();
 }
