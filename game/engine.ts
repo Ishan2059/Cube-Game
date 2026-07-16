@@ -935,6 +935,10 @@ export function startGame(container: HTMLElement): () => void {
     ArrowRight: [1, 0],
     KeyD: [1, 0],
   };
+  // held movement keys, newest last — the loop rolls toward the last one held.
+  // (Don't drive movement off keydown auto-repeat: the OS typematic delay when
+  // switching keys causes a ~1s stall. Tracking held keys makes it instant.)
+  const heldMoveCodes: string[] = [];
   const onKeyDown = (e: KeyboardEvent) => {
     if ((e.code === "KeyP" || e.code === "Escape") && S.running) {
       togglePause();
@@ -943,7 +947,7 @@ export function startGame(container: HTMLElement): () => void {
     if (KEYMAP[e.code]) {
       e.preventDefault();
       audio();
-      tryRoll(...KEYMAP[e.code]);
+      if (!heldMoveCodes.includes(e.code)) heldMoveCodes.push(e.code);
     }
     if (
       e.code === "KeyR" &&
@@ -954,7 +958,18 @@ export function startGame(container: HTMLElement): () => void {
       resetGame();
     }
   };
+  const onKeyUp = (e: KeyboardEvent) => {
+    const i = heldMoveCodes.indexOf(e.code);
+    if (i !== -1) heldMoveCodes.splice(i, 1);
+  };
+  // lost focus mid-hold: drop keys so the cube doesn't roll on forever
+  const onBlur = () => {
+    heldMoveCodes.length = 0;
+    touchDir = null;
+  };
   window.addEventListener("keydown", onKeyDown);
+  window.addEventListener("keyup", onKeyUp);
+  window.addEventListener("blur", onBlur);
 
   // touch: hold & drag from the first-touch point like a virtual d-pad.
   // Keeps rolling in the held direction until the finger lifts (no tapping).
@@ -1035,8 +1050,10 @@ export function startGame(container: HTMLElement): () => void {
         if (S.comboTimer <= 0) endCombo();
       }
 
-      // held touch: keep rolling in the dragged direction while idle
-      if (touchDir && !S.rolling) tryRoll(touchDir[0], touchDir[1]);
+      // held input: newest key wins, else touch drag — keep rolling while idle
+      const lastKey = heldMoveCodes[heldMoveCodes.length - 1];
+      const heldDir = lastKey ? KEYMAP[lastKey] : touchDir;
+      if (heldDir && !S.rolling) tryRoll(heldDir[0], heldDir[1]);
 
       updateRoll(dt);
 
@@ -1176,6 +1193,8 @@ export function startGame(container: HTMLElement): () => void {
   return function dispose() {
     cancelAnimationFrame(rafId);
     window.removeEventListener("keydown", onKeyDown);
+    window.removeEventListener("keyup", onKeyUp);
+    window.removeEventListener("blur", onBlur);
     window.removeEventListener("resize", onResize);
     window.removeEventListener("touchstart", onTouchStart);
     window.removeEventListener("touchmove", onTouchMove);
