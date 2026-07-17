@@ -1273,7 +1273,7 @@ if (!S.heart) return;
 scene.remove(S.heart.mesh);
 disposeObject(S.heart.mesh);
 S.heart = null;
-S.heartCooldown = 20 + Math.random() * 15; // rare: ~20–35s until next
+S.heartCooldown = 17 + Math.random() * 13; // ~17–30s until next (was 20–35s)
 }
 
 function collectHeart() {
@@ -1313,7 +1313,7 @@ if (!S.powerup) return;
 scene.remove(S.powerup.mesh);
 disposeObject(S.powerup.mesh);
 S.powerup = null;
-S.powerupCooldown = 20 + Math.random() * 15; // ~20–35s until next (was 35–55s)
+S.powerupCooldown = 14 + Math.random() * 12; // ~14–26s until next (was 20–35s)
 }
 
 function collectPowerup() {
