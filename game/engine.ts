@@ -35,6 +35,41 @@ HEART_SPAWN_MAX = 11;
 const HEART_DESPAWN_R = 16; // roll past this and it's gone
 const HEART_LIFE = 30; // seconds solid on the map
 const HEART_BLINK = 3; // then blinks this long before vanishing
+// power-ups (rare, short-lived, high value)
+const POWERUP_MIN_SCORE = 300; // available almost from the start
+const POWERUP_LIFE = 18;
+const POWERUP_BLINK = 3;
+const SPEED_TIME = 10; // ⚡ bolt: seconds of fast rolling
+const SPEED_FACTOR = 0.55; // roll-time multiplier while ⚡ active
+const GIANT_TIME = 8; // ★ star: seconds of giant mode
+const GIANT_SCALE = 1.3; // giant cube visual scale (crushes 3×3)
+// ground hazards (spider web / slug slime / termite pit)
+const WEB_LIFE = 14; // seconds a web stays on the ground
+const WEB_MAX = 8; // most webs alive at once
+const WEB_DROP_CHANCE = 0.18; // per spider step
+const WEB_SLOW_TIME = 2.4; // seconds of slow after rolling into one
+const WEB_SLOW_FACTOR = 1.9; // roll-time multiplier while slowed
+const SLIME_LIFE = 11; // seconds slug slime lingers
+const SLIME_DROP_CHANCE = 0.5; // per slug step (slugs trail heavily)
+const SLIME_STALL = 0.55; // seconds the cube is stuck on slime
+const PIT_LIFE = 5.5; // seconds a termite pit blocks the tile
+const PIT_MAX = 5; // hard cap so the cube can never be boxed in
+const PIT_DROP_CHANCE = 0.4; // per termite step
+const PIT_MIN_DIST = 2; // never dig within this many tiles of the cube
+const HAZARD_MAX = 16; // total ground hazards (all kinds) alive at once
+// scorpion poison
+const POISON_TIME = 4;
+const POISON_DPS = 0.5 / POISON_TIME; // drains half a heart icon total
+// hornet daze (controls invert) & mosquito drain
+const DAZE_TIME = 2.5;
+const MOSQUITO_DRAIN = 2; // bite damage multiplier for mosquitoes
+// locust dash
+const LOCUST_DASH_CD_MIN = 3,
+LOCUST_DASH_CD_MAX = 5.5;
+const LOCUST_DASH_SLIDE = 2.4; // slide-speed multiplier during a lunge
+// egg sac
+const EGGSAC_HATCH = 6; // seconds until it hatches if left alone
+const EGGSAC_BROOD = 3; // bugs it hatches into
 const GROUND_SIZE = 60;
 const CAM_OFFSET = new THREE.Vector3(0, 11, 8.5);
 const SUN_OFFSET = new THREE.Vector3(6, 14, 4);
@@ -138,6 +173,123 @@ g.scale.set(0.85, 0.85, 0.85);
 return g;
 }
 
+function makeBoltMesh(): THREE.Group {
+const g = new THREE.Group();
+const mat = new THREE.MeshStandardMaterial({
+color: 0xffe14e,
+emissive: 0x8a6a10,
+emissiveIntensity: 0.9,
+roughness: 0.3,
+});
+// two slanted slabs form a zig-zag lightning bolt
+const top = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.26, 0.05), mat);
+top.position.set(0.05, 0.12, 0);
+top.rotation.z = 0.45;
+g.add(top);
+const bot = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.26, 0.05), mat);
+bot.position.set(-0.05, -0.12, 0);
+bot.rotation.z = 0.45;
+g.add(bot);
+return g;
+}
+
+function makeStarMesh(): THREE.Group {
+const g = new THREE.Group();
+const mat = new THREE.MeshStandardMaterial({
+color: 0xe05ae0,
+emissive: 0x6a106a,
+emissiveIntensity: 0.9,
+roughness: 0.25,
+});
+const gem = new THREE.Mesh(new THREE.OctahedronGeometry(0.18), mat);
+gem.scale.y = 1.3;
+g.add(gem);
+return g;
+}
+
+function makeWebTexture() {
+const cv = document.createElement("canvas");
+cv.width = cv.height = 128;
+const ctx = cv.getContext("2d")!;
+ctx.strokeStyle = "rgba(255,255,255,0.9)";
+ctx.lineWidth = 2;
+const c = 64;
+// radial spokes
+for (let i = 0; i < 8; i++) {
+const a = (i / 8) * Math.PI * 2;
+ctx.beginPath();
+ctx.moveTo(c, c);
+ctx.lineTo(c + Math.cos(a) * 60, c + Math.sin(a) * 60);
+ctx.stroke();
+}
+// concentric rings (slightly wobbly polygons read as silk)
+for (let r = 14; r <= 56; r += 14) {
+ctx.beginPath();
+for (let i = 0; i <= 8; i++) {
+const a = (i / 8) * Math.PI * 2;
+const rr = r * (0.92 + hash2(r, i) * 0.16);
+const x = c + Math.cos(a) * rr,
+y = c + Math.sin(a) * rr;
+i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+}
+ctx.stroke();
+}
+return new THREE.CanvasTexture(cv);
+}
+
+function makeSlimeTexture() {
+const cv = document.createElement("canvas");
+cv.width = cv.height = 128;
+const ctx = cv.getContext("2d")!;
+const grad = ctx.createRadialGradient(64, 64, 4, 64, 64, 60);
+grad.addColorStop(0, "rgba(200,230,120,0.95)");
+grad.addColorStop(0.6, "rgba(150,190,70,0.8)");
+grad.addColorStop(1, "rgba(120,150,50,0)");
+// irregular blob outline
+ctx.fillStyle = grad;
+ctx.beginPath();
+for (let i = 0; i <= 16; i++) {
+const a = (i / 16) * Math.PI * 2;
+const r = 46 + hash2(i * 3, i * 7) * 16;
+const x = 64 + Math.cos(a) * r,
+y = 64 + Math.sin(a) * r;
+i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+}
+ctx.closePath();
+ctx.fill();
+// glossy highlights
+ctx.fillStyle = "rgba(240,255,200,0.7)";
+for (let i = 0; i < 5; i++) {
+const x = 40 + hash2(i, 1) * 48,
+y = 40 + hash2(i, 2) * 48;
+ctx.beginPath();
+ctx.arc(x, y, 3 + hash2(i, 3) * 4, 0, Math.PI * 2);
+ctx.fill();
+}
+return new THREE.CanvasTexture(cv);
+}
+
+function makePitTexture() {
+const cv = document.createElement("canvas");
+cv.width = cv.height = 128;
+const ctx = cv.getContext("2d")!;
+// crumbly lighter rim
+ctx.fillStyle = "rgba(70,60,48,0.9)";
+ctx.beginPath();
+ctx.arc(64, 64, 60, 0, Math.PI * 2);
+ctx.fill();
+// dark hole
+const grad = ctx.createRadialGradient(64, 64, 6, 64, 64, 52);
+grad.addColorStop(0, "rgba(2,2,4,1)");
+grad.addColorStop(0.75, "rgba(6,8,6,1)");
+grad.addColorStop(1, "rgba(30,26,20,0)");
+ctx.fillStyle = grad;
+ctx.beginPath();
+ctx.arc(64, 64, 52, 0, Math.PI * 2);
+ctx.fill();
+return new THREE.CanvasTexture(cv);
+}
+
 // free GPU resources of an object we're done with for good (not pooled ones)
 function disposeObject(o: THREE.Object3D) {
 o.traverse((c) => {
@@ -173,10 +325,16 @@ state: "crawl" | "attached";
 biteTimer: number; // seconds until this latched parasite bites
 localN: THREE.Vector3;
 animT: number;
+hp: number; // armored beetles take 2 crushes (crack, then kill)
+stunT: number; // seconds frozen after a shell crack
+hatchT: number; // egg sac: seconds until it hatches (0 = n/a)
+dashT: number; // locust: seconds until its next dash lunge
+slideMul: number; // per-step slide-speed scale (locust dash uses >1)
 }
 
 interface RollState {
 t: number;
+dur: number; // seconds for this roll (speed/slow effects bake in here)
 anchor: THREE.Vector3;
 axis: THREE.Vector3;
 startOffset: THREE.Vector3;
@@ -193,6 +351,24 @@ t: number;
 }
 interface Decal {
 mesh: THREE.Mesh;
+t: number;
+life: number;
+}
+
+interface Pickup {
+kind: "bolt" | "star";
+mesh: THREE.Group;
+ix: number;
+iz: number;
+t: number;
+}
+
+type HazardKind = "web" | "slime" | "pit";
+interface Hazard {
+kind: HazardKind;
+mesh: THREE.Mesh;
+ix: number;
+iz: number;
 t: number;
 life: number;
 }
@@ -222,6 +398,15 @@ glow: number; // current red bite-glow opacity
 glowHold: number; // seconds to hold the glow before it decays
 heart: Heart | null;
 heartCooldown: number; // seconds until the next heart may spawn
+powerup: Pickup | null;
+powerupCooldown: number; // seconds until the next power-up may spawn
+hazards: Hazard[];
+speedT: number; // ⚡ time left
+giantT: number; // ★ time left
+slowT: number; // webbed-slow time left
+poisonT: number; // scorpion poison time left
+stallT: number; // slime-stall time left (cube can't roll)
+dazeT: number; // hornet daze time left (controls inverted)
 }
 
 /* ================= entry point ================= */
@@ -254,6 +439,15 @@ glow: 0,
 glowHold: 0,
 heart: null,
 heartCooldown: 25,
+powerup: null,
+powerupCooldown: 10,
+hazards: [],
+speedT: 0,
+giantT: 0,
+slowT: 0,
+poisonT: 0,
+stallT: 0,
+dazeT: 0,
 };
 
 // reusable scratch vectors — avoid per-frame allocation in the hot loop
@@ -468,6 +662,14 @@ bug: [],
 spider: [],
 scorpion: [],
 beetle: [],
+slug: [],
+termite: [],
+hornet: [],
+mosquito: [],
+pillbug: [],
+flea: [],
+locust: [],
+eggsac: [],
 };
 function acquireParasiteMesh(type: ParasiteType): THREE.Group {
 const m = parasitePools[type].pop() ?? makeParasiteMesh(type);
@@ -495,9 +697,9 @@ return "worm";
 }
 
 function spawnParasite() {
-if (S.parasites.length >= MAX_PARASITES) return;
+const swarm = LEVELS[S.level].swarm ?? 1;
+if (S.parasites.length >= Math.round(MAX_PARASITES * swarm)) return;
 const type = pickType();
-const def = TYPES[type];
 
 // spawn in a ring around the cube, outside the fog-lit area's centre
 let ix = 0,
@@ -512,6 +714,12 @@ tries++;
 } while (isObstacle(ix, iz) && tries < 8);
 if (isObstacle(ix, iz)) return;
 
+addParasite(type, ix, iz);
+}
+
+// build a parasite on a specific tile (used by spawnParasite and egg-sac hatch)
+function addParasite(type: ParasiteType, ix: number, iz: number) {
+const def = TYPES[type];
 const mesh = acquireParasiteMesh(type);
 const p = tileToWorld(ix, iz);
 mesh.position.copy(p);
@@ -533,11 +741,21 @@ state: "crawl", // crawl | attached
 biteTimer: 0,
 localN: new THREE.Vector3(), // cube-local normal of the face it clings to
 animT: Math.random() * 10,
+hp: type === "beetle" ? 1 + (LEVELS[S.level].armor ?? 0) : 1,
+stunT: 0,
+hatchT: type === "eggsac" ? EGGSAC_HATCH : 0,
+dashT:
+type === "locust"
+? LOCUST_DASH_CD_MIN +
+Math.random() * (LOCUST_DASH_CD_MAX - LOCUST_DASH_CD_MIN)
+: 0,
+slideMul: 1,
 });
 }
 
+// bugs treat rocks AND active termite pits as impassable
 function freeTile(ix: number, iz: number) {
-return !isObstacle(ix, iz);
+return !isObstacle(ix, iz) && !pitAt(ix, iz);
 }
 
   // seconds until a freshly-latched parasite bites; a level's `bite` rating
@@ -552,6 +770,46 @@ function stepParasite(pz: Parasite) {
 const dx = S.cube.ix - pz.ix;
 const dz = S.cube.iz - pz.iz;
     const stick = LEVELS[S.level].stick;
+
+    // locust lunge: every few seconds it dashes 2 tiles straight at the cube.
+    // A fast slide (slideMul) sells the pounce. Only when a clear 2-tile beeline
+    // exists and it isn't already adjacent (adjacency is the normal latch path).
+    if (
+      pz.type === "locust" &&
+      pz.dashT <= 0 &&
+      Math.abs(dx) + Math.abs(dz) > 1 &&
+      !S.rolling
+    ) {
+      const ax = Math.abs(dx) >= Math.abs(dz);
+      const ssx = ax ? Math.sign(dx) : 0;
+      const ssz = ax ? 0 : Math.sign(dz);
+      const midx = pz.ix + ssx,
+        midz = pz.iz + ssz;
+      const farx = pz.ix + ssx * 2,
+        farz = pz.iz + ssz * 2;
+      const onCube = (x: number, z: number) => x === S.cube.ix && z === S.cube.iz;
+      if (
+        freeTile(midx, midz) &&
+        !onCube(midx, midz) &&
+        freeTile(farx, farz) &&
+        !onCube(farx, farz)
+      ) {
+        pz.dashT =
+          LOCUST_DASH_CD_MIN +
+          Math.random() * (LOCUST_DASH_CD_MAX - LOCUST_DASH_CD_MIN);
+        pz.prevIx = pz.ix;
+        pz.prevIz = pz.iz;
+        pz.ix = farx;
+        pz.iz = farz;
+        pz.fromPos.copy(pz.mesh.position);
+        pz.fromPos.y = 0;
+        pz.toPos.copy(tileToWorld(farx, farz));
+        pz.moveT = 0;
+        pz.slideMul = LOCUST_DASH_SLIDE;
+        pz.mesh.rotation.set(0, Math.atan2(ssx, ssz) - Math.PI / 2, 0);
+        return;
+      }
+    }
 
     // sticky grab: when orthogonally adjacent to an idle cube, the parasite can
     // reach out and latch onto the facing face instead of stepping in. Scales
@@ -580,7 +838,15 @@ Math.abs(dx) > Math.abs(dz) ||
     // beeline: spiders/scorpions wander sideways less as stick rises, so they
     // path straight for the cube at high levels
     const sidestep = 0.35 * (1 - stick) + 0.05 * stick;
-    if ((pz.type === "spider" || pz.type === "scorpion") && Math.random() < sidestep) {
+    // fleas jitter far more than they path — that erratic hop is what makes
+    // them hard to land on
+    const wander = pz.type === "flea" ? 0.55 : sidestep;
+    if (
+      (pz.type === "spider" ||
+        pz.type === "scorpion" ||
+        pz.type === "flea") &&
+      Math.random() < wander
+    ) {
 if (preferX) sz = Math.sign(dz) || (Math.random() < 0.5 ? 1 : -1);
 else sx = Math.sign(dx) || (Math.random() < 0.5 ? 1 : -1);
 } else {
@@ -645,11 +911,45 @@ pz.fromPos.y = 0;
 pz.toPos.copy(tileToWorld(nx, nz));
 pz.moveT = 0;
 pz.mesh.rotation.set(0, Math.atan2(sx, sz) - Math.PI / 2, 0);
+
+// trail-leavers drop a hazard on the tile they just vacated
+maybeDropHazard(pz);
 }
 
 function removeParasite(pz: Parasite) {
 releaseParasiteMesh(pz.type, pz.mesh);
 S.parasites.splice(S.parasites.indexOf(pz), 1);
+}
+
+// egg sac timed out: burst into a small brood on the free tiles around it,
+// then remove the sac. Ignoring a sac now costs you a cluster of bugs.
+function hatchEggSac(pz: Parasite) {
+const ix = pz.ix,
+iz = pz.iz;
+popup(pz.mesh.position.clone(), "HATCHED!", "rampage");
+splat(pz.mesh.position.clone().setY(0), pz.def.goo, false);
+playRampage();
+const dirs = [
+[1, 0],
+[-1, 0],
+[0, 1],
+[0, -1],
+[1, 1],
+[-1, -1],
+[1, -1],
+[-1, 1],
+] as const;
+let spawned = 0;
+for (const [ax, az] of dirs) {
+if (spawned >= EGGSAC_BROOD) break;
+const nx = ix + ax,
+nz = iz + az;
+if (freeTile(nx, nz) && !(nx === S.cube.ix && nz === S.cube.iz)) {
+addParasite("bug", nx, nz);
+spawned++;
+}
+}
+removeParasite(pz);
 }
 
 /* ---------- splat effects (blob texture, no perfect circles) ---------- */
@@ -728,6 +1028,97 @@ scene.remove(old.mesh);
 }
 }
 
+/* ---------- ground hazards: spider web / slug slime / termite pit ---------- */
+const hazardGeo = new THREE.PlaneGeometry(0.95, 0.95);
+hazardGeo.rotateX(-Math.PI / 2);
+const hazardTex: Record<HazardKind, THREE.CanvasTexture> = {
+web: makeWebTexture(),
+slime: makeSlimeTexture(),
+pit: makePitTexture(),
+};
+const HAZARD_STYLE: Record<
+HazardKind,
+{ life: number; opacity: number; color: number; y: number }
+> = {
+web: { life: WEB_LIFE, opacity: 0.55, color: 0xffffff, y: 0.02 },
+slime: { life: SLIME_LIFE, opacity: 0.78, color: 0xffffff, y: 0.02 },
+pit: { life: PIT_LIFE, opacity: 0.96, color: 0xffffff, y: 0.012 },
+};
+
+function hazardAt(ix: number, iz: number) {
+return S.hazards.find((h) => h.ix === ix && h.iz === iz);
+}
+function pitAt(ix: number, iz: number) {
+return S.hazards.some((h) => h.kind === "pit" && h.ix === ix && h.iz === iz);
+}
+function countKind(kind: HazardKind) {
+let n = 0;
+for (const h of S.hazards) if (h.kind === kind) n++;
+return n;
+}
+
+function removeHazard(h: Hazard) {
+scene.remove(h.mesh);
+(h.mesh.material as THREE.Material).dispose(); // geo/tex shared, kept
+const i = S.hazards.indexOf(h);
+if (i !== -1) S.hazards.splice(i, 1);
+}
+
+function dropHazard(kind: HazardKind, ix: number, iz: number) {
+if (hazardAt(ix, iz)) return; // one hazard per tile
+// oldest web recycles first if webs alone hit their cap; otherwise the global
+// cap keeps total hazard draw-count bounded
+if (kind === "web" && countKind("web") >= WEB_MAX) {
+const w = S.hazards.find((h) => h.kind === "web");
+if (w) removeHazard(w);
+}
+if (S.hazards.length >= HAZARD_MAX) removeHazard(S.hazards[0]);
+const st = HAZARD_STYLE[kind];
+const m = new THREE.Mesh(
+hazardGeo,
+new THREE.MeshBasicMaterial({
+map: hazardTex[kind],
+color: st.color,
+transparent: true,
+opacity: st.opacity,
+depthWrite: false,
+polygonOffset: true,
+polygonOffsetFactor: -2,
+}),
+);
+m.renderOrder = 1;
+const p = tileToWorld(ix, iz);
+m.position.set(p.x, st.y, p.z);
+scene.add(m);
+S.hazards.push({ kind, mesh: m, ix, iz, t: 0, life: st.life });
+}
+
+// spiders trail silk, slugs trail slime, termites dig pits — each on the tile
+// they just left. Pits are throttled and kept clear of the cube so it can never
+// be walled in.
+function maybeDropHazard(pz: Parasite) {
+const px = pz.prevIx,
+pz2 = pz.prevIz;
+if (hazardAt(px, pz2)) return;
+if (pz.type === "spider") {
+if (Math.random() < WEB_DROP_CHANCE) dropHazard("web", px, pz2);
+} else if (pz.type === "slug") {
+if (Math.random() < SLIME_DROP_CHANCE) dropHazard("slime", px, pz2);
+} else if (pz.type === "termite") {
+const dist = Math.max(
+Math.abs(px - S.cube.ix),
+Math.abs(pz2 - S.cube.iz),
+);
+if (
+Math.random() < PIT_DROP_CHANCE &&
+dist >= PIT_MIN_DIST &&
+countKind("pit") < PIT_MAX
+) {
+dropHazard("pit", px, pz2);
+}
+}
+}
+
 /* ---------- scoring / HUD ---------- */
 const $ = (id: string) => document.getElementById(id) as HTMLElement;
 const scoreEl = $("score"),
@@ -742,7 +1133,9 @@ popups = $("popups"),
 warning = $("warning"),
 levelEl = $("level"),
 levelupEl = $("levelup"),
-biteGlow = $("bite-glow");
+biteGlow = $("bite-glow"),
+poisonGlow = $("poison-glow"),
+buffsEl = $("buffs");
 void flash; // kept for markup compatibility; bites use the glow overlay now
 
 function applyLevel(idx: number) {
@@ -822,9 +1215,23 @@ comboBar.style.width = "0%";
 }
 
   // a latched parasite bites: chip health + escalating red glow. Higher levels
-  // drain more per bite (LEVELS[].bite multiplier).
-function applyBite() {
-    S.lives = Math.max(0, S.lives - BITE_DAMAGE * LEVELS[S.level].bite);
+  // drain more per bite (LEVELS[].bite multiplier). Scorpions also poison:
+  // half an icon drains over the next few seconds.
+function applyBite(pz: Parasite) {
+    // mosquitoes drain extra on the bite itself
+    const drain = pz.type === "mosquito" ? MOSQUITO_DRAIN : 1;
+    S.lives = Math.max(0, S.lives - BITE_DAMAGE * LEVELS[S.level].bite * drain);
+if (pz.type === "scorpion") {
+S.poisonT = POISON_TIME;
+popup(cubeMesh.position.clone(), "POISONED!", "rampage");
+}
+if (pz.type === "hornet") {
+S.dazeT = DAZE_TIME; // controls invert for a moment
+popup(cubeMesh.position.clone(), "DAZED!", "rampage");
+}
+if (pz.type === "mosquito") {
+popup(cubeMesh.position.clone(), "DRAINED!", "rampage");
+}
 S.streak = 0;
 endCombo();
 playBite();
@@ -866,7 +1273,7 @@ if (!S.heart) return;
 scene.remove(S.heart.mesh);
 disposeObject(S.heart.mesh);
 S.heart = null;
-S.heartCooldown = 20 + Math.random() * 15; // rare: ~20–35s until next
+S.heartCooldown = 17 + Math.random() * 13; // ~17–30s until next (was 20–35s)
 }
 
 function collectHeart() {
@@ -877,16 +1284,77 @@ removeHeart();
 updateHUD();
 }
 
+/* ---------- power-ups (⚡ speed / ★ giant) ---------- */
+function spawnPowerup() {
+let ix = 0,
+iz = 0,
+ok = false;
+for (let tries = 0; tries < 12 && !ok; tries++) {
+const a = Math.random() * Math.PI * 2;
+const r = HEART_SPAWN_MIN + Math.random() * (HEART_SPAWN_MAX - HEART_SPAWN_MIN);
+ix = S.cube.ix + Math.round(Math.cos(a) * r);
+iz = S.cube.iz + Math.round(Math.sin(a) * r);
+ok = !isObstacle(ix, iz) && !(ix === S.cube.ix && iz === S.cube.iz);
+}
+if (!ok) {
+S.powerupCooldown = 3; // no spot, retry soon
+return;
+}
+const kind: Pickup["kind"] = Math.random() < 0.5 ? "bolt" : "star";
+const mesh = kind === "bolt" ? makeBoltMesh() : makeStarMesh();
+const p = tileToWorld(ix, iz);
+mesh.position.set(p.x, 0.5, p.z);
+scene.add(mesh);
+S.powerup = { kind, mesh, ix, iz, t: 0 };
+}
+
+function removePowerup() {
+if (!S.powerup) return;
+scene.remove(S.powerup.mesh);
+disposeObject(S.powerup.mesh);
+S.powerup = null;
+S.powerupCooldown = 14 + Math.random() * 12; // ~14–26s until next (was 20–35s)
+}
+
+function collectPowerup() {
+const kind = S.powerup!.kind;
+if (kind === "bolt") {
+S.speedT = SPEED_TIME;
+popup(cubeMesh.position.clone(), "⚡ SPEED!", "big");
+playHeal();
+} else {
+S.giantT = GIANT_TIME;
+cubeMesh.scale.setScalar(GIANT_SCALE);
+popup(cubeMesh.position.clone(), "★ GIANT!", "big");
+playRampage();
+}
+removePowerup();
+}
+
 /* ---------- squash ---------- */
-function crushList(victims: Parasite[], strongThud: boolean) {
+// pierce=true ignores beetle armor (grinding a latched bug always kills)
+function crushList(victims: Parasite[], strongThud: boolean, pierce = false) {
 if (!victims.length) return;
+let killed = 0;
 for (const pz of victims) {
+if (!pierce && pz.hp > 1) {
+// armored beetle: first roll cracks the shell and stuns it
+pz.hp--;
+pz.stunT = 0.7;
+pz.mesh.scale.set(1.15, 0.45, 1.15);
+popup(pz.mesh.position.clone(), "CRACK!", "");
+playKnock();
+continue;
+}
 splat(pz.mesh.position.clone().setY(0), pz.def.goo, pz.type === "spider");
 addKill(pz, pz.mesh.position.clone());
 removeParasite(pz);
+killed++;
 }
-playThud(strongThud || victims.length > 1);
+if (killed) {
+playThud(strongThud || killed > 1);
 playSplat();
+}
 S.shake = Math.min(0.35, 0.12 + victims.length * 0.08);
 }
 
@@ -899,12 +1367,31 @@ function squashAt(ix: number, iz: number) {
 const c = tileToWorld(ix, iz);
 const victims = S.parasites.filter((p) => {
 if (p.state !== "crawl") return false;
+if (p.type === "pillbug") {
+// curls into an armored ball while moving — only killable sitting still
+return p.moveT >= 1 && p.ix === ix && p.iz === iz;
+}
 if (p.ix === ix && p.iz === iz) return true;
 if (p.moveT < 1 && p.prevIx === ix && p.prevIz === iz) return true;
 const dx = p.mesh.position.x - c.x;
 const dz = p.mesh.position.z - c.z;
 return dx * dx + dz * dz < 0.6 * 0.6;
 });
+// landed on a rolling pillbug? it shrugs it off — give the whiff some feedback
+if (!victims.length) {
+const curled = S.parasites.some(
+(p) =>
+p.state === "crawl" &&
+p.type === "pillbug" &&
+p.moveT < 1 &&
+((p.ix === ix && p.iz === iz) ||
+(p.prevIx === ix && p.prevIz === iz)),
+);
+if (curled) {
+playKnock();
+popup(tileToWorld(ix, iz), "CURLED!", "");
+}
+}
 crushList(victims, victims.some((v) => v.type === "spider"));
 }
 
@@ -916,19 +1403,21 @@ if (p.state !== "attached") return false;
 const worldN = _v1.copy(p.localN).applyQuaternion(cubeMesh.quaternion);
 return worldN.y < -0.5; // its face is now against the ground
 });
-crushList(crushed, true);
+crushList(crushed, true, true);
 }
 
 /* ---------- rolling ---------- */
 function tryRoll(dx: number, dz: number) {
 if (!S.running || S.paused) return;
+if (S.stallT > 0) return; // stuck in slime — can't roll yet
 if (S.rolling) {
 S.queuedDir = [dx, dz];
 return;
 }
 const nx = S.cube.ix + dx,
 nz = S.cube.iz + dz;
-if (isObstacle(nx, nz)) {
+// rocks and termite pits both block the roll
+if (isObstacle(nx, nz) || pitAt(nx, nz)) {
 playKnock();
 S.shake = Math.max(S.shake, 0.08);
 return;
@@ -938,6 +1427,11 @@ const anchor = cubeMesh.position
 .add(new THREE.Vector3(dx * 0.5, -0.5, dz * 0.5));
 S.rolling = {
 t: 0,
+// ⚡ rolls fast, webbed rolls slow (both can overlap and mostly cancel)
+dur:
+ROLL_TIME *
+(S.speedT > 0 ? SPEED_FACTOR : 1) *
+(S.slowT > 0 ? WEB_SLOW_FACTOR : 1),
 anchor,
 axis: new THREE.Vector3(dz, 0, -dx),
 startOffset: cubeMesh.position.clone().sub(anchor),
@@ -950,7 +1444,7 @@ nz,
 function updateRoll(dt: number) {
 const r = S.rolling;
 if (!r) return;
-r.t += dt / ROLL_TIME;
+r.t += dt / r.dur;
 const t = Math.min(r.t, 1);
 const angle = t * (Math.PI / 2);
 const q = new THREE.Quaternion().setFromAxisAngle(r.axis, angle);
@@ -965,9 +1459,32 @@ cubeMesh.position.set(p.x, TILE / 2, p.z);
 S.rolling = null;
 playThud(false);
 S.shake = Math.max(S.shake, 0.06);
+if (S.giantT > 0) {
+// giant mode: the landing flattens the whole 3×3 around the cube
+for (let dx = -1; dx <= 1; dx++)
+for (let dz = -1; dz <= 1; dz++) squashAt(r.nx + dx, r.nz + dz);
+} else {
 squashAt(r.nx, r.nz);
+}
 grindLatchedAfterRoll();
+const hz = hazardAt(r.nx, r.nz);
+if (hz && hz.kind !== "pit") {
+removeHazard(hz); // consumed on contact; giant tears through unharmed
+if (S.giantT <= 0) {
+if (hz.kind === "web") {
+S.slowT = WEB_SLOW_TIME;
+popup(cubeMesh.position.clone(), "WEBBED!", "");
+playLatch();
+} else {
+S.stallT = SLIME_STALL;
+popup(cubeMesh.position.clone(), "STUCK!", "");
+playLatch();
+}
+}
+}
 if (S.heart && S.heart.ix === r.nx && S.heart.iz === r.nz) collectHeart();
+if (S.powerup && S.powerup.ix === r.nx && S.powerup.iz === r.nz)
+collectPowerup();
 updateWorld();
 if (S.queuedDir) {
 const [dx, dz] = S.queuedDir;
@@ -986,6 +1503,9 @@ scene.remove(d.mesh);
 (d.mesh.material as THREE.Material).dispose();
 }
 removeHeart();
+removePowerup();
+for (const h of [...S.hazards]) removeHazard(h);
+cubeMesh.scale.setScalar(1);
 S.particles = [];
 S.decals = [];
 pauseScreen.classList.add("hidden");
@@ -1011,8 +1531,19 @@ glow: 0,
 glowHold: 0,
 heart: null,
 heartCooldown: 25,
+powerup: null,
+powerupCooldown: 10,
+hazards: [],
+speedT: 0,
+giantT: 0,
+slowT: 0,
+poisonT: 0,
+stallT: 0,
+dazeT: 0,
 });
 biteGlow.style.opacity = "0";
+poisonGlow.style.opacity = "0";
+buffsEl.textContent = "";
 endCombo();
 applyLevel(0);
 placeCube();
@@ -1161,6 +1692,7 @@ updateHUD();
 camera.position.copy(cubeMesh.position).add(CAM_OFFSET);
 const clock = new THREE.Clock();
 let rafId = 0;
+let hudAcc = 0; // throttles heart re-renders during poison drain
 
 function tick() {
 rafId = requestAnimationFrame(tick);
@@ -1174,8 +1706,45 @@ S.time += dt;
 S.spawnTimer -= dt;
 if (S.spawnTimer <= 0) {
 spawnParasite();
-const interval = Math.max(0.55, 2.2 - S.time * 0.022);
+// swarm (late levels) packs spawns tighter on top of the time ramp
+const swarm = LEVELS[S.level].swarm ?? 1;
+const interval = Math.max(0.45, (2.2 - S.time * 0.022) / swarm);
 S.spawnTimer = interval * (0.7 + Math.random() * 0.6);
+}
+
+// effect timers
+if (S.speedT > 0) S.speedT -= dt;
+if (S.slowT > 0) S.slowT -= dt;
+if (S.stallT > 0) S.stallT -= dt;
+if (S.dazeT > 0) S.dazeT -= dt;
+if (S.giantT > 0) {
+S.giantT -= dt;
+if (S.giantT <= 0) cubeMesh.scale.setScalar(1); // shrink back
+}
+if (S.poisonT > 0) {
+S.poisonT -= dt;
+S.lives = Math.max(0, S.lives - POISON_DPS * dt);
+hudAcc += dt;
+if (hudAcc > 0.15) {
+hudAcc = 0;
+updateHUD(); // hearts drain visibly while poisoned
+}
+if (S.lives <= 0) {
+updateHUD();
+gameOver();
+}
+}
+
+// active-effect readout under the level label
+{
+let b = "";
+if (S.speedT > 0) b += `⚡ ${Math.ceil(S.speedT)}s  `;
+if (S.giantT > 0) b += `★ ${Math.ceil(S.giantT)}s  `;
+if (S.slowT > 0) b += "🕸 SLOWED  ";
+if (S.stallT > 0) b += "🐌 STUCK  ";
+if (S.dazeT > 0) b += "🌀 DAZED  ";
+if (S.poisonT > 0) b += "☠ POISONED";
+buffsEl.textContent = b;
 }
 
 if (S.combo > 0) {
@@ -1186,10 +1755,14 @@ comboBar.style.width = (S.comboTimer / COMBO_WINDOW) * 100 + "%";
 if (S.comboTimer <= 0) endCombo();
 }
 
-// held input: newest key wins, else touch drag — keep rolling while idle
+// held input: newest key wins, else touch drag — keep rolling while idle.
+// hornet daze inverts the direction for a couple seconds.
 const lastKey = heldMoveCodes[heldMoveCodes.length - 1];
 const heldDir = lastKey ? KEYMAP[lastKey] : touchDir;
-if (heldDir && !S.rolling) tryRoll(heldDir[0], heldDir[1]);
+if (heldDir && !S.rolling) {
+const inv = S.dazeT > 0 ? -1 : 1;
+tryRoll(heldDir[0] * inv, heldDir[1] * inv);
+}
 
 updateRoll(dt);
 
@@ -1198,12 +1771,34 @@ for (let i = S.parasites.length - 1; i >= 0; i--) {
 const pz = S.parasites[i];
 pz.animT += dt;
 if (pz.state === "crawl") {
+// shell just cracked: frozen flat for a beat, then pops back up
+if (pz.stunT > 0) {
+pz.stunT -= dt;
+if (pz.stunT <= 0) pz.mesh.scale.setScalar(1);
+continue;
+}
+// egg sac never moves; it hatches a brood if not crushed in time
+if (pz.type === "eggsac") {
+pz.hatchT -= dt;
+pz.mesh.userData.animate(pz.animT);
+if (pz.hatchT <= 0) {
+hatchEggSac(pz);
+} else if (
+Math.max(Math.abs(pz.ix - S.cube.ix), Math.abs(pz.iz - S.cube.iz)) >
+DESPAWN_R
+) {
+removeParasite(pz);
+}
+continue;
+}
+if (pz.type === "locust" && pz.dashT > 0) pz.dashT -= dt;
 if (pz.moveT < 1) {
 pz.moveT = Math.min(
 1,
-pz.moveT + (dt * spd) / (pz.def.interval * 0.55),
+pz.moveT + (dt * spd * pz.slideMul) / (pz.def.interval * 0.55),
 );
 pz.mesh.position.lerpVectors(pz.fromPos, pz.toPos, pz.moveT);
+if (pz.moveT >= 1) pz.slideMul = 1; // lunge over, resume normal pace
 }
 pz.moveTimer += dt;
 if (pz.moveTimer >= pz.def.interval / spd) {
@@ -1235,7 +1830,7 @@ pz.mesh.scale.set(p, p, p);
 if (pz.biteTimer <= 0) {
 splat(cubeMesh.position.clone().setY(0), pz.def.goo, false);
 removeParasite(pz); // it feeds and drops off
-applyBite();
+applyBite(pz);
 }
 }
 }
@@ -1264,9 +1859,43 @@ removeHeart();
 S.heartCooldown -= dt;
 if (S.heartCooldown <= 0) spawnHeart();
 }
+
+// power-up lifecycle (same rhythm as hearts, rarer)
+if (S.powerup) {
+const pu = S.powerup;
+pu.t += dt;
+pu.mesh.rotation.y += dt * 2.2;
+pu.mesh.position.y = 0.5 + Math.sin(pu.t * 3) * 0.09;
+const dist = Math.max(
+Math.abs(pu.ix - S.cube.ix),
+Math.abs(pu.iz - S.cube.iz),
+);
+if (pu.t > POWERUP_LIFE)
+pu.mesh.visible = Math.floor(pu.t * 6) % 2 === 0;
+if (pu.t > POWERUP_LIFE + POWERUP_BLINK || dist > HEART_DESPAWN_R) {
+removePowerup();
+}
+} else if (S.score >= POWERUP_MIN_SCORE) {
+S.powerupCooldown -= dt;
+if (S.powerupCooldown <= 0) spawnPowerup();
+}
+
+// ground hazards age out (fade over their last 2s)
+for (let i = S.hazards.length - 1; i >= 0; i--) {
+const h = S.hazards[i];
+h.t += dt;
+if (h.t > h.life - 2) {
+const base = HAZARD_STYLE[h.kind].opacity;
+(h.mesh.material as THREE.MeshBasicMaterial).opacity =
+base * Math.max(0, (h.life - h.t) / 2);
+}
+if (h.t >= h.life) removeHazard(h);
+}
 }
 
 biteGlow.style.opacity = String(S.glow);
+poisonGlow.style.opacity =
+S.poisonT > 0 ? String(0.25 + 0.35 * (S.poisonT / POISON_TIME)) : "0";
 
 // particles (reverse loop = safe in-place removal, no array copy)
 for (let i = S.particles.length - 1; i >= 0; i--) {
