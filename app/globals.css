@@ -73,6 +73,16 @@ canvas { display: block; touch-action: none; }
   100% { opacity: 0; transform: translate(-50%, -62%) scale(1); }
 }
 
+/* active effect readout (⚡ / ★ / 🕸 / ☠) */
+#buffs {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #e0d64e;
+  margin-top: 4px;
+  min-height: 17px;
+}
+
 #combo-wrap { margin-top: 10px; height: 40px; }
 #combo-label {
   font-size: 18px;
@@ -197,6 +207,15 @@ canvas { display: block; touch-action: none; }
   z-index: 5;
   opacity: 0;
   background: radial-gradient(ellipse at center, transparent 42%, rgba(190, 28, 40, 0.85) 100%);
+}
+
+/* green poison glow while a scorpion sting drains health; opacity via JS */
+#poison-glow {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(70, 190, 60, 0.7) 100%);
 }
 
 /* ---------- score popups ---------- */
