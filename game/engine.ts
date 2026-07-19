@@ -15,6 +15,8 @@ playLatch,
 playBite,
 playHeal,
 playRampage,
+playCoin,
+playSpit,
 } from "./audio";
 import { LEVELS, type Level } from "./levels";
 import {
@@ -30,6 +32,9 @@ import {
   trackRef,
 } from "./leaderboard";
 import { renderCard } from "./share-card";
+import { addCoins, getEquippedSkin, getSettings } from "./storage";
+import { skinById, getSkinTexture } from "./skins";
+import { initMenus, showStart } from "./menus";
 
 /* ================= constants ================= */
 const TILE = 1;
@@ -88,6 +93,12 @@ const LOCUST_DASH_SLIDE = 2.4; // slide-speed multiplier during a lunge
 // egg sac
 const EGGSAC_HATCH = 6; // seconds until it hatches if left alone
 const EGGSAC_BROOD = 3; // bugs it hatches into
+// spitter: ranged acid lobber — punishes camping in one spot
+const SPIT_RANGE_MIN = 3; // holds ground inside this ring (tiles, chebyshev)
+const SPIT_RANGE_MAX = 6; // spits (and lands hits) from up to 6 tiles out
+const SPIT_CD_MIN = 2.4,
+SPIT_CD_MAX = 4.0; // seconds between shots
+const SPIT_DAMAGE = 0.75; // × BITE_DAMAGE — softer than a bite, but ranged
 const GROUND_SIZE = 60;
 const CAM_OFFSET = new THREE.Vector3(0, 11, 8.5);
 const SUN_OFFSET = new THREE.Vector3(6, 14, 4);
@@ -225,6 +236,38 @@ g.add(gem);
 return g;
 }
 
+// pickup beacon: pulsing ground ring + soft light pillar so power-ups read
+// from across the arena (players were rolling straight past them)
+function addBeacon(g: THREE.Group, color: number, strong: boolean) {
+  const ring = new THREE.Mesh(
+    new THREE.RingGeometry(0.4, 0.58, 24),
+    new THREE.MeshBasicMaterial({
+      color,
+      transparent: true,
+      opacity: strong ? 0.85 : 0.55,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    }),
+  );
+  ring.rotation.x = -Math.PI / 2;
+  ring.position.y = -0.46; // pickup floats at y≈0.5 — ring sits on the soil
+  g.add(ring);
+  const pillar = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.14, 0.3, 2.4, 12, 1, true),
+    new THREE.MeshBasicMaterial({
+      color,
+      transparent: true,
+      opacity: strong ? 0.22 : 0.12,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    }),
+  );
+  pillar.position.y = 0.75;
+  g.add(pillar);
+  g.userData.beaconRing = ring;
+}
+
 function makeWebTexture() {
 const cv = document.createElement("canvas");
 cv.width = cv.height = 128;
@@ -348,6 +391,7 @@ stunT: number; // seconds frozen after a shell crack
 hatchT: number; // egg sac: seconds until it hatches (0 = n/a)
 dashT: number; // locust: seconds until its next dash lunge
 slideMul: number; // per-step slide-speed scale (locust dash uses >1)
+spitT: number; // spitter: seconds until its next acid lob
 }
 
 interface RollState {
@@ -381,6 +425,17 @@ iz: number;
 t: number;
 }
 
+// spitter's acid glob mid-flight; lands on the tile the cube occupied at launch
+interface Glob {
+mesh: THREE.Mesh;
+from: THREE.Vector3;
+to: THREE.Vector3;
+t: number; // 0→1 flight progress
+dur: number;
+ix: number;
+iz: number;
+}
+
 type HazardKind = "web" | "slime" | "pit";
 interface Hazard {
 kind: HazardKind;
@@ -397,6 +452,7 @@ paused: boolean;
 time: number;
 score: number;
 best: number;
+lastHitBy: string; // parasite type that last bit us (game-over cause line)
 level: number;
 lives: number;
 combo: number;
@@ -420,6 +476,7 @@ heartCooldown: number; // seconds until the next heart may spawn
 powerup: Pickup | null;
 powerupCooldown: number; // seconds until the next power-up may spawn
 hazards: Hazard[];
+globs: Glob[]; // spitter acid shots in flight
 speedT: number; // ⚡ time left
 giantT: number; // ★ time left
 slowT: number; // webbed-slow time left
@@ -439,6 +496,7 @@ paused: false,
 time: 0,
 score: 0,
 best: Number(localStorage.getItem("crush-best") || 0),
+lastHitBy: "",
 level: 0,
 lives: START_LIVES,
 combo: 0,
@@ -462,6 +520,7 @@ heartCooldown: 25,
 powerup: null,
 powerupCooldown: 10,
 hazards: [],
+globs: [],
 speedT: 0,
 giantT: 0,
 slowT: 0,
@@ -473,6 +532,14 @@ dazeT: 0,
 // reusable scratch vectors — avoid per-frame allocation in the hot loop
 const _v1 = new THREE.Vector3();
 const _v2 = new THREE.Vector3();
+
+// per-run settings snapshot — difficulty is only changeable from the menu,
+// so resetGame() re-reads it at the start of each run
+let casual = getSettings().difficulty === "casual";
+// haptic tap on damage/pickups; respects the settings toggle, no-ops on desktop
+const buzz = (ms: number) => {
+  if ("vibrate" in navigator && getSettings().haptics) navigator.vibrate(ms);
+};
 
 /* ---------- scene ---------- */
 const scene = new THREE.Scene();
@@ -690,6 +757,7 @@ pillbug: [],
 flea: [],
 locust: [],
 eggsac: [],
+spitter: [],
 };
 function acquireParasiteMesh(type: ParasiteType): THREE.Group {
 const m = parasitePools[type].pop() ?? makeParasiteMesh(type);
@@ -770,6 +838,7 @@ type === "locust"
 Math.random() * (LOCUST_DASH_CD_MAX - LOCUST_DASH_CD_MIN)
 : 0,
 slideMul: 1,
+spitT: type === "spitter" ? 1.2 + Math.random() * 1.4 : 0,
 });
 }
 
@@ -790,6 +859,57 @@ function stepParasite(pz: Parasite) {
 const dx = S.cube.ix - pz.ix;
 const dz = S.cube.iz - pz.iz;
     const stick = LEVELS[S.level].stick;
+
+    // spitter: ranged — never latches. Keeps a firing ring around the cube:
+    // backs off when crowded, closes in when out of range, holds otherwise
+    // (the spit-cooldown in the main loop handles the actual shot).
+    if (pz.type === "spitter") {
+      const cheb = Math.max(Math.abs(dx), Math.abs(dz));
+      const faceCube = () =>
+        pz.mesh.rotation.set(0, Math.atan2(dx, dz) - Math.PI / 2, 0);
+      if (cheb >= SPIT_RANGE_MIN && cheb <= SPIT_RANGE_MAX) {
+        faceCube();
+        return; // in range: stand and shoot
+      }
+      const dir = cheb > SPIT_RANGE_MAX ? 1 : -1; // approach vs back off
+      let sx = 0,
+        sz = 0;
+      if (
+        Math.abs(dx) > Math.abs(dz) ||
+        (Math.abs(dx) === Math.abs(dz) && Math.random() < 0.5)
+      )
+        sx = (Math.sign(dx) || 1) * dir;
+      else sz = (Math.sign(dz) || 1) * dir;
+      const onCube = (x: number, z: number) =>
+        x === S.cube.ix && z === S.cube.iz;
+      let nx = pz.ix + sx,
+        nz = pz.iz + sz;
+      if (!freeTile(nx, nz) || onCube(nx, nz)) {
+        if (sx !== 0) {
+          sx = 0;
+          sz = (Math.sign(dz) || (Math.random() < 0.5 ? 1 : -1)) * dir;
+        } else {
+          sz = 0;
+          sx = (Math.sign(dx) || (Math.random() < 0.5 ? 1 : -1)) * dir;
+        }
+        nx = pz.ix + sx;
+        nz = pz.iz + sz;
+        if (!freeTile(nx, nz) || onCube(nx, nz)) {
+          faceCube();
+          return; // cornered: hold — chasing it down is the counterplay
+        }
+      }
+      pz.prevIx = pz.ix;
+      pz.prevIz = pz.iz;
+      pz.ix = nx;
+      pz.iz = nz;
+      pz.fromPos.copy(pz.mesh.position);
+      pz.fromPos.y = 0;
+      pz.toPos.copy(tileToWorld(nx, nz));
+      pz.moveT = 0;
+      faceCube();
+      return;
+    }
 
     // locust lunge: every few seconds it dashes 2 tiles straight at the cube.
     // A fast slide (slideMul) sells the pounce. Only when a clear 2-tile beeline
@@ -1139,6 +1259,67 @@ dropHazard("pit", px, pz2);
 }
 }
 
+/* ---------- spitter acid globs ---------- */
+const globGeo = new THREE.SphereGeometry(0.07, 8, 6);
+
+function launchSpit(pz: Parasite) {
+  const to = tileToWorld(S.cube.ix, S.cube.iz);
+  const from = pz.mesh.position.clone();
+  from.y = 0.24;
+  const dist = from.distanceTo(to);
+  const mesh = new THREE.Mesh(
+    globGeo,
+    new THREE.MeshStandardMaterial({
+      color: 0x9fe32a,
+      emissive: 0x3a6a08,
+      emissiveIntensity: 0.7,
+      roughness: 0.3,
+    }),
+  );
+  mesh.castShadow = true;
+  mesh.position.copy(from);
+  scene.add(mesh);
+  S.globs.push({
+    mesh,
+    from,
+    to,
+    t: 0,
+    dur: 0.55 + dist * 0.07, // farther lob = longer hang time = fairer dodge
+    ix: S.cube.ix,
+    iz: S.cube.iz,
+  });
+  playSpit();
+}
+
+function removeGlob(i: number) {
+  const g = S.globs[i];
+  scene.remove(g.mesh);
+  (g.mesh.material as THREE.Material).dispose(); // geometry shared, kept
+  S.globs.splice(i, 1);
+}
+
+// acid connects: softer than a bite, but it still breaks combo/streak —
+// that loss is the real anti-camping tax
+function applySpitHit() {
+  const soften = casual ? 0.75 : 1;
+  S.lives = Math.max(
+    0,
+    S.lives - BITE_DAMAGE * SPIT_DAMAGE * LEVELS[S.level].bite * soften,
+  );
+  S.lastHitBy = "spitter";
+  S.streak = 0;
+  endCombo();
+  playBite();
+  buzz(35);
+  popup(cubeMesh.position.clone(), "ACID!", "rampage");
+  S.shake = Math.max(S.shake, 0.22);
+  const missing = (3 - S.lives) / 3;
+  S.glow = Math.max(S.glow, 0.28 + missing * 0.4);
+  S.glowHold = 0.1 + missing * 1.0;
+  updateHUD();
+  if (S.lives <= 0) gameOver();
+}
+
 /* ---------- scoring / HUD ---------- */
 const $ = (id: string) => document.getElementById(id) as HTMLElement;
 const scoreEl = $("score"),
@@ -1158,13 +1339,28 @@ poisonGlow = $("poison-glow"),
 buffsEl = $("buffs");
 void flash; // kept for markup compatibility; bites use the glow overlay now
 
+// Cube look = equipped skin texture × current level colour. Textures are
+// grayscale, so the level tint multiplies through and the pattern (cracks /
+// scales / sticker grid) stays contrasty at every level.
+function applyCubeStyle() {
+  const mat = cubeMesh.material as THREE.MeshStandardMaterial;
+  const sk = skinById(getEquippedSkin());
+  const L = LEVELS[S.level];
+  mat.color.set(L.skin);
+  mat.emissive.set(L.emissive ?? 0x000000);
+  mat.emissiveIntensity = 1;
+  mat.roughness = sk.roughness;
+  mat.map = getSkinTexture(sk.id);
+  mat.needsUpdate = true;
+}
+// shop equips a skin → restyle the live cube immediately
+const onSkinChange = () => applyCubeStyle();
+window.addEventListener("crush:skin", onSkinChange);
+
 function applyLevel(idx: number) {
 S.level = idx;
-const L = LEVELS[idx];
-const mat = cubeMesh.material as THREE.MeshStandardMaterial;
-mat.color.set(L.skin);
-mat.emissive.set(L.emissive ?? 0x000000);
-levelEl.textContent = `LVL ${idx + 1} · ${L.name}`;
+applyCubeStyle();
+levelEl.textContent = `LVL ${idx + 1} · ${LEVELS[idx].name}`;
 }
 
 function announceLevel(L: Level) {
@@ -1239,9 +1435,15 @@ comboBar.style.width = "0%";
   // drain more per bite (LEVELS[].bite multiplier). Scorpions also poison:
   // half an icon drains over the next few seconds.
 function applyBite(pz: Parasite) {
-    // mosquitoes drain extra on the bite itself
+    // mosquitoes drain extra on the bite itself; casual difficulty softens all
     const drain = pz.type === "mosquito" ? MOSQUITO_DRAIN : 1;
-    S.lives = Math.max(0, S.lives - BITE_DAMAGE * LEVELS[S.level].bite * drain);
+    const soften = casual ? 0.75 : 1;
+    S.lives = Math.max(
+      0,
+      S.lives - BITE_DAMAGE * LEVELS[S.level].bite * drain * soften,
+    );
+    S.lastHitBy = pz.type;
+    buzz(45);
 if (pz.type === "scorpion") {
 S.poisonT = POISON_TIME;
 popup(cubeMesh.position.clone(), "POISONED!", "rampage");
@@ -1282,7 +1484,11 @@ if (!ok) {
 S.heartCooldown = 3; // no spot, retry soon
 return;
 }
-const mesh = makeHeartMesh();
+const icon = makeHeartMesh();
+const mesh = new THREE.Group();
+mesh.add(icon);
+addBeacon(mesh, 0xff4d6a, false);
+mesh.userData.icon = icon;
 const p = tileToWorld(ix, iz);
 mesh.position.set(p.x, 0.5, p.z);
 scene.add(mesh);
@@ -1300,6 +1506,7 @@ S.heartCooldown = 17 + Math.random() * 13; // ~17–30s until next (was 20–35s
 function collectHeart() {
 S.lives = Math.min(3, S.lives + 1); // heal one full icon
 playHeal();
+buzz(25);
 popup(cubeMesh.position.clone(), "+1 ♥", "big");
 removeHeart();
 updateHUD();
@@ -1322,11 +1529,22 @@ S.powerupCooldown = 3; // no spot, retry soon
 return;
 }
 const kind: Pickup["kind"] = Math.random() < 0.5 ? "bolt" : "star";
-const mesh = kind === "bolt" ? makeBoltMesh() : makeStarMesh();
+const icon = kind === "bolt" ? makeBoltMesh() : makeStarMesh();
+icon.scale.setScalar(1.35); // bigger than before — players kept missing them
+const mesh = new THREE.Group();
+mesh.add(icon);
+addBeacon(mesh, kind === "bolt" ? 0xffe14e : 0xe05ae0, true);
+mesh.userData.icon = icon;
 const p = tileToWorld(ix, iz);
 mesh.position.set(p.x, 0.5, p.z);
 scene.add(mesh);
 S.powerup = { kind, mesh, ix, iz, t: 0 };
+// on-spawn callout so the player knows something worth grabbing appeared
+popup(
+  p.clone().setY(1),
+  kind === "bolt" ? "⚡ SPEED SPAWNED!" : "★ GIANT SPAWNED!",
+  "big",
+);
 }
 
 function removePowerup() {
@@ -1339,6 +1557,7 @@ S.powerupCooldown = 14 + Math.random() * 12; // ~14–26s until next (was 20–3
 
 function collectPowerup() {
 const kind = S.powerup!.kind;
+buzz(35);
 if (kind === "bolt") {
 S.speedT = SPEED_TIME;
 popup(cubeMesh.position.clone(), "⚡ SPEED!", "big");
@@ -1517,6 +1736,7 @@ tryRoll(dx, dz);
 
 /* ---------- game flow ---------- */
 function resetGame() {
+casual = getSettings().difficulty === "casual";
 for (const pz of [...S.parasites]) removeParasite(pz);
 for (const pt of S.particles) releaseParticle(pt.mesh);
 for (const d of S.decals) {
@@ -1526,6 +1746,7 @@ scene.remove(d.mesh);
 removeHeart();
 removePowerup();
 for (const h of [...S.hazards]) removeHazard(h);
+while (S.globs.length) removeGlob(S.globs.length - 1);
 cubeMesh.scale.setScalar(1);
 S.particles = [];
 S.decals = [];
@@ -1536,6 +1757,7 @@ running: true,
 paused: false,
 time: 0,
 score: 0,
+lastHitBy: "",
 level: 0,
 lives: START_LIVES,
 combo: 0,
@@ -1575,10 +1797,23 @@ updateHUD();
 
 function gameOver() {
 S.running = false;
+const prevBest = S.best;
 S.best = Math.max(S.best, S.score);
 localStorage.setItem("crush-best", String(S.best));
-$("final-stats").textContent = `BEST ${S.best} · ${S.totalKills} parasites crushed · LVL ${S.level + 1} ${LEVELS[S.level].name}`;
-drawCard();
+// coin payout: 1 per parasite crushed + 10 per level climbed
+const earned = S.totalKills + S.level * 10;
+addCoins(earned);
+$("newbest-chip").classList.toggle("hidden", S.score <= prevBest);
+$("final-score").textContent = S.score.toLocaleString();
+$("final-best").textContent = S.best.toLocaleString();
+$("go-level").textContent = `${S.level + 1} · ${LEVELS[S.level].name}`;
+$("go-bugs").textContent = String(S.totalKills);
+$("final-coins").textContent = `+${earned}`;
+$("final-stats").textContent = S.lastHitBy
+  ? `Overrun by ${S.lastHitBy}s at LVL ${S.level + 1}.`
+  : `The horde got you at LVL ${S.level + 1}.`;
+if (earned > 0) playCoin();
+buzz(120);
 $("gameover-screen").classList.remove("hidden");
 endCombo();
 void submitAndRenderBoard(S.score);
@@ -1636,6 +1871,12 @@ const pauseScreen = $("pause-screen");
 function setPause(p: boolean) {
 if (!S.running) return;
 S.paused = p;
+if (p) {
+  // live run snapshot on the pause card
+  $("pause-score").textContent = S.score.toLocaleString();
+  $("pause-bugs").textContent = String(S.totalKills);
+  $("pause-combo").textContent = `×${Math.min(S.combo, 8)}`;
+}
 pauseScreen.classList.toggle("hidden", !p);
 pauseBtn.textContent = p ? "▶" : "❚❚";
 }
@@ -1707,6 +1948,29 @@ void (async () => {
     nudge.textContent = `🔥 ${me.streak} day streak — play today to keep it`;
   }
 })();
+
+// pause-menu extras + game-over exit back to the Start screen
+const onPauseRestart = () => resetGame();
+const onQuitToMenu = () => {
+  S.running = false;
+  S.paused = false;
+  pauseScreen.classList.add("hidden");
+  pauseBtn.textContent = "❚❚";
+  showStart();
+};
+const onGameoverMenu = () => {
+  $("gameover-screen").classList.add("hidden");
+  showStart();
+};
+const pauseRestartBtn = $("pause-restart");
+const pauseMenuBtn = $("pause-menu");
+const gameoverMenuBtn = $("gameover-menu");
+pauseRestartBtn.addEventListener("click", onPauseRestart);
+pauseMenuBtn.addEventListener("click", onQuitToMenu);
+gameoverMenuBtn.addEventListener("click", onGameoverMenu);
+
+// menu screens (start/how-to/shop/settings) wire themselves
+const disposeMenus = initMenus();
 
 const KEYMAP: Record<string, [number, number]> = {
 ArrowUp: [0, -1],
@@ -1803,6 +2067,7 @@ window.addEventListener("touchcancel", onTouchEnd, { passive: true });
 
 /* ---------- main loop ---------- */
 placeCube();
+applyCubeStyle(); // equipped skin shows on the menu-background cube too
 updateWorld();
 updateHUD();
 camera.position.copy(cubeMesh.position).add(CAM_OFFSET);
@@ -1824,7 +2089,8 @@ if (S.spawnTimer <= 0) {
 spawnParasite();
 // swarm (late levels) packs spawns tighter on top of the time ramp
 const swarm = LEVELS[S.level].swarm ?? 1;
-const interval = Math.max(0.45, (2.2 - S.time * 0.022) / swarm);
+const interval =
+  Math.max(0.45, (2.2 - S.time * 0.022) / swarm) * (casual ? 1.18 : 1);
 S.spawnTimer = interval * (0.7 + Math.random() * 0.6);
 }
 
@@ -1839,7 +2105,7 @@ if (S.giantT <= 0) cubeMesh.scale.setScalar(1); // shrink back
 }
 if (S.poisonT > 0) {
 S.poisonT -= dt;
-S.lives = Math.max(0, S.lives - POISON_DPS * dt);
+S.lives = Math.max(0, S.lives - POISON_DPS * dt * (casual ? 0.75 : 1));
 hudAcc += dt;
 if (hudAcc > 0.15) {
 hudAcc = 0;
@@ -1908,6 +2174,23 @@ removeParasite(pz);
 continue;
 }
 if (pz.type === "locust" && pz.dashT > 0) pz.dashT -= dt;
+// spitter fires only while planted (not mid-slide) and in range —
+// the standing-still charge-up is the player's dodge telegraph
+if (pz.type === "spitter" && pz.moveT >= 1) {
+  pz.spitT -= dt;
+  if (pz.spitT <= 0) {
+    const cdx = S.cube.ix - pz.ix,
+      cdz = S.cube.iz - pz.iz;
+    const cheb = Math.max(Math.abs(cdx), Math.abs(cdz));
+    if (cheb >= 2 && cheb <= SPIT_RANGE_MAX) {
+      pz.mesh.rotation.set(0, Math.atan2(cdx, cdz) - Math.PI / 2, 0);
+      launchSpit(pz);
+      pz.spitT = SPIT_CD_MIN + Math.random() * (SPIT_CD_MAX - SPIT_CD_MIN);
+    } else {
+      pz.spitT = 0.4; // out of range: recheck soon
+    }
+  }
+}
 if (pz.moveT < 1) {
 pz.moveT = Math.min(
 1,
@@ -1961,8 +2244,13 @@ else if (S.glow > 0) S.glow = Math.max(0, S.glow - dt * 1.4);
 if (S.heart) {
 const h = S.heart;
 h.t += dt;
-h.mesh.rotation.y += dt * 1.6;
-h.mesh.position.y = 0.5 + Math.sin(h.t * 3) * 0.09;
+// bob/spin the icon only — the beacon ring must stay flat on the soil
+const hIcon = h.mesh.userData.icon as THREE.Group;
+hIcon.rotation.y += dt * 1.6;
+hIcon.position.y = Math.sin(h.t * 3) * 0.09;
+(h.mesh.userData.beaconRing as THREE.Mesh).scale.setScalar(
+  1 + Math.sin(h.t * 4) * 0.15,
+);
 const dist = Math.max(
 Math.abs(h.ix - S.cube.ix),
 Math.abs(h.iz - S.cube.iz),
@@ -1980,8 +2268,14 @@ if (S.heartCooldown <= 0) spawnHeart();
 if (S.powerup) {
 const pu = S.powerup;
 pu.t += dt;
-pu.mesh.rotation.y += dt * 2.2;
-pu.mesh.position.y = 0.5 + Math.sin(pu.t * 3) * 0.09;
+const puIcon = pu.mesh.userData.icon as THREE.Group;
+puIcon.rotation.y += dt * 2.2;
+puIcon.position.y = Math.sin(pu.t * 3) * 0.09;
+// breathe: the icon and its ground ring pulse so it reads from far away
+puIcon.scale.setScalar(1.35 * (1 + Math.sin(pu.t * 5) * 0.1));
+(pu.mesh.userData.beaconRing as THREE.Mesh).scale.setScalar(
+  1 + Math.sin(pu.t * 4.5) * 0.18,
+);
 const dist = Math.max(
 Math.abs(pu.ix - S.cube.ix),
 Math.abs(pu.iz - S.cube.iz),
@@ -1994,6 +2288,30 @@ removePowerup();
 } else if (S.score >= POWERUP_MIN_SCORE) {
 S.powerupCooldown -= dt;
 if (S.powerupCooldown <= 0) spawnPowerup();
+}
+
+// acid globs in flight: arc to their target tile, then hit or splat
+for (let i = S.globs.length - 1; i >= 0; i--) {
+  const g = S.globs[i];
+  g.t += dt / g.dur;
+  const t = Math.min(g.t, 1);
+  g.mesh.position.lerpVectors(g.from, g.to, t);
+  g.mesh.position.y += Math.sin(t * Math.PI) * 0.9; // lob arc
+  if (g.t < 1) continue;
+  const impact = g.to.clone();
+  removeGlob(i);
+  splat(impact.setY(0), 0x9fe32a, false);
+  // rolling when it lands = dodged (S.cube only commits at roll end)
+  if (S.cube.ix === g.ix && S.cube.iz === g.iz && !S.rolling) {
+    if (S.giantT > 0) {
+      popup(cubeMesh.position.clone(), "BLOCKED!", "");
+      playKnock();
+    } else {
+      applySpitHit();
+    }
+  } else {
+    dropHazard("slime", g.ix, g.iz); // near-miss still poisons the tile
+  }
 }
 
 // ground hazards age out (fade over their last 2s)
@@ -2087,6 +2405,11 @@ restartBtn.removeEventListener("click", onRestart);
 copyImgBtn?.removeEventListener("click", onCopyImg);
 pauseBtn.removeEventListener("click", togglePause);
 resumeBtn.removeEventListener("click", onResume);
+pauseRestartBtn.removeEventListener("click", onPauseRestart);
+pauseMenuBtn.removeEventListener("click", onQuitToMenu);
+gameoverMenuBtn.removeEventListener("click", onGameoverMenu);
+window.removeEventListener("crush:skin", onSkinChange);
+disposeMenus();
 initialsInput?.removeEventListener("change", onInitials);
 renderer.domElement.remove();
 renderer.dispose();
