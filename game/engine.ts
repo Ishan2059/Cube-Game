@@ -1805,7 +1805,14 @@ $("final-stats").textContent = S.lastHitBy
   : `The horde got you at LVL ${S.level + 1}.`;
 if (earned > 0) playCoin();
 buzz(120);
-scoreSaved = false; // fresh run: offer to save it to the board again
+// Username is set once. After that every run auto-saves (server keeps the
+// highest). First-time players get prompted for a username in the board modal.
+if (getInitials()) {
+  scoreSaved = true;
+  void submitScore(S.score);
+} else {
+  scoreSaved = false;
+}
 $("gameover-screen").classList.remove("hidden");
 endCombo();
 }
@@ -1858,17 +1865,19 @@ restartBtn.addEventListener("click", onRestart);
 const initialsInput = $("initials-input") as HTMLInputElement;
 let scoreSaved = false;
 
-// canSave: game-over path with a real, unsaved score. View-only otherwise.
+// canSave: game-over path. Prompt for a username only the first time (no name
+// stored yet); once set it's locked and every run auto-saves. View-only when
+// opened from the start menu.
 function openBoard(canSave: boolean) {
-  const offer = canSave && S.score > 0 && !scoreSaved;
-  $("board-save").classList.toggle("hidden", !offer);
+  const needsName = canSave && S.score > 0 && !getInitials();
+  $("board-save").classList.toggle("hidden", !needsName);
   $("board-saved").classList.toggle("hidden", !(canSave && scoreSaved));
-  initialsInput.value = getInitials();
   $("board-modal").classList.remove("hidden");
   void renderBoardInto();
 }
 const closeBoard = () => $("board-modal").classList.add("hidden");
 
+// First-time save: set the username (write-once) and submit this run.
 const onSaveScore = async () => {
   const name = setInitials(initialsInput.value); // sanitizes + persists
   if (!name) {
