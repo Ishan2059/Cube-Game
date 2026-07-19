@@ -24,12 +24,22 @@ import {
   getInitials,
   setInitials,
   fetchMe,
+  copyCardImage,
+  saveCard,
+  challengeUrl,
+  trackRef,
 } from "./leaderboard";
+import { renderCard } from "./share-card";
 
 /* ================= constants ================= */
 const TILE = 1;
 const ROLL_TIME = 0.14; // seconds per roll
 const BITE_DAMAGE = 0.25; // fraction of one health icon lost per bite
+// Local dev: start near-dead so game-over triggers fast for testing the
+// game-over screen. Prod (real host) = full 3 lives.
+const IS_LOCAL =
+  typeof location !== "undefined" && /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+const START_LIVES = IS_LOCAL ? 0.25 : 3;
 const COMBO_WINDOW = 2.5; // seconds to keep a combo alive
 const RAMPAGE_AT = 4; // combo count that triggers rampage
 const MAX_PARASITES = 24;
@@ -390,6 +400,7 @@ best: number;
 level: number;
 lives: number;
 combo: number;
+maxCombo: number;
 comboTimer: number;
 rampage: boolean;
 streak: number;
@@ -429,8 +440,9 @@ time: 0,
 score: 0,
 best: Number(localStorage.getItem("crush-best") || 0),
 level: 0,
-lives: 3,
+lives: START_LIVES,
 combo: 0,
+maxCombo: 0,
 comboTimer: 0,
 rampage: false,
 streak: 0,
@@ -1191,6 +1203,7 @@ function addKill(pz: Parasite, atPos: THREE.Vector3) {
 S.totalKills++;
 S.streak++;
 S.combo++;
+if (S.combo > S.maxCombo) S.maxCombo = S.combo;
 S.comboTimer = COMBO_WINDOW;
 const wasRampage = S.rampage;
 if (S.combo >= RAMPAGE_AT) S.rampage = true;
@@ -1524,8 +1537,9 @@ paused: false,
 time: 0,
 score: 0,
 level: 0,
-lives: 3,
+lives: START_LIVES,
 combo: 0,
+maxCombo: 0,
 comboTimer: 0,
 rampage: false,
 streak: 0,
@@ -1563,27 +1577,55 @@ function gameOver() {
 S.running = false;
 S.best = Math.max(S.best, S.score);
 localStorage.setItem("crush-best", String(S.best));
-$("final-score").textContent = S.score + " POINTS";
-$("final-best").textContent = "BEST " + S.best;
-$("final-stats").textContent = `${S.totalKills} parasites crushed · reached LVL ${S.level + 1} ${LEVELS[S.level].name}`;
+$("final-stats").textContent = `BEST ${S.best} · ${S.totalKills} parasites crushed · LVL ${S.level + 1} ${LEVELS[S.level].name}`;
+drawCard();
 $("gameover-screen").classList.remove("hidden");
 endCombo();
 void submitAndRenderBoard(S.score);
 }
 
+// (Re)draw the shareable score card with the current run + latest known streak.
+function drawCard() {
+  const canvas = $("share-card") as HTMLCanvasElement | null;
+  if (canvas)
+    renderCard(canvas, {
+      score: S.score,
+      streak: lastStreak,
+      initials: getInitials() || "player",
+      kills: S.totalKills,
+      maxCombo: S.maxCombo,
+      level: S.level + 1,
+      rank: lastRank,
+      total: lastTotal,
+      url: challengeUrl(),
+    });
+}
+
+// Last submit result — card + share button read streak/rank from it.
+let lastStreak = 0;
+let lastRank: number | null = null;
+let lastTotal = 0;
+const MILESTONES = [3, 7, 14, 30, 50, 100];
+
 // Submit score, show daily streak, render today's board + your neighbors.
 // All best-effort — failures leave the game fully playable offline.
 async function submitAndRenderBoard(score: number) {
   const board = $("leaderboard");
-  const streakLine = $("daily-streak");
   if (board) board.innerHTML = '<p class="lb-empty">Loading…</p>';
   const res = await submitScore(score);
-  if (streakLine) {
-    streakLine.textContent =
-      res && res.streak > 0
-        ? `🔥 ${res.streak} DAY${res.streak > 1 ? "S" : ""} STREAK`
-        : "";
-  }
+  lastStreak = res?.streak ?? 0;
+  lastRank = res?.rank ?? null;
+  lastTotal = res?.total ?? 0;
+  // Confirmed server-side — redraw the card so it shows the real streak + rank.
+  drawCard();
+  // Emphasize sharing only on a brag-worthy moment: new best, streak
+  // milestone, or top-10 daily rank. Otherwise the button stays default.
+  const brag =
+    !!res &&
+    ((res.best === score && score > 0) ||
+      MILESTONES.includes(res.streak) ||
+      (res.rank !== null && res.rank <= 10));
+  $("copy-img-btn")?.classList.toggle("brag", brag);
   if (board) renderBoard(board, await fetchBoard());
 }
 
@@ -1613,6 +1655,30 @@ const restartBtn = $("restart-btn");
 const resumeBtn = $("resume-btn");
 startBtn.addEventListener("click", onStart);
 restartBtn.addEventListener("click", onRestart);
+
+// Copy the score card to the clipboard as an image. Where the Clipboard image
+// API is missing, silently fall back to a PNG download so the button always works.
+const copyImgBtn = $("copy-img-btn");
+const setToast = (t: string) => {
+  const el = $("share-toast");
+  if (el) el.textContent = t;
+};
+const onCopyImg = async () => {
+  const canvas = $("share-card") as HTMLCanvasElement | null;
+  if (!canvas) return;
+  copyImgBtn?.setAttribute("disabled", "");
+  const r = await copyCardImage(canvas);
+  if (r === "unsupported") {
+    const s = await saveCard(canvas);
+    setToast(s === "saved" ? "Copy unsupported — image saved instead ⬇" : "Failed — try again");
+    copyImgBtn?.removeAttribute("disabled");
+    return;
+  }
+  copyImgBtn?.removeAttribute("disabled");
+  setToast(r === "copied" ? "Screenshot copied — paste it anywhere 🖼" : "Copy failed — try again");
+};
+copyImgBtn?.addEventListener("click", onCopyImg);
+
 const onResume = () => setPause(false);
 pauseBtn.addEventListener("click", togglePause);
 resumeBtn.addEventListener("click", onResume);
@@ -1629,6 +1695,9 @@ if (initialsInput) {
   initialsInput.value = getInitials();
   initialsInput.addEventListener("change", onInitials);
 }
+
+// Count share -> play conversion if arrived via a challenge link.
+trackRef();
 
 // Home screen: nudge returning players whose streak breaks if they skip today.
 void (async () => {
@@ -2015,6 +2084,7 @@ window.removeEventListener("touchend", onTouchEnd);
 window.removeEventListener("touchcancel", onTouchEnd);
 startBtn.removeEventListener("click", onStart);
 restartBtn.removeEventListener("click", onRestart);
+copyImgBtn?.removeEventListener("click", onCopyImg);
 pauseBtn.removeEventListener("click", togglePause);
 resumeBtn.removeEventListener("click", onResume);
 initialsInput?.removeEventListener("change", onInitials);
