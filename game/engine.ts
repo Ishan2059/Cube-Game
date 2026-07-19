@@ -36,11 +36,6 @@ import { initMenus, showStart, toast } from "./menus";
 const TILE = 1;
 const ROLL_TIME = 0.14; // seconds per roll
 const BITE_DAMAGE = 0.25; // fraction of one health icon lost per bite
-// Local dev: start near-dead so game-over triggers fast for testing the
-// game-over screen. Prod (real host) = full 3 lives.
-const IS_LOCAL =
-  typeof location !== "undefined" && /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
-const START_LIVES = IS_LOCAL ? 0.25 : 3;
 const COMBO_WINDOW = 2.5; // seconds to keep a combo alive
 const RAMPAGE_AT = 4; // combo count that triggers rampage
 const MAX_PARASITES = 24;
@@ -494,7 +489,7 @@ score: 0,
 best: Number(localStorage.getItem("crush-best") || 0),
 lastHitBy: "",
 level: 0,
-lives: START_LIVES,
+lives: 3,
 combo: 0,
 maxCombo: 0,
 comboTimer: 0,
@@ -1755,7 +1750,7 @@ time: 0,
 score: 0,
 lastHitBy: "",
 level: 0,
-lives: START_LIVES,
+lives: 3,
 combo: 0,
 maxCombo: 0,
 comboTimer: 0,
