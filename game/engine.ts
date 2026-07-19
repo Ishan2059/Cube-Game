@@ -26,12 +26,8 @@ import {
   getInitials,
   setInitials,
   fetchMe,
-  copyCardImage,
-  saveCard,
-  challengeUrl,
   trackRef,
 } from "./leaderboard";
-import { renderCard } from "./share-card";
 import { addCoins, getEquippedSkin, getSettings } from "./storage";
 import { skinById, getSkinTexture } from "./skins";
 import { initMenus, showStart } from "./menus";
@@ -1814,53 +1810,18 @@ $("final-stats").textContent = S.lastHitBy
   : `The horde got you at LVL ${S.level + 1}.`;
 if (earned > 0) playCoin();
 buzz(120);
+$("leaderboard").classList.add("hidden"); // start collapsed; LEADERBOARD button reveals
 $("gameover-screen").classList.remove("hidden");
 endCombo();
 void submitAndRenderBoard(S.score);
 }
 
-// (Re)draw the shareable score card with the current run + latest known streak.
-function drawCard() {
-  const canvas = $("share-card") as HTMLCanvasElement | null;
-  if (canvas)
-    renderCard(canvas, {
-      score: S.score,
-      streak: lastStreak,
-      initials: getInitials() || "player",
-      kills: S.totalKills,
-      maxCombo: S.maxCombo,
-      level: S.level + 1,
-      rank: lastRank,
-      total: lastTotal,
-      url: challengeUrl(),
-    });
-}
-
-// Last submit result — card + share button read streak/rank from it.
-let lastStreak = 0;
-let lastRank: number | null = null;
-let lastTotal = 0;
-const MILESTONES = [3, 7, 14, 30, 50, 100];
-
-// Submit score, show daily streak, render today's board + your neighbors.
+// Submit score, then render today's board + your neighbors.
 // All best-effort — failures leave the game fully playable offline.
 async function submitAndRenderBoard(score: number) {
   const board = $("leaderboard");
   if (board) board.innerHTML = '<p class="lb-empty">Loading…</p>';
-  const res = await submitScore(score);
-  lastStreak = res?.streak ?? 0;
-  lastRank = res?.rank ?? null;
-  lastTotal = res?.total ?? 0;
-  // Confirmed server-side — redraw the card so it shows the real streak + rank.
-  drawCard();
-  // Emphasize sharing only on a brag-worthy moment: new best, streak
-  // milestone, or top-10 daily rank. Otherwise the button stays default.
-  const brag =
-    !!res &&
-    ((res.best === score && score > 0) ||
-      MILESTONES.includes(res.streak) ||
-      (res.rank !== null && res.rank <= 10));
-  $("copy-img-btn")?.classList.toggle("brag", brag);
+  await submitScore(score);
   if (board) renderBoard(board, await fetchBoard());
 }
 
@@ -1897,28 +1858,11 @@ const resumeBtn = $("resume-btn");
 startBtn.addEventListener("click", onStart);
 restartBtn.addEventListener("click", onRestart);
 
-// Copy the score card to the clipboard as an image. Where the Clipboard image
-// API is missing, silently fall back to a PNG download so the button always works.
-const copyImgBtn = $("copy-img-btn");
-const setToast = (t: string) => {
-  const el = $("share-toast");
-  if (el) el.textContent = t;
-};
-const onCopyImg = async () => {
-  const canvas = $("share-card") as HTMLCanvasElement | null;
-  if (!canvas) return;
-  copyImgBtn?.setAttribute("disabled", "");
-  const r = await copyCardImage(canvas);
-  if (r === "unsupported") {
-    const s = await saveCard(canvas);
-    setToast(s === "saved" ? "Copy unsupported — image saved instead ⬇" : "Failed — try again");
-    copyImgBtn?.removeAttribute("disabled");
-    return;
-  }
-  copyImgBtn?.removeAttribute("disabled");
-  setToast(r === "copied" ? "Screenshot copied — paste it anywhere 🖼" : "Copy failed — try again");
-};
-copyImgBtn?.addEventListener("click", onCopyImg);
+// Toggle today's leaderboard from the game-over screen. Board is filled by
+// submitAndRenderBoard on game-over; this just reveals/hides it.
+const ranksBtn = $("gameover-ranks");
+const onToggleRanks = () => $("leaderboard").classList.toggle("hidden");
+ranksBtn.addEventListener("click", onToggleRanks);
 
 const onResume = () => setPause(false);
 pauseBtn.addEventListener("click", togglePause);
@@ -2402,7 +2346,7 @@ window.removeEventListener("touchend", onTouchEnd);
 window.removeEventListener("touchcancel", onTouchEnd);
 startBtn.removeEventListener("click", onStart);
 restartBtn.removeEventListener("click", onRestart);
-copyImgBtn?.removeEventListener("click", onCopyImg);
+ranksBtn.removeEventListener("click", onToggleRanks);
 pauseBtn.removeEventListener("click", togglePause);
 resumeBtn.removeEventListener("click", onResume);
 pauseRestartBtn.removeEventListener("click", onPauseRestart);

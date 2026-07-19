@@ -349,10 +349,6 @@ export default function Home() {
             </div>
           </div>
 
-          <figure id="share-card-wrap">
-            <canvas id="share-card"></canvas>
-          </figure>
-
           <label id="initials-label">
             USERNAME
             <input
@@ -363,17 +359,7 @@ export default function Home() {
             />
           </label>
 
-          <div id="gameover-actions">
-            <button id="copy-img-btn" className="icon-btn" aria-label="Copy screenshot" title="Copy screenshot">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <rect x="9" y="9" width="13" height="13" rx="2" />
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-              </svg>
-            </button>
-          </div>
-          <p id="share-toast"></p>
-
-          <div id="leaderboard"></div>
+          <div id="leaderboard" className="hidden"></div>
 
           <div className="menu-actions">
             <button id="restart-btn" className="btn primary big">
@@ -384,8 +370,8 @@ export default function Home() {
               <button id="gameover-menu" className="btn secondary">
                 <span className="row-glyph venom-glyph">⌂</span> HOME
               </button>
-              <button id="gameover-ranks" className="btn secondary stub">
-                RANKS <span className="soon-tag">SOON</span>
+              <button id="gameover-ranks" className="btn secondary">
+                LEADERBOARD
               </button>
             </div>
           </div>
