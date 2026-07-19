@@ -17,6 +17,14 @@ playHeal,
 playRampage,
 } from "./audio";
 import { LEVELS, type Level } from "./levels";
+import {
+  submitScore,
+  fetchBoard,
+  renderBoard,
+  getInitials,
+  setInitials,
+  fetchMe,
+} from "./leaderboard";
 
 /* ================= constants ================= */
 const TILE = 1;
@@ -1560,6 +1568,23 @@ $("final-best").textContent = "BEST " + S.best;
 $("final-stats").textContent = `${S.totalKills} parasites crushed · reached LVL ${S.level + 1} ${LEVELS[S.level].name}`;
 $("gameover-screen").classList.remove("hidden");
 endCombo();
+void submitAndRenderBoard(S.score);
+}
+
+// Submit score, show daily streak, render today's board + your neighbors.
+// All best-effort — failures leave the game fully playable offline.
+async function submitAndRenderBoard(score: number) {
+  const board = $("leaderboard");
+  const streakLine = $("daily-streak");
+  if (board) board.innerHTML = '<p class="lb-empty">Loading…</p>';
+  const res = await submitScore(score);
+  if (streakLine) {
+    streakLine.textContent =
+      res && res.streak > 0
+        ? `🔥 ${res.streak} DAY${res.streak > 1 ? "S" : ""} STREAK`
+        : "";
+  }
+  if (board) renderBoard(board, await fetchBoard());
 }
 
 /* ---------- input & buttons ---------- */
@@ -1591,6 +1616,28 @@ restartBtn.addEventListener("click", onRestart);
 const onResume = () => setPause(false);
 pauseBtn.addEventListener("click", togglePause);
 resumeBtn.addEventListener("click", onResume);
+
+// Initials: default set once, editable each game-over. Editing re-submits the
+// last score so the board shows the new name.
+const initialsInput = $("initials-input") as HTMLInputElement | null;
+const onInitials = () => {
+  const clean = setInitials(initialsInput!.value);
+  if (initialsInput!.value !== clean) initialsInput!.value = clean;
+  void submitAndRenderBoard(S.score);
+};
+if (initialsInput) {
+  initialsInput.value = getInitials();
+  initialsInput.addEventListener("change", onInitials);
+}
+
+// Home screen: nudge returning players whose streak breaks if they skip today.
+void (async () => {
+  const me = await fetchMe();
+  const nudge = $("streak-nudge");
+  if (nudge && me && me.atRisk && me.streak > 0) {
+    nudge.textContent = `🔥 ${me.streak} day streak — play today to keep it`;
+  }
+})();
 
 const KEYMAP: Record<string, [number, number]> = {
 ArrowUp: [0, -1],
@@ -1970,6 +2017,7 @@ startBtn.removeEventListener("click", onStart);
 restartBtn.removeEventListener("click", onRestart);
 pauseBtn.removeEventListener("click", togglePause);
 resumeBtn.removeEventListener("click", onResume);
+initialsInput?.removeEventListener("change", onInitials);
 renderer.domElement.remove();
 renderer.dispose();
 };

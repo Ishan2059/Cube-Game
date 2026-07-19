@@ -39,6 +39,7 @@ export default function Home() {
         <div className="hero">
           <h1>CRUSH</h1>
           <p className="tagline">Parasites climb. You are heavy. Do the math.</p>
+          <p id="streak-nudge"></p>
         </div>
 
         <div className="how">
@@ -91,11 +92,28 @@ export default function Home() {
       </div>
 
       <div id="gameover-screen" className="overlay hidden">
-        <h1>OVERRUN</h1>
-        <p id="final-score"></p>
-        <p id="final-best"></p>
-        <p id="final-stats"></p>
-        <button id="restart-btn">CRUSH AGAIN (R)</button>
+        <div id="gameover-layout">
+          <div id="gameover-main">
+            <h1>OVERRUN</h1>
+            <p id="final-score"></p>
+            <p id="final-best"></p>
+            <p id="final-stats"></p>
+            <p id="daily-streak"></p>
+            <label id="initials-label">
+              USERNAME
+              <input
+                id="initials-input"
+                maxLength={12}
+                autoComplete="off"
+                placeholder="player"
+              />
+            </label>
+            <button id="restart-btn">CRUSH AGAIN (R)</button>
+          </div>
+          <aside id="leaderboard-panel">
+            <div id="leaderboard"></div>
+          </aside>
+        </div>
       </div>
 
       <Game />
