@@ -17,6 +17,7 @@ export const TYPES = {
   flea: { points: 35, interval: 0.4, goo: 0x5a3a2a, name: "flea" }, // fast erratic hops
   locust: { points: 70, interval: 0.72, goo: 0x8aa84a, name: "locust" }, // periodic dash
   eggsac: { points: 40, interval: 2, goo: 0xd8d0b8, name: "egg sac" }, // hatches into more
+  spitter: { points: 90, interval: 0.95, goo: 0x7ac05a, name: "spitter" }, // ranged acid lob
 } as const;
 
 export type ParasiteType = keyof typeof TYPES;
@@ -757,6 +758,69 @@ export function makeEggSacMesh(): THREE.Group {
   return g;
 }
 
+export function makeSpitterMesh(): THREE.Group {
+  const g = new THREE.Group();
+  const bodyMat = new THREE.MeshStandardMaterial({
+    color: 0x5aa832,
+    roughness: 0.5,
+  });
+  const darkMat = new THREE.MeshStandardMaterial({
+    color: 0x2e5a14,
+    roughness: 0.55,
+  });
+  const sacMat = new THREE.MeshStandardMaterial({
+    color: 0x9fe32a,
+    roughness: 0.35,
+    emissive: 0x3a6a08,
+    emissiveIntensity: 0.5,
+  });
+  // squat toad body
+  const body = new THREE.Mesh(new THREE.SphereGeometry(0.15, 12, 10), bodyMat);
+  body.scale.set(1.2, 0.85, 1.05);
+  body.position.y = 0.12;
+  body.castShadow = true;
+  g.add(body);
+  // spit snout: short cannon tube pointing forward (+x)
+  const snout = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.05, 0.065, 0.14, 10),
+    darkMat,
+  );
+  snout.rotation.z = Math.PI / 2;
+  snout.position.set(0.2, 0.15, 0);
+  g.add(snout);
+  const lip = new THREE.Mesh(new THREE.TorusGeometry(0.052, 0.016, 8, 12), darkMat);
+  lip.rotation.y = Math.PI / 2;
+  lip.position.set(0.27, 0.15, 0);
+  g.add(lip);
+  // glowing throat sac — inflates while it charges a shot
+  const sac = new THREE.Mesh(new THREE.SphereGeometry(0.085, 10, 8), sacMat);
+  sac.position.set(0.04, 0.07, 0);
+  g.add(sac);
+  makeEyes(g, 0.15, 0.25, 0, 0.055, 0.026);
+  // stubby legs
+  const legs: { m: THREE.Mesh; ph: number; s: number }[] = [];
+  for (let i = -1; i <= 1; i += 2) {
+    for (const s of [-1, 1]) {
+      const leg = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.014, 0.01, 0.09),
+        darkMat,
+      );
+      leg.position.set(i * 0.09, 0.04, s * 0.13);
+      leg.rotation.x = s * 0.6;
+      g.add(leg);
+      legs.push({ m: leg, ph: i + (s > 0 ? 0.5 : 0), s });
+    }
+  }
+  g.userData.animate = (t: number) => {
+    // throat gulps steadily; legs paddle while it repositions
+    sac.scale.setScalar(1 + Math.sin(t * 5) * 0.18);
+    body.position.y = 0.12 + Math.sin(t * 5) * 0.008;
+    for (const l of legs)
+      l.m.rotation.x = l.s * 0.6 + Math.sin(t * 14 + l.ph * 2) * 0.22;
+  };
+  return g;
+}
+
 const BUILDERS: Record<ParasiteType, () => THREE.Group> = {
   worm: makeWormMesh,
   bug: makeBugMesh,
@@ -771,6 +835,7 @@ const BUILDERS: Record<ParasiteType, () => THREE.Group> = {
   flea: makeFleaMesh,
   locust: makeLocustMesh,
   eggsac: makeEggSacMesh,
+  spitter: makeSpitterMesh,
 };
 
 export function makeParasiteMesh(type: ParasiteType): THREE.Group {
