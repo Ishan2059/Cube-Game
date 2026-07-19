@@ -923,6 +923,23 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
   object-fit: contain;
   filter: drop-shadow(0 8px 8px rgba(0, 0, 0, 0.5));
 }
+
+/* leaderboard modal */
+.board-card { width: min(100%, 400px); gap: 14px; }
+.board-card #leaderboard { margin-top: 2px; max-height: 46vh; overflow-y: auto; }
+#board-save { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+#board-save.hidden { display: none; }
+.board-save-q { font-size: 13px; color: #b5b5a8; text-align: center; }
+.board-save-row { display: flex; gap: 8px; }
+.board-save-row #initials-input {
+  flex: 1 1 auto; min-width: 0; margin: 0; text-align: left;
+  padding: 10px 12px; border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #e8e8e0; font-size: 15px; font-weight: 700; letter-spacing: 1px;
+}
+.board-save-row .btn { flex: 0 0 auto; margin-top: 0; }
+.board-saved { font-size: 14px; font-weight: 700; color: #a3d977; text-align: center; }
+.board-saved.hidden { display: none; }
 .modal-title {
   font-family: var(--font-s);
   font-weight: 800;

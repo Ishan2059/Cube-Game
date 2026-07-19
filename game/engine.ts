@@ -30,7 +30,7 @@ import {
 } from "./leaderboard";
 import { addCoins, getEquippedSkin, getSettings } from "./storage";
 import { skinById, getSkinTexture } from "./skins";
-import { initMenus, showStart } from "./menus";
+import { initMenus, showStart, toast } from "./menus";
 
 /* ================= constants ================= */
 const TILE = 1;
@@ -1810,19 +1810,17 @@ $("final-stats").textContent = S.lastHitBy
   : `The horde got you at LVL ${S.level + 1}.`;
 if (earned > 0) playCoin();
 buzz(120);
-$("leaderboard").classList.add("hidden"); // start collapsed; LEADERBOARD button reveals
+scoreSaved = false; // fresh run: offer to save it to the board again
 $("gameover-screen").classList.remove("hidden");
 endCombo();
-void submitAndRenderBoard(S.score);
 }
 
-// Submit score, then render today's board + your neighbors.
-// All best-effort — failures leave the game fully playable offline.
-async function submitAndRenderBoard(score: number) {
+// Fetch + render today's board into the modal. Best-effort — failures leave
+// the game fully playable offline.
+async function renderBoardInto() {
   const board = $("leaderboard");
-  if (board) board.innerHTML = '<p class="lb-empty">Loading…</p>';
-  await submitScore(score);
-  if (board) renderBoard(board, await fetchBoard());
+  board.innerHTML = '<p class="lb-empty">Loading…</p>';
+  renderBoard(board, await fetchBoard());
 }
 
 /* ---------- input & buttons ---------- */
@@ -1858,28 +1856,57 @@ const resumeBtn = $("resume-btn");
 startBtn.addEventListener("click", onStart);
 restartBtn.addEventListener("click", onRestart);
 
-// Toggle today's leaderboard from the game-over screen. Board is filled by
-// submitAndRenderBoard on game-over; this just reveals/hides it.
+// ---- Leaderboard modal ----
+// Opened from the game-over "LEADERBOARD" button (offers to save this run) and
+// from the start-menu "LEADERBOARD" tile (view-only). Nothing is submitted
+// until the player types a username and hits SAVE.
+const initialsInput = $("initials-input") as HTMLInputElement;
+let scoreSaved = false;
+
+// canSave: game-over path with a real, unsaved score. View-only otherwise.
+function openBoard(canSave: boolean) {
+  const offer = canSave && S.score > 0 && !scoreSaved;
+  $("board-save").classList.toggle("hidden", !offer);
+  $("board-saved").classList.toggle("hidden", !(canSave && scoreSaved));
+  initialsInput.value = getInitials();
+  $("board-modal").classList.remove("hidden");
+  void renderBoardInto();
+}
+const closeBoard = () => $("board-modal").classList.add("hidden");
+
+const onSaveScore = async () => {
+  const name = setInitials(initialsInput.value); // sanitizes + persists
+  if (!name) {
+    toast("Type a username first");
+    initialsInput.focus();
+    return;
+  }
+  initialsInput.value = name;
+  scoreSaved = true;
+  await submitScore(S.score);
+  $("board-save").classList.add("hidden");
+  $("board-saved").classList.remove("hidden");
+  void renderBoardInto();
+};
+
 const ranksBtn = $("gameover-ranks");
-const onToggleRanks = () => $("leaderboard").classList.toggle("hidden");
-ranksBtn.addEventListener("click", onToggleRanks);
+const boardBtn = $("board-btn");
+const boardCloseBtn = $("board-close");
+const boardSaveBtn = $("board-save-btn");
+const onOpenSavable = () => openBoard(true);
+const onOpenView = () => openBoard(false);
+const onBoardBackdrop = (e: Event) => {
+  if (e.target === $("board-modal")) closeBoard();
+};
+ranksBtn.addEventListener("click", onOpenSavable);
+boardBtn.addEventListener("click", onOpenView);
+boardCloseBtn.addEventListener("click", closeBoard);
+boardSaveBtn.addEventListener("click", onSaveScore);
+$("board-modal").addEventListener("click", onBoardBackdrop);
 
 const onResume = () => setPause(false);
 pauseBtn.addEventListener("click", togglePause);
 resumeBtn.addEventListener("click", onResume);
-
-// Initials: default set once, editable each game-over. Editing re-submits the
-// last score so the board shows the new name.
-const initialsInput = $("initials-input") as HTMLInputElement | null;
-const onInitials = () => {
-  const clean = setInitials(initialsInput!.value);
-  if (initialsInput!.value !== clean) initialsInput!.value = clean;
-  void submitAndRenderBoard(S.score);
-};
-if (initialsInput) {
-  initialsInput.value = getInitials();
-  initialsInput.addEventListener("change", onInitials);
-}
 
 // Count share -> play conversion if arrived via a challenge link.
 trackRef();
@@ -2346,7 +2373,11 @@ window.removeEventListener("touchend", onTouchEnd);
 window.removeEventListener("touchcancel", onTouchEnd);
 startBtn.removeEventListener("click", onStart);
 restartBtn.removeEventListener("click", onRestart);
-ranksBtn.removeEventListener("click", onToggleRanks);
+ranksBtn.removeEventListener("click", onOpenSavable);
+boardBtn.removeEventListener("click", onOpenView);
+boardCloseBtn.removeEventListener("click", closeBoard);
+boardSaveBtn.removeEventListener("click", onSaveScore);
+$("board-modal").removeEventListener("click", onBoardBackdrop);
 pauseBtn.removeEventListener("click", togglePause);
 resumeBtn.removeEventListener("click", onResume);
 pauseRestartBtn.removeEventListener("click", onPauseRestart);
@@ -2354,7 +2385,6 @@ pauseMenuBtn.removeEventListener("click", onQuitToMenu);
 gameoverMenuBtn.removeEventListener("click", onGameoverMenu);
 window.removeEventListener("crush:skin", onSkinChange);
 disposeMenus();
-initialsInput?.removeEventListener("change", onInitials);
 renderer.domElement.remove();
 renderer.dispose();
 };

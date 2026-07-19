@@ -90,13 +90,13 @@ export default function Home() {
                     </span>
                     <span className="tile-label">SKINS</span>
                   </button>
-                  <button id="board-btn" className="tile stub">
+                  <button id="board-btn" className="tile">
                     <span className="tile-icon ranks-icon">
                       <span></span>
                       <span></span>
                       <span></span>
                     </span>
-                    <span className="tile-label">RANKS</span>
+                    <span className="tile-label">LEADERBOARD</span>
                   </button>
                   <button id="howto-btn" className="tile">
                     <span className="tile-icon guide-icon">?</span>
@@ -349,18 +349,6 @@ export default function Home() {
             </div>
           </div>
 
-          <label id="initials-label">
-            USERNAME
-            <input
-              id="initials-input"
-              maxLength={12}
-              autoComplete="off"
-              placeholder="player"
-            />
-          </label>
-
-          <div id="leaderboard" className="hidden"></div>
-
           <div className="menu-actions">
             <button id="restart-btn" className="btn primary big">
               <span className="btn-glyph">⟳</span> CRUSH AGAIN{" "}
@@ -375,6 +363,28 @@ export default function Home() {
               </button>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* ============ LEADERBOARD MODAL ============ */}
+      <div id="board-modal" className="modal hidden">
+        <div className="modal-card board-card">
+          <button id="board-close" className="icon-btn modal-close" aria-label="Close">✕</button>
+          <div className="modal-title">DAILY LEADERBOARD</div>
+          <div id="leaderboard"></div>
+          <div id="board-save">
+            <p className="board-save-q">Save your score to the leaderboard?</p>
+            <div className="board-save-row">
+              <input
+                id="initials-input"
+                maxLength={12}
+                autoComplete="off"
+                placeholder="username"
+              />
+              <button id="board-save-btn" className="btn primary">SAVE</button>
+            </div>
+          </div>
+          <p id="board-saved" className="board-saved hidden">Saved ✓</p>
         </div>
       </div>
 
