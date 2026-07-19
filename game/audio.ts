@@ -2,6 +2,8 @@
 
 let AC: AudioContext | null = null;
 let NOISE: AudioBuffer | null = null;
+let MASTER: GainNode | null = null;
+let muted = false;
 
 export function audio(): AudioContext {
   if (!AC) {
@@ -15,12 +17,28 @@ export function audio(): AudioContext {
   return AC;
 }
 
+// every sound routes through one master gain so a settings toggle can mute all
+function master(): GainNode {
+  const ac = audio();
+  if (!MASTER) {
+    MASTER = ac.createGain();
+    MASTER.gain.value = muted ? 0 : 1;
+    MASTER.connect(ac.destination);
+  }
+  return MASTER;
+}
+
+export function setMuted(m: boolean) {
+  muted = m;
+  if (MASTER) MASTER.gain.value = m ? 0 : 1;
+}
+
 function env(node: AudioNode, t0: number, peak: number, dur: number) {
   const g = audio().createGain();
   g.gain.setValueAtTime(0.0001, t0);
   g.gain.exponentialRampToValueAtTime(peak, t0 + 0.008);
   g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-  node.connect(g).connect(audio().destination);
+  node.connect(g).connect(master());
   return g;
 }
 
@@ -133,6 +151,43 @@ export function playHeal() {
     o.start(t + i * 0.08);
     o.stop(t + i * 0.08 + 0.22);
   });
+}
+
+export function playCoin() {
+  const ac = audio(),
+    t = ac.currentTime;
+  // bright two-note ding, classic pickup sparkle
+  [1318, 1760].forEach((freq, i) => {
+    const o = ac.createOscillator();
+    o.type = "sine";
+    o.frequency.value = freq;
+    env(o, t + i * 0.06, 0.16, 0.18);
+    o.start(t + i * 0.06);
+    o.stop(t + i * 0.06 + 0.2);
+  });
+}
+
+export function playSpit() {
+  const ac = audio(),
+    t = ac.currentTime;
+  // wet "ptoo": quick pitch-drop blip with a noise puff
+  const o = ac.createOscillator();
+  o.type = "triangle";
+  o.frequency.setValueAtTime(600, t);
+  o.frequency.exponentialRampToValueAtTime(180, t + 0.09);
+  env(o, t, 0.14, 0.1);
+  o.start(t);
+  o.stop(t + 0.12);
+  if (!NOISE) NOISE = noiseBuffer();
+  const src = ac.createBufferSource();
+  src.buffer = NOISE;
+  const f = ac.createBiquadFilter();
+  f.type = "highpass";
+  f.frequency.value = 1800;
+  src.connect(f);
+  env(f, t, 0.08, 0.07);
+  src.start(t);
+  src.stop(t + 0.09);
 }
 
 export function playRampage() {
