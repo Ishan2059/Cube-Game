@@ -1,5 +1,12 @@
 // Client-side leaderboard: anonymous player id + initials in localStorage,
 // submit/fetch, and DOM rendering into the game-over screen.
+import { isValidPid, buildShareUrl } from "@/lib/leaderboard-core";
+import { cardToFile, downloadCard } from "./share-card";
+
+// The player's shareable challenge link (encoded into the card's QR + footer).
+export function challengeUrl(): string {
+  return buildShareUrl(location.origin, getPid());
+}
 
 type Row = { pid: string; initials: string; score: number; rank: number };
 type Board = { top10: Row[]; myRank: number | null; total: number; neighbors: Row[] };
@@ -51,6 +58,24 @@ export async function fetchBoard(): Promise<Board | null> {
   }
 }
 
+// If arrived via ?ref=<pid>, count the referral once (per referrer, deduped in
+// localStorage) so we can measure share -> play conversion. Best-effort.
+export function trackRef(): void {
+  try {
+    const ref = new URLSearchParams(location.search).get("ref");
+    if (!ref || !isValidPid(ref) || ref === getPid()) return;
+    if (localStorage.getItem("crush-ref")) return; // already attributed
+    localStorage.setItem("crush-ref", ref);
+    void fetch("/api/ref", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ pid: ref }),
+    });
+  } catch {
+    // no-op — attribution is never allowed to break load
+  }
+}
+
 export async function fetchMe(): Promise<{ streak: number; atRisk: boolean } | null> {
   try {
     const res = await fetch(`/api/me?pid=${encodeURIComponent(getPid())}`);
@@ -58,6 +83,32 @@ export async function fetchMe(): Promise<{ streak: number; atRisk: boolean } | n
     return await res.json();
   } catch {
     return null;
+  }
+}
+
+// Save the card straight to the user's device as a PNG. Explicit "download",
+// separate from the share sheet.
+export async function saveCard(canvas: HTMLCanvasElement): Promise<"saved" | "failed"> {
+  const file = await cardToFile(canvas);
+  if (!file) return "failed";
+  downloadCard(file);
+  return "saved";
+}
+
+// Copy the rendered card PNG straight to the clipboard (paste into chats,
+// docs, socials). Needs the async Clipboard API + ClipboardItem (Chrome/Edge/
+// Safari; Firefox behind a flag).
+export async function copyCardImage(
+  canvas: HTMLCanvasElement,
+): Promise<"copied" | "unsupported" | "failed"> {
+  if (typeof ClipboardItem === "undefined" || !navigator.clipboard?.write) return "unsupported";
+  try {
+    const blob = await new Promise<Blob | null>((res) => canvas.toBlob(res, "image/png"));
+    if (!blob) return "failed";
+    await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+    return "copied";
+  } catch {
+    return "failed";
   }
 }
 
