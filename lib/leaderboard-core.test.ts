@@ -6,6 +6,10 @@ import {
   yesterdayKey,
   sanitizeInitials,
   validateScore,
+  isValidPid,
+  buildShareText,
+  buildShareUrl,
+  buildSocialLinks,
   MAX_SCORE,
 } from "./leaderboard-core";
 
@@ -40,5 +44,34 @@ assert.equal(validateScore(MAX_SCORE + 1), null, "over cap rejected");
 assert.equal(validateScore(-5), null, "negative rejected");
 assert.equal(validateScore(1.5), null, "non-integer rejected");
 assert.equal(validateScore("abc"), null, "NaN rejected");
+
+// pid validation (trust boundary — reused by /api/score + /c/[pid])
+assert.equal(isValidPid("a1b2c3d4"), true, "8-char alnum ok");
+assert.equal(isValidPid("550e8400-e29b-41d4-a716-446655440000"), true, "uuid ok");
+assert.equal(isValidPid("short"), false, "under 8 rejected");
+assert.equal(isValidPid("bad pid!"), false, "space/punct rejected");
+assert.equal(isValidPid(""), false);
+assert.equal(isValidPid(null), false);
+assert.equal(isValidPid("x".repeat(65)), false, "over 64 rejected");
+
+// share text
+assert.equal(buildShareText(1234, 5), "I hit 1234 in Crush 🔥5. Beat me:");
+assert.equal(buildShareText(1234, 0), "I hit 1234 in Crush. Beat me:", "no streak = no fire");
+
+// share url
+assert.equal(buildShareUrl("https://crush.app", "abc123def"), "https://crush.app/c/abc123def");
+assert.equal(buildShareUrl("https://crush.app/", "abc123def"), "https://crush.app/c/abc123def", "trailing slash trimmed");
+
+// social links — text/url encoded, all 5 networks present
+{
+  const L = buildSocialLinks("I hit 500 in Crush 🔥3. Beat me:", "https://c.app/c/abc");
+  assert.ok(L.x.startsWith("https://twitter.com/intent/tweet?"), "x intent");
+  assert.ok(L.x.includes("url=https%3A%2F%2Fc.app%2Fc%2Fabc"), "x url encoded");
+  assert.ok(L.whatsapp.startsWith("https://wa.me/?text="), "whatsapp intent");
+  assert.ok(L.whatsapp.includes("Crush%20%F0%9F%94%A53"), "whatsapp text+emoji encoded");
+  assert.ok(L.telegram.startsWith("https://t.me/share/url?"), "telegram intent");
+  assert.ok(L.facebook.includes("u=https%3A%2F%2Fc.app"), "facebook url");
+  assert.ok(L.reddit.includes("title="), "reddit title");
+}
 
 console.log("ok — all leaderboard-core assertions passed");
