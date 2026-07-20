@@ -86,7 +86,28 @@ const CAM_OFFSET = new THREE.Vector3(0, 11, 8.5);
 const SUN_OFFSET = new THREE.Vector3(6, 14, 4);
 const UP = new THREE.Vector3(0, 1, 0);
 
+/* ---------- coin economy ----------
+ * No telemetry exists yet (Vercel Analytics here only tracks pageviews), so
+ * this is tuned from the level table: a casual run dying somewhere between
+ * GRUB (500) and HARDENED (1200) — the difficulty ramp (stick 0.15→0.34,
+ * speed 1.0→1.3 across L1-L3) makes that an early-death zone for the
+ * average player — lands in the 15-25 coin target at SCORE_PER_COIN=40.
+ * At that rate Dragon (320) takes ~16 average runs, Rubix (500) ~25 —
+ * matches the "keep coming back" goal. Retune by changing these, not the
+ * formula in coinsForScore(). */
+const SCORE_PER_COIN = 40; // primary rate: this many score points = 1 coin
+const SOFT_CAP_SCORE = 3000; // score above this earns coins at a reduced rate
+const OVERFLOW_SCORE_PER_COIN = 160; // reduced rate applied past SOFT_CAP_SCORE
+const RUN_COIN_CAP = 90; // hard ceiling — no single run can shortcut the grind
+
 /* ================= pure helpers ================= */
+/** Score-to-coins with diminishing returns past SOFT_CAP_SCORE and a hard
+ *  ceiling, so one marathon run can't out-earn many average ones. */
+function coinsForScore(score: number): number {
+  const base = Math.min(score, SOFT_CAP_SCORE) / SCORE_PER_COIN;
+  const overflow = Math.max(0, score - SOFT_CAP_SCORE) / OVERFLOW_SCORE_PER_COIN;
+  return Math.min(RUN_COIN_CAP, Math.floor(base + overflow));
+}
 const tileToWorld = (ix: number, iz: number) =>
 new THREE.Vector3(ix * TILE, 0, iz * TILE);
 const key2 = (x: number, z: number) => x + "," + z;
@@ -1779,8 +1800,8 @@ S.running = false;
 const prevBest = S.best;
 S.best = Math.max(S.best, S.score);
 localStorage.setItem("crush-best", String(S.best));
-// coin payout: 1 per parasite crushed + 10 per level climbed
-const earned = S.totalKills + S.level * 10;
+// coin payout: score converted at SCORE_PER_COIN, capped — see coinsForScore()
+const earned = coinsForScore(S.score);
 addCoins(earned);
 $("newbest-chip").classList.toggle("hidden", S.score <= prevBest);
 $("final-score").textContent = S.score.toLocaleString();
