@@ -68,6 +68,31 @@ export const ownSkin = (id: string) => {
 export const getEquippedSkin = () => read<string>("crush-skin", "classic");
 export const setEquippedSkin = (id: string) => write("crush-skin", id);
 
+/* ---------- trails & auras ----------
+ * Same owned-list / equipped-id shape as skins. "none" is the always-owned,
+ * default-equipped id for both — cosmetic layers are opt-in, not forced. */
+export const getOwnedTrails = () => {
+  const owned = read<string[]>("crush-trails-owned", []);
+  return owned.includes("none") ? owned : ["none", ...owned];
+};
+export const ownTrail = (id: string) => {
+  const owned = getOwnedTrails();
+  if (!owned.includes(id)) write("crush-trails-owned", [...owned, id]);
+};
+export const getEquippedTrail = () => read<string>("crush-trail", "none");
+export const setEquippedTrail = (id: string) => write("crush-trail", id);
+
+export const getOwnedAuras = () => {
+  const owned = read<string[]>("crush-auras-owned", []);
+  return owned.includes("none") ? owned : ["none", ...owned];
+};
+export const ownAura = (id: string) => {
+  const owned = getOwnedAuras();
+  if (!owned.includes(id)) write("crush-auras-owned", [...owned, id]);
+};
+export const getEquippedAura = () => read<string>("crush-aura", "none");
+export const setEquippedAura = (id: string) => write("crush-aura", id);
+
 /* ---------- settings ---------- */
 export interface Settings {
   sound: boolean;

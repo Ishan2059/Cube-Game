@@ -189,12 +189,12 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ============ SHOP / SKINS ============ */}
+      {/* ============ SHOP / SKINS · TRAILS · AURAS ============ */}
       <div id="shop-screen" className="overlay hidden">
         <div className="screen-scroll top-anchored">
           <div className="screen-head">
             <button id="shop-back" className="icon-btn" aria-label="Back">‹</button>
-            <h2 className="screen-title">SKINS</h2>
+            <h2 className="screen-title">SHOP</h2>
             <div className="pill coin-pill head-pill">
               <span className="coin-disc"></span>
               <span className="pill-value gold" id="shop-coins">0</span>
@@ -202,14 +202,14 @@ export default function Home() {
           </div>
 
           <div className="seg-tabs">
-            <button className="seg active">SKINS</button>
-            <button className="seg stub" id="tab-trails">TRAILS</button>
-            <button className="seg stub" id="tab-auras">AURAS</button>
+            <button className="seg active" id="tab-skins">SKINS</button>
+            <button className="seg" id="tab-trails">TRAILS</button>
+            <button className="seg" id="tab-auras">AURAS</button>
           </div>
 
           <div id="skin-list"></div>
 
-          <p className="shop-hint">
+          <p className="shop-hint" id="shop-hint">
             Earn coins by crushing parasites. Skins are cosmetic — pure drip.
           </p>
         </div>

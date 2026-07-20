@@ -18,9 +18,18 @@ playCoin,
 playSpit,
 } from "./audio";
 import { LEVELS, type Level } from "./levels";
-import { addCoins, getEquippedSkin, getSettings } from "./storage";
+import {
+addCoins,
+getEquippedSkin,
+getEquippedTrail,
+getEquippedAura,
+getSettings,
+} from "./storage";
 import { skinById, getSkinTexture } from "./skins";
+import { trailById } from "./trails";
+import { auraById } from "./auras";
 import { createCubeMesh } from "./cubeMesh";
+import { createTrail, createAura } from "./effects";
 import { initMenus, showStart } from "./menus";
 
 /* ================= constants ================= */
@@ -704,6 +713,26 @@ worldMeshes.delete(k);
 // preview modal so it always matches the real gameplay cube exactly.
 const cubeMesh = createCubeMesh(TILE);
 scene.add(cubeMesh);
+
+// trail: motion-triggered afterimage, spawns in world space as the cube
+// rolls. aura: always-on pulsing halo, parented to the cube (tracks it for
+// free). Both cosmetic and independent of the equipped skin.
+const trailFx = createTrail(scene, trailById(getEquippedTrail()).color);
+trailFx.setActive(getEquippedTrail() !== "none");
+const auraFx = createAura(cubeMesh, auraById(getEquippedAura()).color);
+auraFx.setActive(getEquippedAura() !== "none");
+const onTrailChange = () => {
+  const t = trailById(getEquippedTrail());
+  trailFx.setColor(t.color);
+  trailFx.setActive(t.id !== "none");
+};
+const onAuraChange = () => {
+  const a = auraById(getEquippedAura());
+  auraFx.setColor(a.color);
+  auraFx.setActive(a.id !== "none");
+};
+window.addEventListener("crush:trail", onTrailChange);
+window.addEventListener("crush:aura", onAuraChange);
 
 function placeCube() {
 const p = tileToWorld(S.cube.ix, S.cube.iz);
@@ -1718,6 +1747,7 @@ removePowerup();
 for (const h of [...S.hazards]) removeHazard(h);
 while (S.globs.length) removeGlob(S.globs.length - 1);
 cubeMesh.scale.setScalar(1);
+trailFx.clear(); // no stale streak lingering from the previous run
 S.particles = [];
 S.decals = [];
 pauseScreen.classList.add("hidden");
@@ -2021,6 +2051,8 @@ tryRoll(heldDir[0] * inv, heldDir[1] * inv);
 }
 
 updateRoll(dt);
+trailFx.update(dt, cubeMesh.position, !!S.rolling);
+auraFx.update(dt);
 
 const spd = LEVELS[S.level].speed; // parasite speed ramps with level
 for (let i = S.parasites.length - 1; i >= 0; i--) {
@@ -2282,6 +2314,10 @@ pauseRestartBtn.removeEventListener("click", onPauseRestart);
 pauseMenuBtn.removeEventListener("click", onQuitToMenu);
 gameoverMenuBtn.removeEventListener("click", onGameoverMenu);
 window.removeEventListener("crush:skin", onSkinChange);
+window.removeEventListener("crush:trail", onTrailChange);
+window.removeEventListener("crush:aura", onAuraChange);
+trailFx.dispose();
+auraFx.dispose();
 disposeMenus();
 renderer.domElement.remove();
 renderer.dispose();
