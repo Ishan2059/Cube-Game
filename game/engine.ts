@@ -19,6 +19,15 @@ playSpit,
 } from "./audio";
 import { LEVELS, type Level } from "./levels";
 import {
+  submitScore,
+  fetchBoard,
+  renderBoard,
+  getInitials,
+  setInitials,
+  fetchMe,
+  trackRef,
+} from "./leaderboard";
+import {
 addCoins,
 getEquippedSkin,
 getEquippedTrail,
@@ -30,7 +39,7 @@ import { trailById } from "./trails";
 import { auraById } from "./auras";
 import { createCubeMesh } from "./cubeMesh";
 import { createTrail, createAura } from "./effects";
-import { initMenus, showStart } from "./menus";
+import { initMenus, showStart, toast } from "./menus";
 
 /* ================= constants ================= */
 const TILE = 1;
@@ -468,6 +477,7 @@ lastHitBy: string; // parasite type that last bit us (game-over cause line)
 level: number;
 lives: number;
 combo: number;
+maxCombo: number;
 comboTimer: number;
 rampage: boolean;
 streak: number;
@@ -511,6 +521,7 @@ lastHitBy: "",
 level: 0,
 lives: 3,
 combo: 0,
+maxCombo: 0,
 comboTimer: 0,
 rampage: false,
 streak: 0,
@@ -1399,6 +1410,7 @@ function addKill(pz: Parasite, atPos: THREE.Vector3) {
 S.totalKills++;
 S.streak++;
 S.combo++;
+if (S.combo > S.maxCombo) S.maxCombo = S.combo;
 S.comboTimer = COMBO_WINDOW;
 const wasRampage = S.rampage;
 if (S.combo >= RAMPAGE_AT) S.rampage = true;
@@ -1761,6 +1773,7 @@ lastHitBy: "",
 level: 0,
 lives: 3,
 combo: 0,
+maxCombo: 0,
 comboTimer: 0,
 rampage: false,
 streak: 0,
@@ -1813,8 +1826,24 @@ $("final-stats").textContent = S.lastHitBy
   : `The horde got you at LVL ${S.level + 1}.`;
 if (earned > 0) playCoin();
 buzz(120);
+// Username is set once. After that every run auto-saves (server keeps the
+// highest). First-time players get prompted for a username in the board modal.
+if (getInitials()) {
+  scoreSaved = true;
+  void submitScore(S.score);
+} else {
+  scoreSaved = false;
+}
 $("gameover-screen").classList.remove("hidden");
 endCombo();
+}
+
+// Fetch + render today's board into the modal. Best-effort — failures leave
+// the game fully playable offline.
+async function renderBoardInto() {
+  const board = $("leaderboard");
+  board.innerHTML = '<p class="lb-empty">Loading…</p>';
+  renderBoard(board, await fetchBoard());
 }
 
 /* ---------- input & buttons ---------- */
@@ -1849,9 +1878,72 @@ const restartBtn = $("restart-btn");
 const resumeBtn = $("resume-btn");
 startBtn.addEventListener("click", onStart);
 restartBtn.addEventListener("click", onRestart);
+
+// ---- Leaderboard modal ----
+// Opened from the game-over "LEADERBOARD" button (offers to save this run) and
+// from the start-menu "LEADERBOARD" tile (view-only). Nothing is submitted
+// until the player types a username and hits SAVE.
+const initialsInput = $("initials-input") as HTMLInputElement;
+let scoreSaved = false;
+
+// canSave: game-over path. Prompt for a username only the first time (no name
+// stored yet); once set it's locked and every run auto-saves. View-only when
+// opened from the start menu.
+function openBoard(canSave: boolean) {
+  const needsName = canSave && S.score > 0 && !getInitials();
+  $("board-save").classList.toggle("hidden", !needsName);
+  $("board-saved").classList.toggle("hidden", !(canSave && scoreSaved));
+  $("board-modal").classList.remove("hidden");
+  void renderBoardInto();
+}
+const closeBoard = () => $("board-modal").classList.add("hidden");
+
+// First-time save: set the username (write-once) and submit this run.
+const onSaveScore = async () => {
+  const name = setInitials(initialsInput.value); // sanitizes + persists
+  if (!name) {
+    toast("Type a username first");
+    initialsInput.focus();
+    return;
+  }
+  initialsInput.value = name;
+  scoreSaved = true;
+  await submitScore(S.score);
+  $("board-save").classList.add("hidden");
+  $("board-saved").classList.remove("hidden");
+  void renderBoardInto();
+};
+
+const ranksBtn = $("gameover-ranks");
+const boardBtn = $("board-btn");
+const boardCloseBtn = $("board-close");
+const boardSaveBtn = $("board-save-btn");
+const onOpenSavable = () => openBoard(true);
+const onOpenView = () => openBoard(false);
+const onBoardBackdrop = (e: Event) => {
+  if (e.target === $("board-modal")) closeBoard();
+};
+ranksBtn.addEventListener("click", onOpenSavable);
+boardBtn.addEventListener("click", onOpenView);
+boardCloseBtn.addEventListener("click", closeBoard);
+boardSaveBtn.addEventListener("click", onSaveScore);
+$("board-modal").addEventListener("click", onBoardBackdrop);
+
 const onResume = () => setPause(false);
 pauseBtn.addEventListener("click", togglePause);
 resumeBtn.addEventListener("click", onResume);
+
+// Count share -> play conversion if arrived via a challenge link.
+trackRef();
+
+// Home screen: nudge returning players whose streak breaks if they skip today.
+void (async () => {
+  const me = await fetchMe();
+  const nudge = $("streak-nudge");
+  if (nudge && me && me.atRisk && me.streak > 0) {
+    nudge.textContent = `🔥 ${me.streak} day streak — play today to keep it`;
+  }
+})();
 
 // pause-menu extras + game-over exit back to the Start screen
 const onPauseRestart = () => resetGame();
@@ -1895,7 +1987,10 @@ if ((e.code === "KeyP" || e.code === "Escape") && S.running) {
 togglePause();
 return;
 }
-if (KEYMAP[e.code]) {
+const typingInField =
+document.activeElement instanceof HTMLInputElement ||
+document.activeElement instanceof HTMLTextAreaElement;
+if (KEYMAP[e.code] && !typingInField) {
 e.preventDefault();
 audio();
 if (!heldMoveCodes.includes(e.code)) heldMoveCodes.push(e.code);
@@ -1903,6 +1998,7 @@ if (!heldMoveCodes.includes(e.code)) heldMoveCodes.push(e.code);
 if (
 e.code === "KeyR" &&
 !S.running &&
+!typingInField &&
 !$("gameover-screen").classList.contains("hidden")
 ) {
 $("gameover-screen").classList.add("hidden");
@@ -2308,6 +2404,11 @@ window.removeEventListener("touchend", onTouchEnd);
 window.removeEventListener("touchcancel", onTouchEnd);
 startBtn.removeEventListener("click", onStart);
 restartBtn.removeEventListener("click", onRestart);
+ranksBtn.removeEventListener("click", onOpenSavable);
+boardBtn.removeEventListener("click", onOpenView);
+boardCloseBtn.removeEventListener("click", closeBoard);
+boardSaveBtn.removeEventListener("click", onSaveScore);
+$("board-modal").removeEventListener("click", onBoardBackdrop);
 pauseBtn.removeEventListener("click", togglePause);
 resumeBtn.removeEventListener("click", onResume);
 pauseRestartBtn.removeEventListener("click", onPauseRestart);

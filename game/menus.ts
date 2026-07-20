@@ -374,9 +374,7 @@ export function initMenus(): () => void {
     if (e.target === $("beast-modal")) closeBeastModal(); // backdrop tap
   });
 
-  // stub: leaderboard is another teammate's feature
-  on("board-btn", () => toast("Leaderboard coming soon 👀"));
-  on("gameover-ranks", () => toast("Leaderboard coming soon 👀"));
+  // board-btn + gameover-ranks open the leaderboard modal (wired in engine).
 
   on("tab-skins", () => switchShopTab("skins"));
   on("tab-trails", () => switchShopTab("trails"));
