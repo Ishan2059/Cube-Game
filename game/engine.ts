@@ -1966,7 +1966,10 @@ if ((e.code === "KeyP" || e.code === "Escape") && S.running) {
 togglePause();
 return;
 }
-if (KEYMAP[e.code]) {
+const typingInField =
+document.activeElement instanceof HTMLInputElement ||
+document.activeElement instanceof HTMLTextAreaElement;
+if (KEYMAP[e.code] && !typingInField) {
 e.preventDefault();
 audio();
 if (!heldMoveCodes.includes(e.code)) heldMoveCodes.push(e.code);
@@ -1974,6 +1977,7 @@ if (!heldMoveCodes.includes(e.code)) heldMoveCodes.push(e.code);
 if (
 e.code === "KeyR" &&
 !S.running &&
+!typingInField &&
 !$("gameover-screen").classList.contains("hidden")
 ) {
 $("gameover-screen").classList.add("hidden");
