@@ -5,8 +5,9 @@
  * follows the UI kit in docs/CubeCrush UI.html.
  *
  * Leaderboard ("RANKS") is intentionally a stub — that feature is being
- * built separately. The buttons exist (design hooks) but only show a toast,
- * as do the TRAILS/AURAS shop tabs and D-PAD/TILT control schemes.
+ * built separately. The buttons exist (design hooks) but only show a toast.
+ * Skins/Trails/Auras all share one shop grid (#skin-list) and buy/equip
+ * flow — renderShop() swaps its contents based on the active tab.
  */
 
 import {
@@ -17,13 +18,24 @@ import {
   ownSkin,
   getEquippedSkin,
   setEquippedSkin,
+  getOwnedTrails,
+  ownTrail,
+  getEquippedTrail,
+  setEquippedTrail,
+  getOwnedAuras,
+  ownAura,
+  getEquippedAura,
+  setEquippedAura,
   getSettings,
   patchSettings,
   type Settings,
 } from "./storage";
-import { SKINS, skinById } from "./skins";
+import { SKINS, skinById, mountSkinPreview, type SkinDef } from "./skins";
+import { TRAILS, mountTrailPreview, type TrailDef } from "./trails";
+import { AURAS, mountAuraPreview, type AuraDef } from "./auras";
 import { BEASTS, getBugThumbs } from "./bestiary";
 import { setMuted, playCoin, audio } from "./audio";
+import { openItemModal, closeItemModal, initItemModal, type ItemModalItem } from "./itemModal";
 
 const $ = (id: string) => document.getElementById(id) as HTMLElement;
 
@@ -59,7 +71,6 @@ function syncSettingsUI() {
   const s = getSettings();
   // pill switches light up via an .on class
   $("set-sound").classList.toggle("on", s.sound);
-  $("set-haptics").classList.toggle("on", s.haptics);
   $("set-colorblind").classList.toggle("on", s.colorblind);
   $("set-difficulty")
     .querySelectorAll<HTMLElement>(".seg-opt")
@@ -75,52 +86,192 @@ function toggleSetting(patch: (s: Settings) => Partial<Settings>) {
 }
 
 /* ---------- shop ---------- */
+type ShopTab = "skins" | "trails" | "auras";
+let shopTab: ShopTab = "skins";
+
+function shopCardHTML(
+  id: string,
+  name: string,
+  price: number,
+  isOwned: boolean,
+  isEquipped: boolean,
+  coins: number,
+  swatch: string,
+) {
+  const state = isEquipped
+    ? `<span class="skin-state equipped">✓ EQUIPPED</span>`
+    : isOwned
+      ? `<span class="skin-state owned">OWNED</span>`
+      : `<span class="skin-state price${coins < price ? " locked" : ""}"><span class="coin-disc small"></span>${price}</span>`;
+  return `
+    <button class="skin-card${isEquipped ? " equipped" : ""}" data-item="${id}" aria-label="Preview ${name}">
+      <span class="skin-preview"><span class="skin-cube" style="background:${swatch}"></span></span>
+      <span class="skin-name">${name}</span>
+      ${state}
+    </button>`;
+}
+
+const SHOP_HINTS: Record<ShopTab, string> = {
+  skins: "Earn coins by crushing parasites. Skins are cosmetic — pure drip.",
+  trails: "A fading streak that follows the cube while it's rolling.",
+  auras: "A soft glow that pulses around the cube at all times.",
+};
+
 function renderShop() {
+  $("tab-skins").classList.toggle("active", shopTab === "skins");
+  $("tab-trails").classList.toggle("active", shopTab === "trails");
+  $("tab-auras").classList.toggle("active", shopTab === "auras");
+  $("shop-hint").textContent = SHOP_HINTS[shopTab];
+
   const list = $("skin-list");
-  const owned = getOwnedSkins();
-  const equipped = getEquippedSkin();
   const coins = getCoins();
-  list.innerHTML = SKINS.map((sk) => {
-    const isOwned = owned.includes(sk.id);
-    const isEquipped = equipped === sk.id;
-    const act = isEquipped ? "" : isOwned ? "equip" : "buy";
-    const state = isEquipped
-      ? `<span class="skin-state equipped">✓ EQUIPPED</span>`
-      : isOwned
-        ? `<span class="skin-state owned">TAP TO EQUIP</span>`
-        : `<span class="skin-state price${coins < sk.price ? " locked" : ""}"><span class="coin-disc small"></span>${sk.price}</span>`;
-    return `
-      <button class="skin-card${isEquipped ? " equipped" : ""}" data-skin="${sk.id}" data-act="${act}">
-        <span class="skin-preview"><span class="skin-cube" style="background:${sk.previewConic}"></span></span>
-        <span class="skin-name">${sk.name}</span>
-        ${state}
-      </button>`;
-  }).join("");
+  if (shopTab === "skins") {
+    const owned = getOwnedSkins();
+    const equipped = getEquippedSkin();
+    list.innerHTML = SKINS.map((sk) =>
+      shopCardHTML(sk.id, sk.name, sk.price, owned.includes(sk.id), equipped === sk.id, coins, sk.previewConic),
+    ).join("");
+  } else if (shopTab === "trails") {
+    const owned = getOwnedTrails();
+    const equipped = getEquippedTrail();
+    list.innerHTML = TRAILS.map((t) =>
+      shopCardHTML(t.id, t.name, t.price, owned.includes(t.id), equipped === t.id, coins, t.previewSwatch),
+    ).join("");
+  } else {
+    const owned = getOwnedAuras();
+    const equipped = getEquippedAura();
+    list.innerHTML = AURAS.map((a) =>
+      shopCardHTML(a.id, a.name, a.price, owned.includes(a.id), equipped === a.id, coins, a.previewSwatch),
+    ).join("");
+  }
+}
+
+function switchShopTab(tab: ShopTab) {
+  if (shopTab === tab) return;
+  shopTab = tab;
+  renderShop();
+}
+
+/** Builds the generic modal's view of a skin: current owned/equipped
+ *  snapshot, its live preview, and the buy/equip actions that actually
+ *  touch storage — the modal itself never spends coins or equips. */
+function buildSkinItem(sk: SkinDef): ItemModalItem {
+  const afterChange = () => {
+    renderShop();
+    updateMenuStats();
+    // the engine listens and restyles the live cube immediately
+    window.dispatchEvent(new CustomEvent("crush:skin"));
+  };
+  return {
+    name: sk.name,
+    price: sk.price,
+    owned: getOwnedSkins().includes(sk.id),
+    equipped: getEquippedSkin() === sk.id,
+    mountPreview: (el) => mountSkinPreview(el, sk),
+    onBuy: () => {
+      if (!spendCoins(sk.price)) {
+        toast(`Not enough coins — need 🪙 ${sk.price}`);
+        return;
+      }
+      ownSkin(sk.id);
+      setEquippedSkin(sk.id);
+      playCoin();
+      toast(`${sk.name} unlocked & equipped!`);
+      afterChange();
+      closeItemModal();
+    },
+    onEquip: () => {
+      setEquippedSkin(sk.id);
+      toast(`${sk.name} equipped`);
+      afterChange();
+      closeItemModal();
+    },
+  };
+}
+
+/** Same contract as buildSkinItem — Trails equip alongside a skin, not in
+ *  place of one, so "equipped" here only ever compares trail ids. */
+function buildTrailItem(t: TrailDef): ItemModalItem {
+  const afterChange = () => {
+    renderShop();
+    updateMenuStats();
+    window.dispatchEvent(new CustomEvent("crush:trail"));
+  };
+  return {
+    name: t.name,
+    price: t.price,
+    owned: getOwnedTrails().includes(t.id),
+    equipped: getEquippedTrail() === t.id,
+    mountPreview: (el) => mountTrailPreview(el, t),
+    onBuy: () => {
+      if (!spendCoins(t.price)) {
+        toast(`Not enough coins — need 🪙 ${t.price}`);
+        return;
+      }
+      ownTrail(t.id);
+      setEquippedTrail(t.id);
+      playCoin();
+      toast(`${t.name} trail unlocked & equipped!`);
+      afterChange();
+      closeItemModal();
+    },
+    onEquip: () => {
+      setEquippedTrail(t.id);
+      toast(t.id === "none" ? "Trail off" : `${t.name} trail equipped`);
+      afterChange();
+      closeItemModal();
+    },
+  };
+}
+
+function buildAuraItem(a: AuraDef): ItemModalItem {
+  const afterChange = () => {
+    renderShop();
+    updateMenuStats();
+    window.dispatchEvent(new CustomEvent("crush:aura"));
+  };
+  return {
+    name: a.name,
+    price: a.price,
+    owned: getOwnedAuras().includes(a.id),
+    equipped: getEquippedAura() === a.id,
+    mountPreview: (el) => mountAuraPreview(el, a),
+    onBuy: () => {
+      if (!spendCoins(a.price)) {
+        toast(`Not enough coins — need 🪙 ${a.price}`);
+        return;
+      }
+      ownAura(a.id);
+      setEquippedAura(a.id);
+      playCoin();
+      toast(`${a.name} aura unlocked & equipped!`);
+      afterChange();
+      closeItemModal();
+    },
+    onEquip: () => {
+      setEquippedAura(a.id);
+      toast(a.id === "none" ? "Aura off" : `${a.name} aura equipped`);
+      afterChange();
+      closeItemModal();
+    },
+  };
 }
 
 function onShopClick(e: Event) {
   const btn = (e.target as HTMLElement).closest<HTMLElement>(".skin-card");
-  if (!btn || !btn.dataset.act) return;
-  const sk = SKINS.find((s) => s.id === btn.dataset.skin);
-  if (!sk) return;
+  const id = btn?.dataset.item;
+  if (!id) return;
   audio(); // user gesture — safe moment to unlock the AudioContext
-  if (btn.dataset.act === "buy") {
-    if (!spendCoins(sk.price)) {
-      toast(`Not enough coins — need 🪙 ${sk.price}`);
-      return;
-    }
-    ownSkin(sk.id);
-    setEquippedSkin(sk.id);
-    playCoin();
-    toast(`${sk.name} unlocked & equipped!`);
+  if (shopTab === "skins") {
+    const sk = SKINS.find((s) => s.id === id);
+    if (sk) openItemModal(buildSkinItem(sk), getCoins());
+  } else if (shopTab === "trails") {
+    const t = TRAILS.find((x) => x.id === id);
+    if (t) openItemModal(buildTrailItem(t), getCoins());
   } else {
-    setEquippedSkin(sk.id);
-    toast(`${sk.name} equipped`);
+    const a = AURAS.find((x) => x.id === id);
+    if (a) openItemModal(buildAuraItem(a), getCoins());
   }
-  renderShop();
-  updateMenuStats();
-  // the engine listens and restyles the live cube immediately
-  window.dispatchEvent(new CustomEvent("crush:skin"));
 }
 
 /* ---------- bestiary (guide screen) ---------- */
@@ -169,6 +320,7 @@ function show(id: (typeof MENU_SCREENS)[number]) {
   if (id === "start-screen") updateMenuStats();
   if (id === "howto-screen") buildBestiary();
   if (id === "shop-screen") {
+    shopTab = "skins"; // every fresh visit from the menu starts on Skins
     renderShop();
     updateMenuStats();
   }
@@ -206,8 +358,6 @@ export function initMenus(): () => void {
     el.addEventListener(ev, fn);
     handlers.push([el, ev, fn]);
   };
-  const soon = () => toast("Coming soon 👀");
-
   on("howto-btn", () => show("howto-screen"));
   on("shop-btn", () => show("shop-screen"));
   on("settings-btn", () => show("settings-screen"));
@@ -225,16 +375,13 @@ export function initMenus(): () => void {
   });
 
   // board-btn + gameover-ranks open the leaderboard modal (wired in engine).
-  // stubs: trails/auras/d-pad/tilt exist in the design but aren't in this build
-  on("tab-trails", soon);
-  on("tab-auras", soon);
-  on("ctl-dpad", soon);
-  on("ctl-tilt", soon);
 
+  on("tab-skins", () => switchShopTab("skins"));
+  on("tab-trails", () => switchShopTab("trails"));
+  on("tab-auras", () => switchShopTab("auras"));
   on("skin-list", onShopClick);
 
   on("set-sound", () => toggleSetting((s) => ({ sound: !s.sound })));
-  on("set-haptics", () => toggleSetting((s) => ({ haptics: !s.haptics })));
   on("set-difficulty", () =>
     toggleSetting((s) => ({
       difficulty: s.difficulty === "normal" ? "casual" : "normal",
@@ -271,8 +418,12 @@ export function initMenus(): () => void {
     syncSettingsUI();
     updateMenuStats();
     window.dispatchEvent(new CustomEvent("crush:skin"));
+    window.dispatchEvent(new CustomEvent("crush:trail"));
+    window.dispatchEvent(new CustomEvent("crush:aura"));
     toast("Progress wiped. Fresh cube.");
   });
+
+  const disposeItemModal = initItemModal();
 
   applySettingsEffects(getSettings());
   syncSettingsUI();
@@ -281,5 +432,6 @@ export function initMenus(): () => void {
   return () => {
     clearTimeout(resetTimer);
     for (const [el, ev, fn] of handlers) el.removeEventListener(ev, fn);
+    disposeItemModal();
   };
 }

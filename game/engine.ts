@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import {
 TYPES,
 makeParasiteMesh,
@@ -28,8 +27,18 @@ import {
   fetchMe,
   trackRef,
 } from "./leaderboard";
-import { addCoins, getEquippedSkin, getSettings } from "./storage";
+import {
+addCoins,
+getEquippedSkin,
+getEquippedTrail,
+getEquippedAura,
+getSettings,
+} from "./storage";
 import { skinById, getSkinTexture } from "./skins";
+import { trailById } from "./trails";
+import { auraById } from "./auras";
+import { createCubeMesh } from "./cubeMesh";
+import { createTrail, createAura } from "./effects";
 import { initMenus, showStart, toast } from "./menus";
 
 /* ================= constants ================= */
@@ -95,7 +104,28 @@ const CAM_OFFSET = new THREE.Vector3(0, 11, 8.5);
 const SUN_OFFSET = new THREE.Vector3(6, 14, 4);
 const UP = new THREE.Vector3(0, 1, 0);
 
+/* ---------- coin economy ----------
+ * No telemetry exists yet (Vercel Analytics here only tracks pageviews), so
+ * this is tuned from the level table: a casual run dying somewhere between
+ * GRUB (500) and HARDENED (1200) — the difficulty ramp (stick 0.15→0.34,
+ * speed 1.0→1.3 across L1-L3) makes that an early-death zone for the
+ * average player — lands in the 15-25 coin target at SCORE_PER_COIN=40.
+ * At that rate Dragon (320) takes ~16 average runs, Rubix (500) ~25 —
+ * matches the "keep coming back" goal. Retune by changing these, not the
+ * formula in coinsForScore(). */
+const SCORE_PER_COIN = 40; // primary rate: this many score points = 1 coin
+const SOFT_CAP_SCORE = 3000; // score above this earns coins at a reduced rate
+const OVERFLOW_SCORE_PER_COIN = 160; // reduced rate applied past SOFT_CAP_SCORE
+const RUN_COIN_CAP = 90; // hard ceiling — no single run can shortcut the grind
+
 /* ================= pure helpers ================= */
+/** Score-to-coins with diminishing returns past SOFT_CAP_SCORE and a hard
+ *  ceiling, so one marathon run can't out-earn many average ones. */
+function coinsForScore(score: number): number {
+  const base = Math.min(score, SOFT_CAP_SCORE) / SCORE_PER_COIN;
+  const overflow = Math.max(0, score - SOFT_CAP_SCORE) / OVERFLOW_SCORE_PER_COIN;
+  return Math.min(RUN_COIN_CAP, Math.floor(base + overflow));
+}
 const tileToWorld = (ix: number, iz: number) =>
 new THREE.Vector3(ix * TILE, 0, iz * TILE);
 const key2 = (x: number, z: number) => x + "," + z;
@@ -527,9 +557,10 @@ const _v2 = new THREE.Vector3();
 // per-run settings snapshot — difficulty is only changeable from the menu,
 // so resetGame() re-reads it at the start of each run
 let casual = getSettings().difficulty === "casual";
-// haptic tap on damage/pickups; respects the settings toggle, no-ops on desktop
+// haptic tap on damage/pickups; harmless no-op on devices/browsers without
+// the Vibration API (e.g. iOS Safari)
 const buzz = (ms: number) => {
-  if ("vibrate" in navigator && getSettings().haptics) navigator.vibrate(ms);
+  if ("vibrate" in navigator) navigator.vibrate(ms);
 };
 
 /* ---------- scene ---------- */
@@ -689,41 +720,30 @@ worldMeshes.delete(k);
 }
 
 /* ---------- the cube ---------- */
-const cubeMesh = new THREE.Mesh(
-new RoundedBoxGeometry(TILE, TILE, TILE, 4, 0.09),
-new THREE.MeshStandardMaterial({ color: 0xf0e8d8, roughness: 0.55 }),
-);
-cubeMesh.castShadow = true;
-cubeMesh.receiveShadow = true;
+// geometry/material/face built by createCubeMesh() — shared with the skin
+// preview modal so it always matches the real gameplay cube exactly.
+const cubeMesh = createCubeMesh(TILE);
 scene.add(cubeMesh);
 
-// a simple face so it has personality (it tumbles along, that's the charm)
-{
-const eyeMat = new THREE.MeshStandardMaterial({
-color: 0xffffff,
-roughness: 0.3,
-});
-const pupilMat = new THREE.MeshStandardMaterial({
-color: 0x1a1a1a,
-roughness: 0.4,
-});
-for (const sx of [-0.16, 0.16]) {
-const eye = new THREE.Mesh(
-new THREE.SphereGeometry(0.085, 12, 10),
-eyeMat,
-);
-eye.position.set(sx, 0.1, 0.48);
-eye.scale.z = 0.55;
-cubeMesh.add(eye);
-const pupil = new THREE.Mesh(
-new THREE.SphereGeometry(0.04, 8, 6),
-pupilMat,
-);
-pupil.position.set(sx, 0.1, 0.53);
-pupil.scale.z = 0.5;
-cubeMesh.add(pupil);
-}
-}
+// trail: motion-triggered afterimage, spawns in world space as the cube
+// rolls. aura: always-on pulsing halo, parented to the cube (tracks it for
+// free). Both cosmetic and independent of the equipped skin.
+const trailFx = createTrail(scene, trailById(getEquippedTrail()).color);
+trailFx.setActive(getEquippedTrail() !== "none");
+const auraFx = createAura(cubeMesh, auraById(getEquippedAura()).color);
+auraFx.setActive(getEquippedAura() !== "none");
+const onTrailChange = () => {
+  const t = trailById(getEquippedTrail());
+  trailFx.setColor(t.color);
+  trailFx.setActive(t.id !== "none");
+};
+const onAuraChange = () => {
+  const a = auraById(getEquippedAura());
+  auraFx.setColor(a.color);
+  auraFx.setActive(a.id !== "none");
+};
+window.addEventListener("crush:trail", onTrailChange);
+window.addEventListener("crush:aura", onAuraChange);
 
 function placeCube() {
 const p = tileToWorld(S.cube.ix, S.cube.iz);
@@ -1739,6 +1759,7 @@ removePowerup();
 for (const h of [...S.hazards]) removeHazard(h);
 while (S.globs.length) removeGlob(S.globs.length - 1);
 cubeMesh.scale.setScalar(1);
+trailFx.clear(); // no stale streak lingering from the previous run
 S.particles = [];
 S.decals = [];
 pauseScreen.classList.add("hidden");
@@ -1791,8 +1812,8 @@ S.running = false;
 const prevBest = S.best;
 S.best = Math.max(S.best, S.score);
 localStorage.setItem("crush-best", String(S.best));
-// coin payout: 1 per parasite crushed + 10 per level climbed
-const earned = S.totalKills + S.level * 10;
+// coin payout: score converted at SCORE_PER_COIN, capped — see coinsForScore()
+const earned = coinsForScore(S.score);
 addCoins(earned);
 $("newbest-chip").classList.toggle("hidden", S.score <= prevBest);
 $("final-score").textContent = S.score.toLocaleString();
@@ -2126,6 +2147,8 @@ tryRoll(heldDir[0] * inv, heldDir[1] * inv);
 }
 
 updateRoll(dt);
+trailFx.update(dt, cubeMesh.position, !!S.rolling);
+auraFx.update(dt);
 
 const spd = LEVELS[S.level].speed; // parasite speed ramps with level
 for (let i = S.parasites.length - 1; i >= 0; i--) {
@@ -2392,6 +2415,10 @@ pauseRestartBtn.removeEventListener("click", onPauseRestart);
 pauseMenuBtn.removeEventListener("click", onQuitToMenu);
 gameoverMenuBtn.removeEventListener("click", onGameoverMenu);
 window.removeEventListener("crush:skin", onSkinChange);
+window.removeEventListener("crush:trail", onTrailChange);
+window.removeEventListener("crush:aura", onAuraChange);
+trailFx.dispose();
+auraFx.dispose();
 disposeMenus();
 renderer.domElement.remove();
 renderer.dispose();

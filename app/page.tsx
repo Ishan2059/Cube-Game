@@ -190,12 +190,12 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ============ SHOP / SKINS ============ */}
+      {/* ============ SHOP / SKINS · TRAILS · AURAS ============ */}
       <div id="shop-screen" className="overlay hidden">
         <div className="screen-scroll top-anchored">
           <div className="screen-head">
             <button id="shop-back" className="icon-btn" aria-label="Back">‹</button>
-            <h2 className="screen-title">SKINS</h2>
+            <h2 className="screen-title">SHOP</h2>
             <div className="pill coin-pill head-pill">
               <span className="coin-disc"></span>
               <span className="pill-value gold" id="shop-coins">0</span>
@@ -203,14 +203,14 @@ export default function Home() {
           </div>
 
           <div className="seg-tabs">
-            <button className="seg active">SKINS</button>
-            <button className="seg stub" id="tab-trails">TRAILS</button>
-            <button className="seg stub" id="tab-auras">AURAS</button>
+            <button className="seg active" id="tab-skins">SKINS</button>
+            <button className="seg" id="tab-trails">TRAILS</button>
+            <button className="seg" id="tab-auras">AURAS</button>
           </div>
 
           <div id="skin-list"></div>
 
-          <p className="shop-hint">
+          <p className="shop-hint" id="shop-hint">
             Earn coins by crushing parasites. Skins are cosmetic — pure drip.
           </p>
         </div>
@@ -232,15 +232,6 @@ export default function Home() {
           </div>
 
           <div className="group-block">
-            <div className="group-label">CONTROLS</div>
-            <div className="seg-tabs">
-              <button className="seg active">SWIPE</button>
-              <button className="seg stub" id="ctl-dpad">D-PAD</button>
-              <button className="seg stub" id="ctl-tilt">TILT</button>
-            </div>
-          </div>
-
-          <div className="group-block">
             <div className="group-label">GAMEPLAY</div>
             <div className="card">
               <button id="set-difficulty" className="setting-row">
@@ -249,10 +240,6 @@ export default function Home() {
                   <span className="seg-opt" data-v="normal">NORMAL</span>
                   <span className="seg-opt" data-v="casual">CASUAL</span>
                 </span>
-              </button>
-              <button id="set-haptics" className="setting-row">
-                <span className="setting-name">Haptics / Vibration</span>
-                <span className="switch"><span className="knob"></span></span>
               </button>
               <button id="set-colorblind" className="setting-row">
                 <span className="setting-name">Colorblind Mode</span>
@@ -398,6 +385,23 @@ export default function Home() {
           </div>
           <div id="beast-title" className="modal-title"></div>
           <p id="beast-desc" className="modal-desc"></p>
+        </div>
+      </div>
+
+      {/* ============ ITEM PREVIEW MODAL (skins / trails / auras) ============ */}
+      <div
+        id="item-modal"
+        className="modal hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="item-modal-name"
+      >
+        <div className="modal-card item-modal-card">
+          <button id="item-modal-close" className="icon-btn modal-close" aria-label="Close">✕</button>
+          <div id="item-modal-preview" className="item-modal-preview"></div>
+          <div id="item-modal-name" className="modal-title"></div>
+          <div id="item-modal-price" className="item-modal-price"></div>
+          <button id="item-modal-action" className="btn primary big"></button>
         </div>
       </div>
 
