@@ -76,6 +76,7 @@ export default function Home() {
               <p className="tagline sub">
                 Parasites climb. You are heavy. <b>Do the math.</b>
               </p>
+          <p id="streak-nudge"></p>
               <p className="tagline-mono">ROLL · SMASH · RAMPAGE</p>
 
               <div className="menu-actions">
@@ -89,13 +90,13 @@ export default function Home() {
                     </span>
                     <span className="tile-label">SKINS</span>
                   </button>
-                  <button id="board-btn" className="tile stub">
+                  <button id="board-btn" className="tile">
                     <span className="tile-icon ranks-icon">
                       <span></span>
                       <span></span>
                       <span></span>
                     </span>
-                    <span className="tile-label">RANKS</span>
+                    <span className="tile-label">LEADERBOARD</span>
                   </button>
                   <button id="howto-btn" className="tile">
                     <span className="tile-icon guide-icon">?</span>
@@ -357,11 +358,33 @@ export default function Home() {
               <button id="gameover-menu" className="btn secondary">
                 <span className="row-glyph venom-glyph">⌂</span> HOME
               </button>
-              <button id="gameover-ranks" className="btn secondary stub">
-                RANKS <span className="soon-tag">SOON</span>
+              <button id="gameover-ranks" className="btn secondary">
+                LEADERBOARD
               </button>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* ============ LEADERBOARD MODAL ============ */}
+      <div id="board-modal" className="modal hidden">
+        <div className="modal-card board-card">
+          <button id="board-close" className="icon-btn modal-close" aria-label="Close">✕</button>
+          <div className="modal-title">DAILY LEADERBOARD</div>
+          <div id="leaderboard"></div>
+          <div id="board-save">
+            <p className="board-save-q">Save your score to the leaderboard?</p>
+            <div className="board-save-row">
+              <input
+                id="initials-input"
+                maxLength={12}
+                autoComplete="off"
+                placeholder="username"
+              />
+              <button id="board-save-btn" className="btn primary">SAVE</button>
+            </div>
+          </div>
+          <p id="board-saved" className="board-saved hidden">Saved ✓</p>
         </div>
       </div>
 

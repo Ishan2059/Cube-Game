@@ -224,10 +224,8 @@ export function initMenus(): () => void {
     if (e.target === $("beast-modal")) closeBeastModal(); // backdrop tap
   });
 
-  // stubs: leaderboard is another teammate's feature; trails/auras/d-pad/tilt
-  // exist in the design but aren't part of this build
-  on("board-btn", () => toast("Leaderboard coming soon 👀"));
-  on("gameover-ranks", () => toast("Leaderboard coming soon 👀"));
+  // board-btn + gameover-ranks open the leaderboard modal (wired in engine).
+  // stubs: trails/auras/d-pad/tilt exist in the design but aren't in this build
   on("tab-trails", soon);
   on("tab-auras", soon);
   on("ctl-dpad", soon);
