@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import {
 TYPES,
 makeParasiteMesh,
@@ -21,6 +20,7 @@ playSpit,
 import { LEVELS, type Level } from "./levels";
 import { addCoins, getEquippedSkin, getSettings } from "./storage";
 import { skinById, getSkinTexture } from "./skins";
+import { createCubeMesh } from "./cubeMesh";
 import { initMenus, showStart } from "./menus";
 
 /* ================= constants ================= */
@@ -700,41 +700,10 @@ worldMeshes.delete(k);
 }
 
 /* ---------- the cube ---------- */
-const cubeMesh = new THREE.Mesh(
-new RoundedBoxGeometry(TILE, TILE, TILE, 4, 0.09),
-new THREE.MeshStandardMaterial({ color: 0xf0e8d8, roughness: 0.55 }),
-);
-cubeMesh.castShadow = true;
-cubeMesh.receiveShadow = true;
+// geometry/material/face built by createCubeMesh() — shared with the skin
+// preview modal so it always matches the real gameplay cube exactly.
+const cubeMesh = createCubeMesh(TILE);
 scene.add(cubeMesh);
-
-// a simple face so it has personality (it tumbles along, that's the charm)
-{
-const eyeMat = new THREE.MeshStandardMaterial({
-color: 0xffffff,
-roughness: 0.3,
-});
-const pupilMat = new THREE.MeshStandardMaterial({
-color: 0x1a1a1a,
-roughness: 0.4,
-});
-for (const sx of [-0.16, 0.16]) {
-const eye = new THREE.Mesh(
-new THREE.SphereGeometry(0.085, 12, 10),
-eyeMat,
-);
-eye.position.set(sx, 0.1, 0.48);
-eye.scale.z = 0.55;
-cubeMesh.add(eye);
-const pupil = new THREE.Mesh(
-new THREE.SphereGeometry(0.04, 8, 6),
-pupilMat,
-);
-pupil.position.set(sx, 0.1, 0.53);
-pupil.scale.z = 0.5;
-cubeMesh.add(pupil);
-}
-}
 
 function placeCube() {
 const p = tileToWorld(S.cube.ix, S.cube.iz);

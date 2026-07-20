@@ -947,6 +947,29 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
   text-align: center;
 }
 
+/* ---------- item preview modal (skins / trails / auras) ---------- */
+.item-modal-card { width: min(100%, 300px); padding: 24px 20px 20px; }
+.item-modal-preview {
+  width: min(46vw, 168px);
+  aspect-ratio: 1;
+  border-radius: 18px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 40%, rgba(183, 243, 43, 0.14), transparent 65%), #0f0c07;
+  border: 1px solid var(--line);
+}
+.item-modal-preview canvas { display: block; }
+.item-modal-price { min-height: 20px; }
+#item-modal-action { margin-top: 4px; }
+.btn:disabled { cursor: not-allowed; }
+.btn.locked {
+  background: var(--btn2);
+  color: var(--dim);
+  border: 1px solid var(--line2);
+  box-shadow: none;
+  opacity: 0.75;
+}
+.btn.locked:active { transform: none; }
+
 /* ---------- segmented tabs ---------- */
 .seg-tabs {
   display: flex;

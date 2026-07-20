@@ -365,6 +365,23 @@ export default function Home() {
         </div>
       </div>
 
+      {/* ============ ITEM PREVIEW MODAL (skins / trails / auras) ============ */}
+      <div
+        id="item-modal"
+        className="modal hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="item-modal-name"
+      >
+        <div className="modal-card item-modal-card">
+          <button id="item-modal-close" className="icon-btn modal-close" aria-label="Close">✕</button>
+          <div id="item-modal-preview" className="item-modal-preview"></div>
+          <div id="item-modal-name" className="modal-title"></div>
+          <div id="item-modal-price" className="item-modal-price"></div>
+          <button id="item-modal-action" className="btn primary big"></button>
+        </div>
+      </div>
+
       <Game />
     </>
   );

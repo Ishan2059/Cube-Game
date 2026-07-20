@@ -21,9 +21,10 @@ import {
   patchSettings,
   type Settings,
 } from "./storage";
-import { SKINS, skinById } from "./skins";
+import { SKINS, skinById, mountSkinPreview, type SkinDef } from "./skins";
 import { BEASTS, getBugThumbs } from "./bestiary";
 import { setMuted, playCoin, audio } from "./audio";
+import { openItemModal, closeItemModal, initItemModal, type ItemModalItem } from "./itemModal";
 
 const $ = (id: string) => document.getElementById(id) as HTMLElement;
 
@@ -82,14 +83,13 @@ function renderShop() {
   list.innerHTML = SKINS.map((sk) => {
     const isOwned = owned.includes(sk.id);
     const isEquipped = equipped === sk.id;
-    const act = isEquipped ? "" : isOwned ? "equip" : "buy";
     const state = isEquipped
       ? `<span class="skin-state equipped">✓ EQUIPPED</span>`
       : isOwned
-        ? `<span class="skin-state owned">TAP TO EQUIP</span>`
+        ? `<span class="skin-state owned">OWNED</span>`
         : `<span class="skin-state price${coins < sk.price ? " locked" : ""}"><span class="coin-disc small"></span>${sk.price}</span>`;
     return `
-      <button class="skin-card${isEquipped ? " equipped" : ""}" data-skin="${sk.id}" data-act="${act}">
+      <button class="skin-card${isEquipped ? " equipped" : ""}" data-skin="${sk.id}" aria-label="Preview ${sk.name}">
         <span class="skin-preview"><span class="skin-cube" style="background:${sk.previewConic}"></span></span>
         <span class="skin-name">${sk.name}</span>
         ${state}
@@ -97,29 +97,50 @@ function renderShop() {
   }).join("");
 }
 
+/** Builds the generic modal's view of a skin: current owned/equipped
+ *  snapshot, its live preview, and the buy/equip actions that actually
+ *  touch storage — the modal itself never spends coins or equips. */
+function buildSkinItem(sk: SkinDef): ItemModalItem {
+  const afterChange = () => {
+    renderShop();
+    updateMenuStats();
+    // the engine listens and restyles the live cube immediately
+    window.dispatchEvent(new CustomEvent("crush:skin"));
+  };
+  return {
+    name: sk.name,
+    price: sk.price,
+    owned: getOwnedSkins().includes(sk.id),
+    equipped: getEquippedSkin() === sk.id,
+    mountPreview: (el) => mountSkinPreview(el, sk),
+    onBuy: () => {
+      if (!spendCoins(sk.price)) {
+        toast(`Not enough coins — need 🪙 ${sk.price}`);
+        return;
+      }
+      ownSkin(sk.id);
+      setEquippedSkin(sk.id);
+      playCoin();
+      toast(`${sk.name} unlocked & equipped!`);
+      afterChange();
+      closeItemModal();
+    },
+    onEquip: () => {
+      setEquippedSkin(sk.id);
+      toast(`${sk.name} equipped`);
+      afterChange();
+      closeItemModal();
+    },
+  };
+}
+
 function onShopClick(e: Event) {
   const btn = (e.target as HTMLElement).closest<HTMLElement>(".skin-card");
-  if (!btn || !btn.dataset.act) return;
+  if (!btn) return;
   const sk = SKINS.find((s) => s.id === btn.dataset.skin);
   if (!sk) return;
   audio(); // user gesture — safe moment to unlock the AudioContext
-  if (btn.dataset.act === "buy") {
-    if (!spendCoins(sk.price)) {
-      toast(`Not enough coins — need 🪙 ${sk.price}`);
-      return;
-    }
-    ownSkin(sk.id);
-    setEquippedSkin(sk.id);
-    playCoin();
-    toast(`${sk.name} unlocked & equipped!`);
-  } else {
-    setEquippedSkin(sk.id);
-    toast(`${sk.name} equipped`);
-  }
-  renderShop();
-  updateMenuStats();
-  // the engine listens and restyles the live cube immediately
-  window.dispatchEvent(new CustomEvent("crush:skin"));
+  openItemModal(buildSkinItem(sk), getCoins());
 }
 
 /* ---------- bestiary (guide screen) ---------- */
@@ -272,6 +293,8 @@ export function initMenus(): () => void {
     toast("Progress wiped. Fresh cube.");
   });
 
+  const disposeItemModal = initItemModal();
+
   applySettingsEffects(getSettings());
   syncSettingsUI();
   updateMenuStats();
@@ -279,5 +302,6 @@ export function initMenus(): () => void {
   return () => {
     clearTimeout(resetTimer);
     for (const [el, ev, fn] of handlers) el.removeEventListener(ev, fn);
+    disposeItemModal();
   };
 }
