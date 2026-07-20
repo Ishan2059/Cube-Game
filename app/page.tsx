@@ -231,15 +231,6 @@ export default function Home() {
           </div>
 
           <div className="group-block">
-            <div className="group-label">CONTROLS</div>
-            <div className="seg-tabs">
-              <button className="seg active">SWIPE</button>
-              <button className="seg stub" id="ctl-dpad">D-PAD</button>
-              <button className="seg stub" id="ctl-tilt">TILT</button>
-            </div>
-          </div>
-
-          <div className="group-block">
             <div className="group-label">GAMEPLAY</div>
             <div className="card">
               <button id="set-difficulty" className="setting-row">
@@ -248,10 +239,6 @@ export default function Home() {
                   <span className="seg-opt" data-v="normal">NORMAL</span>
                   <span className="seg-opt" data-v="casual">CASUAL</span>
                 </span>
-              </button>
-              <button id="set-haptics" className="setting-row">
-                <span className="setting-name">Haptics / Vibration</span>
-                <span className="switch"><span className="knob"></span></span>
               </button>
               <button id="set-colorblind" className="setting-row">
                 <span className="setting-name">Colorblind Mode</span>

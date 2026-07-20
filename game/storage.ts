@@ -71,13 +71,11 @@ export const setEquippedSkin = (id: string) => write("crush-skin", id);
 /* ---------- settings ---------- */
 export interface Settings {
   sound: boolean;
-  haptics: boolean;
   difficulty: "normal" | "casual";
   colorblind: boolean;
 }
 const DEFAULT_SETTINGS: Settings = {
   sound: true,
-  haptics: true,
   difficulty: "normal",
   colorblind: false,
 };

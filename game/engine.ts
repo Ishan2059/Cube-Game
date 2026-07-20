@@ -516,9 +516,10 @@ const _v2 = new THREE.Vector3();
 // per-run settings snapshot — difficulty is only changeable from the menu,
 // so resetGame() re-reads it at the start of each run
 let casual = getSettings().difficulty === "casual";
-// haptic tap on damage/pickups; respects the settings toggle, no-ops on desktop
+// haptic tap on damage/pickups; harmless no-op on devices/browsers without
+// the Vibration API (e.g. iOS Safari)
 const buzz = (ms: number) => {
-  if ("vibrate" in navigator && getSettings().haptics) navigator.vibrate(ms);
+  if ("vibrate" in navigator) navigator.vibrate(ms);
 };
 
 /* ---------- scene ---------- */

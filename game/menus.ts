@@ -6,7 +6,7 @@
  *
  * Leaderboard ("RANKS") is intentionally a stub — that feature is being
  * built separately. The buttons exist (design hooks) but only show a toast,
- * as do the TRAILS/AURAS shop tabs and D-PAD/TILT control schemes.
+ * as do the TRAILS/AURAS shop tabs.
  */
 
 import {
@@ -59,7 +59,6 @@ function syncSettingsUI() {
   const s = getSettings();
   // pill switches light up via an .on class
   $("set-sound").classList.toggle("on", s.sound);
-  $("set-haptics").classList.toggle("on", s.haptics);
   $("set-colorblind").classList.toggle("on", s.colorblind);
   $("set-difficulty")
     .querySelectorAll<HTMLElement>(".seg-opt")
@@ -224,19 +223,16 @@ export function initMenus(): () => void {
     if (e.target === $("beast-modal")) closeBeastModal(); // backdrop tap
   });
 
-  // stubs: leaderboard is another teammate's feature; trails/auras/d-pad/tilt
-  // exist in the design but aren't part of this build
+  // stubs: leaderboard is another teammate's feature; trails/auras exist in
+  // the design but aren't part of this build
   on("board-btn", () => toast("Leaderboard coming soon 👀"));
   on("gameover-ranks", () => toast("Leaderboard coming soon 👀"));
   on("tab-trails", soon);
   on("tab-auras", soon);
-  on("ctl-dpad", soon);
-  on("ctl-tilt", soon);
 
   on("skin-list", onShopClick);
 
   on("set-sound", () => toggleSetting((s) => ({ sound: !s.sound })));
-  on("set-haptics", () => toggleSetting((s) => ({ haptics: !s.haptics })));
   on("set-difficulty", () =>
     toggleSetting((s) => ({
       difficulty: s.difficulty === "normal" ? "casual" : "normal",
