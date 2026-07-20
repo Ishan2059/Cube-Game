@@ -2,7 +2,7 @@
 
 /* ================= design tokens =================
  * From docs/CubeCrush UI.html — dark subterranean arcade, toxic-venom accent.
- * Display: Anton · Body/buttons: Space Grotesk · Numbers/labels: Space Mono */
+ * Display: Anton · Primary: Syne · Numbers/labels: Space Mono */
 :root {
   --bg: #0a0907;
   --screen: #100e0a;
@@ -26,9 +26,8 @@
   --dim: #8f8778;
   --faint: #6f685b;
   --font-d: var(--font-display), Impact, "Arial Narrow", sans-serif;
-  --font-b: var(--font-body), "Segoe UI", system-ui, sans-serif;
+  --font-b: var(--font-primary), sans-serif;
   --font-m: var(--font-mono), Consolas, monospace;
-  --font-s: var(--font-syne), var(--font-body), "Segoe UI", system-ui, sans-serif;
 }
 
 html, body {
@@ -570,7 +569,7 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
 
 /* ---------- buttons ---------- */
 .btn {
-  font-family: var(--font-s);
+  font-family: var(--font-b);
   font-weight: 700;
   font-size: 13px;
   letter-spacing: 0.05em;
@@ -924,7 +923,7 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
   filter: drop-shadow(0 8px 8px rgba(0, 0, 0, 0.5));
 }
 .modal-title {
-  font-family: var(--font-s);
+  font-family: var(--font-b);
   font-weight: 800;
   font-size: 20px;
   letter-spacing: 0.08em;
@@ -1014,7 +1013,7 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
 }
 .skin-name {
   margin-top: 10px;
-  font-family: var(--font-s);
+  font-family: var(--font-b);
   font-weight: 700;
   font-size: 12.5px;
   letter-spacing: 0.04em;
@@ -1174,7 +1173,7 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
   border-radius: 12px;
   background: var(--pill);
   border: 1px solid rgba(183, 243, 43, 0.3);
-  font-family: var(--font-s);
+  font-family: var(--font-b);
   font-weight: 700;
   font-size: 12.5px;
   letter-spacing: 0.06em;
