@@ -622,7 +622,14 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
 .row-glyph { font-size: 16px; font-style: normal; }
 .venom-glyph { color: var(--venom); }
 .btn-row { display: flex; gap: 9px; width: 100%; }
-.btn-row .btn { flex: 1; }
+.btn-row .btn { flex: 1; min-width: 0; }
+/* Syne runs wider than the old Space Grotesk body font — on narrow phones
+ * three flex:1 buttons (RESTART / SETTINGS / QUIT) no longer fit at the
+ * default padding/gap, so tighten both below 400px. */
+@media (max-width: 400px) {
+  .btn-row { gap: 6px; }
+  .btn-row .btn { padding: 13px 6px; font-size: 11px; gap: 4px; }
+}
 .soon-tag {
   font-family: var(--font-m);
   font-size: 8.5px;
@@ -711,9 +718,9 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
 .screen-head.spread { justify-content: space-between; }
 .head-pill { margin-left: auto; }
 .icon-btn {
-  width: 34px; height: 34px;
+  width: 44px; height: 44px;
   flex: none;
-  border-radius: 11px;
+  border-radius: 13px;
   background: var(--tile);
   border: 1px solid var(--line2);
   display: flex;
@@ -884,7 +891,11 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding:
+    calc(24px + env(safe-area-inset-top))
+    calc(24px + env(safe-area-inset-right))
+    calc(24px + env(safe-area-inset-bottom))
+    calc(24px + env(safe-area-inset-left));
   background: rgba(6, 5, 3, 0.72);
   backdrop-filter: blur(3px);
 }
@@ -948,6 +959,10 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
 }
 .seg {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
   text-align: center;
   padding: 9px;
   border: none;
@@ -1150,6 +1165,10 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
 .ps-div { width: 1px; height: 28px; background: var(--line2); }
 .pause-link {
   align-self: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
   background: none;
   border: none;
   cursor: pointer;
