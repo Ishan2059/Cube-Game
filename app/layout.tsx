@@ -1,19 +1,23 @@
 import type { Metadata, Viewport } from "next";
-import { Syne } from "next/font/google";
+import { Syne, Press_Start_2P } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
-// Site-wide primary font — headings, body, buttons, HUD/score numbers all
-// read var(--font-primary) via the --font-d/--font-b/--font-m role
-// variables in globals.css, so this one family covers every text role.
-// Variable weight (400-800) matches the full range the design calls for,
-// from Space Mono-replacement HUD digits (400/700) up to the heaviest
-// display headings (800), without shipping a separate static file per
-// weight.
+// Press Start 2P is the primary font — headings/display text (--font-d in
+// globals.css) read var(--font-primary). It only ships one weight (400).
+const pressStart2P = Press_Start_2P({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-primary",
+  display: "swap",
+});
+
+// Syne is the secondary font — body copy, descriptions, HUD/mono text
+// (--font-b/--font-m in globals.css) read var(--font-secondary).
 const syne = Syne({
   weight: "variable",
   subsets: ["latin"],
-  variable: "--font-primary",
+  variable: "--font-secondary",
   display: "swap",
 });
 
@@ -43,7 +47,11 @@ export default function RootLayout({
   // --font-d/--font-b/--font-m compute as invalid everywhere and silently
   // fall back to the browser's default serif despite Syne loading fine.
   return (
-    <html lang="en" suppressHydrationWarning className={syne.variable}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${pressStart2P.variable} ${syne.variable}`}
+    >
       <body suppressHydrationWarning>
         {children}
         <Analytics />

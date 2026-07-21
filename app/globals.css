@@ -2,7 +2,7 @@
 
 /* ================= design tokens =================
  * From docs/CubeCrush UI.html — dark subterranean arcade, toxic-venom accent.
- * Display: Anton · Primary: Syne · Numbers/labels: Space Mono */
+ * Display/headings: Press Start 2P · Body/HUD/labels: Syne */
 :root {
   --bg: #0a0907;
   --screen: #100e0a;
@@ -25,14 +25,13 @@
   --text-2: #c9c1b2;
   --dim: #8f8778;
   --faint: #6f685b;
-  /* Syne is the site's one primary font (see app/layout.tsx). These three
-   * role variables (display/body/mono) all resolve to it — kept separate,
-   * rather than collapsed into one variable, so call sites still say what
-   * *role* a piece of text plays (heading vs. body vs. HUD/numeric) even
-   * though today they render identically. */
+  /* Press Start 2P is the primary font (headings/display); Syne is the
+   * secondary font (body, descriptions, HUD/mono text) — see
+   * app/layout.tsx. --font-d/--font-b/--font-m stay separate variables so
+   * call sites still say what *role* a piece of text plays. */
   --font-d: var(--font-primary), sans-serif;
-  --font-b: var(--font-primary), sans-serif;
-  --font-m: var(--font-primary), sans-serif;
+  --font-b: var(--font-secondary), sans-serif;
+  --font-m: var(--font-secondary), sans-serif;
 }
 
 html, body {
@@ -383,9 +382,12 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
 .overlay h1 {
   font-family: var(--font-d);
   font-weight: 400;
-  font-size: clamp(56px, 17vw, 80px);
+  /* Press Start 2P is a wide, blocky monospace glyph set — much wider
+     per-character than the condensed display font these sizes were
+     originally tuned for, so the clamp runs noticeably smaller here. */
+  font-size: clamp(28px, 8vw, 40px);
   letter-spacing: 0.01em;
-  line-height: 0.85;
+  line-height: 1.15;
   color: var(--text);
   text-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
 }
@@ -486,7 +488,7 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
   .start-hero-cube .hero-cube { width: 220px; height: 220px; }
   .start-hero-cube .hero-glow { width: 330px; height: 330px; }
   .start-main { flex: 1.1; align-items: flex-start; text-align: left; }
-  .start-main h1 { font-size: 120px; }
+  .start-main h1 { font-size: 52px; }
   .start-main .menu-actions { max-width: 430px; margin-top: 8px; }
   .start-main .tile-grid { display: flex; }
   .start-main .tile {
@@ -1173,7 +1175,7 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
   text-align: left;
 }
 .pause-head { display: flex; align-items: center; gap: 12px; }
-.pause-head h1 { font-size: 54px; }
+.pause-head h1 { font-size: 26px; }
 .pause-bars { display: inline-flex; gap: 4px; }
 .pause-bars span {
   width: 6px; height: 28px;
@@ -1200,8 +1202,8 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
 }
 .ps-value {
   font-family: var(--font-d);
-  font-size: 23px;
-  line-height: 1;
+  font-size: 14px;
+  line-height: 1.3;
   color: var(--text);
 }
 .ps-value.venom { color: var(--venom); }
@@ -1286,8 +1288,8 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
 }
 .final-score {
   font-family: var(--font-d);
-  font-size: 58px;
-  line-height: 0.9;
+  font-size: 30px;
+  line-height: 1.2;
   color: var(--venom);
   text-shadow: 0 0 24px rgba(183, 243, 43, 0.3);
 }
