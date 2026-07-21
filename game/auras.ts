@@ -5,7 +5,7 @@
 
 import * as THREE from "three";
 import { createCubeMesh, disposeCubeMesh } from "./cubeMesh";
-import { createAura } from "./effects";
+import { createAura, AURA_RADIUS } from "./effects";
 import { mountItemPreview } from "./itemPreview";
 
 export interface AuraDef {
@@ -58,10 +58,10 @@ export const AURAS: AuraDef[] = [
 export const auraById = (id: string): AuraDef =>
   AURAS.find((a) => a.id === id) ?? AURAS[0];
 
-// The halo glow sprite pulses out to scale 2.05 (half-extent 1.025 from the
-// cube's center) — bigger than the cube itself, so it's what sets the
-// bounding sphere the preview camera needs to fit.
-const PREVIEW_RADIUS = 1.05;
+// The halo pulses out past the cube itself, so it's the aura — not the cube's
+// 0.5*sqrt(3) corner reach — that sets the sphere the preview camera must fit.
+// Taken from effects.ts so retuning the glow can't silently start clipping.
+const PREVIEW_RADIUS = Math.max(AURA_RADIUS, 0.5 * Math.sqrt(3));
 
 /** Mounts a live preview: the real cube mesh idly rotating inside
  *  `container`, with the given aura pulsing around it (always-on, exactly
@@ -70,7 +70,7 @@ export function mountAuraPreview(
   container: HTMLElement,
   aura: AuraDef,
 ): () => void {
-  return mountItemPreview(container, PREVIEW_RADIUS, (scene) => {
+  return mountItemPreview(container, { radius: PREVIEW_RADIUS }, (scene) => {
     const mesh = createCubeMesh();
     scene.add(mesh);
 

@@ -207,7 +207,7 @@ export function mountSkinPreview(
   container: HTMLElement,
   skin: SkinDef,
 ): () => void {
-  return mountItemPreview(container, PREVIEW_RADIUS, (scene) => {
+  return mountItemPreview(container, { radius: PREVIEW_RADIUS }, (scene) => {
     const mesh = createCubeMesh();
     const mat = mesh.material as THREE.MeshStandardMaterial;
     mat.color.set(PREVIEW_TINT);
