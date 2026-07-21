@@ -25,9 +25,14 @@
   --text-2: #c9c1b2;
   --dim: #8f8778;
   --faint: #6f685b;
-  --font-d: var(--font-display), Impact, "Arial Narrow", sans-serif;
+  /* Syne is the site's one primary font (see app/layout.tsx). These three
+   * role variables (display/body/mono) all resolve to it — kept separate,
+   * rather than collapsed into one variable, so call sites still say what
+   * *role* a piece of text plays (heading vs. body vs. HUD/numeric) even
+   * though today they render identically. */
+  --font-d: var(--font-primary), sans-serif;
   --font-b: var(--font-primary), sans-serif;
-  --font-m: var(--font-mono), Consolas, monospace;
+  --font-m: var(--font-primary), sans-serif;
 }
 
 html, body {
@@ -643,7 +648,7 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
 .menu-actions {
   display: flex;
   flex-direction: column;
-  gap: 11px;
+  gap: 16px;
   width: 100%;
 }
 

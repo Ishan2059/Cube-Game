@@ -10,6 +10,9 @@
 
 import * as THREE from "three";
 import { createCubeMesh, disposeCubeMesh } from "./cubeMesh";
+import { NET_COLS, NET_ROWS } from "./cubeNet";
+import { drawDragonNet } from "./dragonSkin";
+import { mountItemPreview } from "./itemPreview";
 
 export interface SkinDef {
   id: "classic" | "venom" | "magma";
@@ -17,12 +20,7 @@ export interface SkinDef {
   desc: string;
   price: number; // coins; 0 = owned from the start
   roughness: number;
-  /** layered CSS background for the shop/hero preview cube */
-  previewConic: string;
 }
-
-const conic = (a: string, b: string, c: string) =>
-  `conic-gradient(from 0deg at 50% 50%, ${a} 0deg 63.43deg, ${b} 63.43deg 180deg, ${c} 180deg 296.57deg, ${a} 296.57deg 360deg)`;
 
 export const SKINS: SkinDef[] = [
   {
@@ -31,22 +29,13 @@ export const SKINS: SkinDef[] = [
     desc: "Cracked stone shell. Every level recolours it — the cracks stay.",
     price: 0,
     roughness: 0.6,
-    previewConic:
-      "linear-gradient(115deg, transparent 40%, rgba(0,0,0,0.45) 41.5%, transparent 43%), " +
-      "linear-gradient(62deg, transparent 62%, rgba(0,0,0,0.38) 63.5%, transparent 65%), " +
-      "linear-gradient(158deg, transparent 22%, rgba(0,0,0,0.3) 23%, transparent 24.5%), " +
-      conic("#ded8cc", "#7f7a6f", "#4e4a42"),
   },
   {
     id: "venom",
     name: "DRAGON",
-    desc: "Overlapping dragon scales. Sheds nothing, fears nothing.",
+    desc: "An imperial serpent wound right around the cube. Sheds nothing, fears nothing.",
     price: 320,
     roughness: 0.45,
-    previewConic:
-      "radial-gradient(circle at 50% 30%, rgba(0,0,0,0.3) 26%, transparent 28%) 0 0 / 13px 13px, " +
-      "radial-gradient(circle at 50% 30%, rgba(0,0,0,0.3) 26%, transparent 28%) 6.5px 6.5px / 13px 13px, " +
-      conic("#d6ff4a", "#86c21a", "#3f5e0a"),
   },
   {
     id: "magma",
@@ -54,10 +43,6 @@ export const SKINS: SkinDef[] = [
     desc: "3×3 sticker grid. Never solved — always crushing.",
     price: 500,
     roughness: 0.35,
-    previewConic:
-      "linear-gradient(rgba(10,10,10,0.75) 2.5px, transparent 2.5px) 0 0 / 33.34% 33.34%, " +
-      "linear-gradient(90deg, rgba(10,10,10,0.75) 2.5px, transparent 2.5px) 0 0 / 33.34% 33.34%, " +
-      conic("#f0ede4", "#b8b4a8", "#8a867a"),
   },
 ];
 
@@ -115,32 +100,6 @@ function makeRockyTexture(ctx: CanvasRenderingContext2D, T: number) {
   }
 }
 
-function makeDragonTexture(ctx: CanvasRenderingContext2D, T: number) {
-  ctx.fillStyle = "#c8c8c8";
-  ctx.fillRect(0, 0, T, T);
-  // overlapping scale rows, drawn bottom-up so upper rows overlap lower
-  const R = 20; // scale radius
-  const rowH = R * 0.72;
-  let row = 0;
-  for (let y = T + R; y > -R; y -= rowH, row++) {
-    const off = row % 2 ? R : 0;
-    for (let x = -R + off; x < T + R; x += R * 2) {
-      // each scale: light crown fading to dark rim = depth without color
-      const g = ctx.createRadialGradient(x, y - R * 0.55, R * 0.15, x, y, R);
-      g.addColorStop(0, "#e8e8e8");
-      g.addColorStop(0.75, "#9a9a9a");
-      g.addColorStop(1, "#3c3c3c");
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.arc(x, y, R, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = "rgba(25,25,25,0.7)";
-      ctx.lineWidth = 1.6;
-      ctx.stroke();
-    }
-  }
-}
-
 function makeRubixTexture(ctx: CanvasRenderingContext2D, T: number) {
   // black frame + 3×3 stickers in distinct GRAY values: the level colour
   // tints the whole face, gray steps keep the sticker mosaic readable
@@ -170,22 +129,97 @@ function makeRubixTexture(ctx: CanvasRenderingContext2D, T: number) {
 
 const texCache = new Map<string, THREE.CanvasTexture>();
 
-/** Grayscale skin texture, cached per skin id. */
+// Per-face cell size. The net skin keeps the same 256 per face as the tiled
+// ones, it just needs six cells' worth of canvas to lay them out in.
+const FACE_PX = 256;
+
+/** Grayscale skin texture, cached per skin id.
+ *
+ *  Two shapes come out of here, both plain CanvasTextures on `material.map`:
+ *  tiled skins paint one 256px square repeated on every face, while DRAGON
+ *  paints the cube's whole unwrapped net so its subject runs across faces. The
+ *  net one reads the second UV set, selected by `channel` — see cubeNet.ts. */
 export function getSkinTexture(id: SkinDef["id"]): THREE.CanvasTexture {
   const hit = texCache.get(id);
   if (hit) return hit;
-  const T = 256;
+
+  const net = id === "venom";
   const cv = document.createElement("canvas");
-  cv.width = cv.height = T;
+  cv.width = net ? NET_COLS * FACE_PX : FACE_PX;
+  cv.height = net ? NET_ROWS * FACE_PX : FACE_PX;
   const ctx = cv.getContext("2d")!;
-  if (id === "classic") makeRockyTexture(ctx, T);
-  else if (id === "venom") makeDragonTexture(ctx, T);
-  else makeRubixTexture(ctx, T);
+  if (net) drawDragonNet(ctx, FACE_PX);
+  else if (id === "classic") makeRockyTexture(ctx, FACE_PX);
+  else makeRubixTexture(ctx, FACE_PX);
+
   const tex = new THREE.CanvasTexture(cv);
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.anisotropy = 4;
+  if (net) tex.channel = 1;
   texCache.set(id, tex);
   return tex;
+}
+
+/* ---------- flat thumbnail (shop card + home-screen indicator) ----------
+ * Both spots used to show a hand-authored CSS gradient standing in for the
+ * skin, tuned once and never touched again — which is exactly how DRAGON's
+ * thumbnail ended up showing scattered dots long after the real texture
+ * became a serpent, and ROCKY/RUBIX's ended up close but not quite the real
+ * palette either. A rendered snapshot of the actual cube mesh + material
+ * can't drift like that: whatever the skin looks like in the interactive
+ * preview and in gameplay is what gets captured here, because it's the same
+ * geometry, texture and tint. */
+const thumbCache = new Map<string, string>();
+const THUMB_PX = 320;
+// Isometric (camera along (1,1,1)) so the cube's rendered silhouette lines
+// up with the hexagon clip-path .hero-cube/.skin-cube already use for every
+// other cube icon in the UI. HALF is the ortho frustum half-extent: an exact
+// corner-to-corner fit is 1/sqrt(2) horizontally and sqrt(2/3) vertically
+// (derived from the cube's corners projected onto the isometric screen
+// basis); using the larger of the two for a square frustum keeps the cube
+// undistorted, with ~5% headroom so the (slightly rounded) mesh never
+// touches the edge.
+const THUMB_HALF = Math.sqrt(2 / 3) * 1.05;
+
+/** Renders `id`'s cube — real mesh, real texture, same tint as the item-modal
+ *  preview — from a fixed isometric angle, and returns it as a PNG data URL.
+ *  Cached per skin id: the shot is fully deterministic, so it's computed once
+ *  and reused for the rest of the session. */
+export function getSkinThumbnail(id: SkinDef["id"]): string {
+  const hit = thumbCache.get(id);
+  if (hit) return hit;
+
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setSize(THUMB_PX, THUMB_PX, false);
+
+  const scene = new THREE.Scene();
+  scene.add(new THREE.HemisphereLight(0xfff2dc, 0x2c2418, 1.2));
+  const sun = new THREE.DirectionalLight(0xffe6c0, 1.8);
+  sun.position.set(2, 3, 2);
+  scene.add(sun);
+
+  const camera = new THREE.OrthographicCamera(-THUMB_HALF, THUMB_HALF, THUMB_HALF, -THUMB_HALF, 0.1, 10);
+  camera.position.set(1, 1, 1).normalize().multiplyScalar(4);
+  camera.up.set(0, 1, 0);
+  camera.lookAt(0, 0, 0);
+
+  const skin = skinById(id);
+  const mesh = createCubeMesh();
+  const mat = mesh.material as THREE.MeshStandardMaterial;
+  mat.color.set(PREVIEW_TINT);
+  mat.roughness = skin.roughness;
+  mat.map = getSkinTexture(skin.id);
+  mat.needsUpdate = true;
+  scene.add(mesh);
+
+  renderer.render(scene, camera);
+  const url = renderer.domElement.toDataURL("image/png");
+
+  disposeCubeMesh(mesh);
+  renderer.dispose();
+
+  thumbCache.set(id, url);
+  return url;
 }
 
 /* ---------- live skin preview (item modal) ---------- */
@@ -193,6 +227,10 @@ export function getSkinTexture(id: SkinDef["id"]): THREE.CanvasTexture {
 // merits, independent of whatever level colour the live game happens to
 // be on — matches the cube's default (unlevelled) look.
 const PREVIEW_TINT = 0xf0e8d8;
+
+// A cube's corner is always 0.5*sqrt(3) from its center, no matter how it's
+// rotated — that's the sphere mountItemPreview needs to fit on screen.
+const PREVIEW_RADIUS = (0.5 * Math.sqrt(3));
 
 /** Mounts a small idle-rotating render of `skin` on the real cube mesh into
  *  `container` (its own WebGL canvas, filling the container). Returns a
@@ -202,54 +240,25 @@ export function mountSkinPreview(
   container: HTMLElement,
   skin: SkinDef,
 ): () => void {
-  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  container.appendChild(renderer.domElement);
-  renderer.domElement.style.width = "100%";
-  renderer.domElement.style.height = "100%";
+  return mountItemPreview(container, { radius: PREVIEW_RADIUS }, (scene) => {
+    const mesh = createCubeMesh();
+    const mat = mesh.material as THREE.MeshStandardMaterial;
+    mat.color.set(PREVIEW_TINT);
+    mat.roughness = skin.roughness;
+    mat.map = getSkinTexture(skin.id);
+    mat.needsUpdate = true;
+    scene.add(mesh);
 
-  const scene = new THREE.Scene();
-  scene.add(new THREE.HemisphereLight(0xfff2dc, 0x2c2418, 1.2));
-  const sun = new THREE.DirectionalLight(0xffe6c0, 1.8);
-  sun.position.set(2, 3, 2);
-  scene.add(sun);
-
-  const cam = new THREE.PerspectiveCamera(32, 1, 0.1, 10);
-  cam.position.set(1.05, 1.05, 1.4);
-  cam.lookAt(0, 0, 0);
-
-  const mesh = createCubeMesh();
-  const mat = mesh.material as THREE.MeshStandardMaterial;
-  mat.color.set(PREVIEW_TINT);
-  mat.roughness = skin.roughness;
-  mat.map = getSkinTexture(skin.id);
-  mat.needsUpdate = true;
-  scene.add(mesh);
-
-  const resize = () => {
-    const s = Math.max(1, Math.min(container.clientWidth, container.clientHeight));
-    renderer.setSize(s, s, false);
-  };
-  resize();
-  const ro = new ResizeObserver(resize);
-  ro.observe(container);
-
-  let raf = 0;
-  let t = 0;
-  const tick = () => {
-    t += 0.011;
-    mesh.rotation.y = t;
-    mesh.rotation.x = Math.sin(t * 0.6) * 0.12;
-    renderer.render(scene, cam);
-    raf = requestAnimationFrame(tick);
-  };
-  raf = requestAnimationFrame(tick);
-
-  return () => {
-    cancelAnimationFrame(raf);
-    ro.disconnect();
-    disposeCubeMesh(mesh);
-    renderer.dispose();
-    renderer.domElement.remove();
-  };
+    let t = 0;
+    return {
+      tick(dt) {
+        t += dt * 0.66; // matches the previous fixed +0.011/frame @60fps pace
+        mesh.rotation.y = t;
+        mesh.rotation.x = Math.sin(t * 0.6) * 0.12;
+      },
+      dispose() {
+        disposeCubeMesh(mesh);
+      },
+    };
+  });
 }
