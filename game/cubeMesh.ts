@@ -6,10 +6,15 @@
 
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
+import { applyNetUvs } from "./cubeNet";
 
 export function createCubeMesh(size = 1): THREE.Mesh {
+  const geo = new RoundedBoxGeometry(size, size, size, 4, 0.09 * size);
+  // second UV set, for skins whose artwork runs across faces rather than
+  // repeating per face — see cubeNet.ts. Default UVs are left as they were.
+  applyNetUvs(geo);
   const mesh = new THREE.Mesh(
-    new RoundedBoxGeometry(size, size, size, 4, 0.09 * size),
+    geo,
     new THREE.MeshStandardMaterial({ color: 0xf0e8d8, roughness: 0.55 }),
   );
   mesh.castShadow = true;

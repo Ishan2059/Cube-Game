@@ -10,6 +10,8 @@
 
 import * as THREE from "three";
 import { createCubeMesh, disposeCubeMesh } from "./cubeMesh";
+import { NET_COLS, NET_ROWS } from "./cubeNet";
+import { drawDragonNet } from "./dragonSkin";
 import { mountItemPreview } from "./itemPreview";
 
 export interface SkinDef {
@@ -41,7 +43,7 @@ export const SKINS: SkinDef[] = [
   {
     id: "venom",
     name: "DRAGON",
-    desc: "Overlapping dragon scales. Sheds nothing, fears nothing.",
+    desc: "An imperial serpent wound right around the cube. Sheds nothing, fears nothing.",
     price: 320,
     roughness: 0.45,
     previewConic:
@@ -116,32 +118,6 @@ function makeRockyTexture(ctx: CanvasRenderingContext2D, T: number) {
   }
 }
 
-function makeDragonTexture(ctx: CanvasRenderingContext2D, T: number) {
-  ctx.fillStyle = "#c8c8c8";
-  ctx.fillRect(0, 0, T, T);
-  // overlapping scale rows, drawn bottom-up so upper rows overlap lower
-  const R = 20; // scale radius
-  const rowH = R * 0.72;
-  let row = 0;
-  for (let y = T + R; y > -R; y -= rowH, row++) {
-    const off = row % 2 ? R : 0;
-    for (let x = -R + off; x < T + R; x += R * 2) {
-      // each scale: light crown fading to dark rim = depth without color
-      const g = ctx.createRadialGradient(x, y - R * 0.55, R * 0.15, x, y, R);
-      g.addColorStop(0, "#e8e8e8");
-      g.addColorStop(0.75, "#9a9a9a");
-      g.addColorStop(1, "#3c3c3c");
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.arc(x, y, R, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = "rgba(25,25,25,0.7)";
-      ctx.lineWidth = 1.6;
-      ctx.stroke();
-    }
-  }
-}
-
 function makeRubixTexture(ctx: CanvasRenderingContext2D, T: number) {
   // black frame + 3×3 stickers in distinct GRAY values: the level colour
   // tints the whole face, gray steps keep the sticker mosaic readable
@@ -171,20 +147,33 @@ function makeRubixTexture(ctx: CanvasRenderingContext2D, T: number) {
 
 const texCache = new Map<string, THREE.CanvasTexture>();
 
-/** Grayscale skin texture, cached per skin id. */
+// Per-face cell size. The net skin keeps the same 256 per face as the tiled
+// ones, it just needs six cells' worth of canvas to lay them out in.
+const FACE_PX = 256;
+
+/** Grayscale skin texture, cached per skin id.
+ *
+ *  Two shapes come out of here, both plain CanvasTextures on `material.map`:
+ *  tiled skins paint one 256px square repeated on every face, while DRAGON
+ *  paints the cube's whole unwrapped net so its subject runs across faces. The
+ *  net one reads the second UV set, selected by `channel` — see cubeNet.ts. */
 export function getSkinTexture(id: SkinDef["id"]): THREE.CanvasTexture {
   const hit = texCache.get(id);
   if (hit) return hit;
-  const T = 256;
+
+  const net = id === "venom";
   const cv = document.createElement("canvas");
-  cv.width = cv.height = T;
+  cv.width = net ? NET_COLS * FACE_PX : FACE_PX;
+  cv.height = net ? NET_ROWS * FACE_PX : FACE_PX;
   const ctx = cv.getContext("2d")!;
-  if (id === "classic") makeRockyTexture(ctx, T);
-  else if (id === "venom") makeDragonTexture(ctx, T);
-  else makeRubixTexture(ctx, T);
+  if (net) drawDragonNet(ctx, FACE_PX);
+  else if (id === "classic") makeRockyTexture(ctx, FACE_PX);
+  else makeRubixTexture(ctx, FACE_PX);
+
   const tex = new THREE.CanvasTexture(cv);
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.anisotropy = 4;
+  if (net) tex.channel = 1;
   texCache.set(id, tex);
   return tex;
 }
