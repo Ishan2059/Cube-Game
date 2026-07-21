@@ -10,6 +10,7 @@
 
 import * as THREE from "three";
 import { createCubeMesh, disposeCubeMesh } from "./cubeMesh";
+import { mountItemPreview } from "./itemPreview";
 
 export interface SkinDef {
   id: "classic" | "venom" | "magma";
@@ -194,6 +195,10 @@ export function getSkinTexture(id: SkinDef["id"]): THREE.CanvasTexture {
 // be on — matches the cube's default (unlevelled) look.
 const PREVIEW_TINT = 0xf0e8d8;
 
+// A cube's corner is always 0.5*sqrt(3) from its center, no matter how it's
+// rotated — that's the sphere mountItemPreview needs to fit on screen.
+const PREVIEW_RADIUS = (0.5 * Math.sqrt(3));
+
 /** Mounts a small idle-rotating render of `skin` on the real cube mesh into
  *  `container` (its own WebGL canvas, filling the container). Returns a
  *  dispose function — call it when the preview is no longer shown to stop
@@ -202,54 +207,25 @@ export function mountSkinPreview(
   container: HTMLElement,
   skin: SkinDef,
 ): () => void {
-  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  container.appendChild(renderer.domElement);
-  renderer.domElement.style.width = "100%";
-  renderer.domElement.style.height = "100%";
+  return mountItemPreview(container, PREVIEW_RADIUS, (scene) => {
+    const mesh = createCubeMesh();
+    const mat = mesh.material as THREE.MeshStandardMaterial;
+    mat.color.set(PREVIEW_TINT);
+    mat.roughness = skin.roughness;
+    mat.map = getSkinTexture(skin.id);
+    mat.needsUpdate = true;
+    scene.add(mesh);
 
-  const scene = new THREE.Scene();
-  scene.add(new THREE.HemisphereLight(0xfff2dc, 0x2c2418, 1.2));
-  const sun = new THREE.DirectionalLight(0xffe6c0, 1.8);
-  sun.position.set(2, 3, 2);
-  scene.add(sun);
-
-  const cam = new THREE.PerspectiveCamera(32, 1, 0.1, 10);
-  cam.position.set(1.05, 1.05, 1.4);
-  cam.lookAt(0, 0, 0);
-
-  const mesh = createCubeMesh();
-  const mat = mesh.material as THREE.MeshStandardMaterial;
-  mat.color.set(PREVIEW_TINT);
-  mat.roughness = skin.roughness;
-  mat.map = getSkinTexture(skin.id);
-  mat.needsUpdate = true;
-  scene.add(mesh);
-
-  const resize = () => {
-    const s = Math.max(1, Math.min(container.clientWidth, container.clientHeight));
-    renderer.setSize(s, s, false);
-  };
-  resize();
-  const ro = new ResizeObserver(resize);
-  ro.observe(container);
-
-  let raf = 0;
-  let t = 0;
-  const tick = () => {
-    t += 0.011;
-    mesh.rotation.y = t;
-    mesh.rotation.x = Math.sin(t * 0.6) * 0.12;
-    renderer.render(scene, cam);
-    raf = requestAnimationFrame(tick);
-  };
-  raf = requestAnimationFrame(tick);
-
-  return () => {
-    cancelAnimationFrame(raf);
-    ro.disconnect();
-    disposeCubeMesh(mesh);
-    renderer.dispose();
-    renderer.domElement.remove();
-  };
+    let t = 0;
+    return {
+      tick(dt) {
+        t += dt * 0.66; // matches the previous fixed +0.011/frame @60fps pace
+        mesh.rotation.y = t;
+        mesh.rotation.x = Math.sin(t * 0.6) * 0.12;
+      },
+      dispose() {
+        disposeCubeMesh(mesh);
+      },
+    };
+  });
 }
