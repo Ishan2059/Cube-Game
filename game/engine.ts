@@ -1836,6 +1836,9 @@ if (getInitials()) {
 }
 $("gameover-screen").classList.remove("hidden");
 endCombo();
+// First-ever run: no username saved yet, so surface the save prompt right
+// here instead of requiring a manual trip into the leaderboard modal.
+if (!getInitials() && S.score > 0) openBoard(true);
 }
 
 // Fetch + render today's board into the modal. Best-effort — failures leave
