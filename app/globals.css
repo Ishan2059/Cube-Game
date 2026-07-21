@@ -643,7 +643,7 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
 .menu-actions {
   display: flex;
   flex-direction: column;
-  gap: 11px;
+  gap: 16px;
   width: 100%;
 }
 
