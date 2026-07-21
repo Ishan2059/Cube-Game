@@ -20,12 +20,7 @@ export interface SkinDef {
   desc: string;
   price: number; // coins; 0 = owned from the start
   roughness: number;
-  /** layered CSS background for the shop/hero preview cube */
-  previewConic: string;
 }
-
-const conic = (a: string, b: string, c: string) =>
-  `conic-gradient(from 0deg at 50% 50%, ${a} 0deg 63.43deg, ${b} 63.43deg 180deg, ${c} 180deg 296.57deg, ${a} 296.57deg 360deg)`;
 
 export const SKINS: SkinDef[] = [
   {
@@ -34,11 +29,6 @@ export const SKINS: SkinDef[] = [
     desc: "Cracked stone shell. Every level recolours it — the cracks stay.",
     price: 0,
     roughness: 0.6,
-    previewConic:
-      "linear-gradient(115deg, transparent 40%, rgba(0,0,0,0.45) 41.5%, transparent 43%), " +
-      "linear-gradient(62deg, transparent 62%, rgba(0,0,0,0.38) 63.5%, transparent 65%), " +
-      "linear-gradient(158deg, transparent 22%, rgba(0,0,0,0.3) 23%, transparent 24.5%), " +
-      conic("#ded8cc", "#7f7a6f", "#4e4a42"),
   },
   {
     id: "venom",
@@ -46,10 +36,6 @@ export const SKINS: SkinDef[] = [
     desc: "An imperial serpent wound right around the cube. Sheds nothing, fears nothing.",
     price: 320,
     roughness: 0.45,
-    previewConic:
-      "radial-gradient(circle at 50% 30%, rgba(0,0,0,0.3) 26%, transparent 28%) 0 0 / 13px 13px, " +
-      "radial-gradient(circle at 50% 30%, rgba(0,0,0,0.3) 26%, transparent 28%) 6.5px 6.5px / 13px 13px, " +
-      conic("#d6ff4a", "#86c21a", "#3f5e0a"),
   },
   {
     id: "magma",
@@ -57,10 +43,6 @@ export const SKINS: SkinDef[] = [
     desc: "3×3 sticker grid. Never solved — always crushing.",
     price: 500,
     roughness: 0.35,
-    previewConic:
-      "linear-gradient(rgba(10,10,10,0.75) 2.5px, transparent 2.5px) 0 0 / 33.34% 33.34%, " +
-      "linear-gradient(90deg, rgba(10,10,10,0.75) 2.5px, transparent 2.5px) 0 0 / 33.34% 33.34%, " +
-      conic("#f0ede4", "#b8b4a8", "#8a867a"),
   },
 ];
 
@@ -176,6 +158,68 @@ export function getSkinTexture(id: SkinDef["id"]): THREE.CanvasTexture {
   if (net) tex.channel = 1;
   texCache.set(id, tex);
   return tex;
+}
+
+/* ---------- flat thumbnail (shop card + home-screen indicator) ----------
+ * Both spots used to show a hand-authored CSS gradient standing in for the
+ * skin, tuned once and never touched again — which is exactly how DRAGON's
+ * thumbnail ended up showing scattered dots long after the real texture
+ * became a serpent, and ROCKY/RUBIX's ended up close but not quite the real
+ * palette either. A rendered snapshot of the actual cube mesh + material
+ * can't drift like that: whatever the skin looks like in the interactive
+ * preview and in gameplay is what gets captured here, because it's the same
+ * geometry, texture and tint. */
+const thumbCache = new Map<string, string>();
+const THUMB_PX = 320;
+// Isometric (camera along (1,1,1)) so the cube's rendered silhouette lines
+// up with the hexagon clip-path .hero-cube/.skin-cube already use for every
+// other cube icon in the UI. HALF is the ortho frustum half-extent: an exact
+// corner-to-corner fit is 1/sqrt(2) horizontally and sqrt(2/3) vertically
+// (derived from the cube's corners projected onto the isometric screen
+// basis); using the larger of the two for a square frustum keeps the cube
+// undistorted, with ~5% headroom so the (slightly rounded) mesh never
+// touches the edge.
+const THUMB_HALF = Math.sqrt(2 / 3) * 1.05;
+
+/** Renders `id`'s cube — real mesh, real texture, same tint as the item-modal
+ *  preview — from a fixed isometric angle, and returns it as a PNG data URL.
+ *  Cached per skin id: the shot is fully deterministic, so it's computed once
+ *  and reused for the rest of the session. */
+export function getSkinThumbnail(id: SkinDef["id"]): string {
+  const hit = thumbCache.get(id);
+  if (hit) return hit;
+
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setSize(THUMB_PX, THUMB_PX, false);
+
+  const scene = new THREE.Scene();
+  scene.add(new THREE.HemisphereLight(0xfff2dc, 0x2c2418, 1.2));
+  const sun = new THREE.DirectionalLight(0xffe6c0, 1.8);
+  sun.position.set(2, 3, 2);
+  scene.add(sun);
+
+  const camera = new THREE.OrthographicCamera(-THUMB_HALF, THUMB_HALF, THUMB_HALF, -THUMB_HALF, 0.1, 10);
+  camera.position.set(1, 1, 1).normalize().multiplyScalar(4);
+  camera.up.set(0, 1, 0);
+  camera.lookAt(0, 0, 0);
+
+  const skin = skinById(id);
+  const mesh = createCubeMesh();
+  const mat = mesh.material as THREE.MeshStandardMaterial;
+  mat.color.set(PREVIEW_TINT);
+  mat.roughness = skin.roughness;
+  mat.map = getSkinTexture(skin.id);
+  mat.needsUpdate = true;
+  scene.add(mesh);
+
+  renderer.render(scene, camera);
+  const url = renderer.domElement.toDataURL("image/png");
+
+  disposeCubeMesh(mesh);
+  renderer.dispose();
+
+  thumbCache.set(id, url);
+  return url;
 }
 
 /* ---------- live skin preview (item modal) ---------- */

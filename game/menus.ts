@@ -30,7 +30,7 @@ import {
   patchSettings,
   type Settings,
 } from "./storage";
-import { SKINS, skinById, mountSkinPreview, type SkinDef } from "./skins";
+import { SKINS, skinById, mountSkinPreview, getSkinThumbnail, type SkinDef } from "./skins";
 import { TRAILS, mountTrailPreview, type TrailDef } from "./trails";
 import { AURAS, mountAuraPreview, type AuraDef } from "./auras";
 import { BEASTS, getBugThumbs } from "./bestiary";
@@ -55,9 +55,10 @@ export function updateMenuStats() {
   const coins = getCoins().toLocaleString();
   $("menu-coins").textContent = coins;
   $("shop-coins").textContent = coins;
-  // the hero cube on the Start screen previews the equipped skin
+  // the hero cube on the Start screen previews the equipped skin, as a
+  // snapshot of the real cube mesh — see getSkinThumbnail
   const sk = skinById(getEquippedSkin());
-  $("hero-cube").style.background = sk.previewConic;
+  $("hero-cube").style.background = `url(${getSkinThumbnail(sk.id)}) center / contain no-repeat`;
   $("hero-skin-label").textContent = sk.name;
 }
 
@@ -129,7 +130,15 @@ function renderShop() {
     const owned = getOwnedSkins();
     const equipped = getEquippedSkin();
     list.innerHTML = SKINS.map((sk) =>
-      shopCardHTML(sk.id, sk.name, sk.price, owned.includes(sk.id), equipped === sk.id, coins, sk.previewConic),
+      shopCardHTML(
+        sk.id,
+        sk.name,
+        sk.price,
+        owned.includes(sk.id),
+        equipped === sk.id,
+        coins,
+        `url(${getSkinThumbnail(sk.id)}) center / contain no-repeat`,
+      ),
     ).join("");
   } else if (shopTab === "trails") {
     const owned = getOwnedTrails();
