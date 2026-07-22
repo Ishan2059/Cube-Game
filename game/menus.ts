@@ -30,6 +30,7 @@ import {
   patchSettings,
   type Settings,
 } from "./storage";
+import { getInitials, renameInitials } from "./leaderboard";
 import { SKINS, skinById, mountSkinPreview, getSkinThumbnail, type SkinDef } from "./skins";
 import { TRAILS, mountTrailPreview, type TrailDef } from "./trails";
 import { AURAS, mountAuraPreview, type AuraDef } from "./auras";
@@ -78,6 +79,17 @@ function syncSettingsUI() {
     .forEach((el) =>
       el.classList.toggle("active", el.dataset.v === s.difficulty),
     );
+  syncProfileUI();
+}
+
+// Rename only exists for a player who's already been through the first-time
+// naming prompt at least once — a brand-new player with no name yet doesn't
+// see this row at all.
+function syncProfileUI() {
+  const name = getInitials();
+  $("profile-group").classList.toggle("hidden", !name);
+  $("username-current").textContent = name;
+  $("username-edit").classList.add("hidden");
 }
 
 function toggleSetting(patch: (s: Settings) => Partial<Settings>) {
@@ -328,6 +340,7 @@ function show(id: (typeof MENU_SCREENS)[number]) {
   for (const s of MENU_SCREENS) $(s).classList.toggle("hidden", s !== id);
   if (id === "start-screen") updateMenuStats();
   if (id === "howto-screen") buildBestiary();
+  if (id === "settings-screen") syncProfileUI();
   if (id === "shop-screen") {
     shopTab = "skins"; // every fresh visit from the menu starts on Skins
     renderShop();
@@ -341,6 +354,7 @@ let fromPause = false;
 function openFromPause(id: "settings-screen" | "howto-screen") {
   fromPause = true;
   if (id === "howto-screen") buildBestiary();
+  if (id === "settings-screen") syncProfileUI();
   $("pause-screen").classList.add("hidden");
   $(id).classList.remove("hidden");
 }
@@ -399,6 +413,27 @@ export function initMenus(): () => void {
   on("set-colorblind", () =>
     toggleSetting((s) => ({ colorblind: !s.colorblind })),
   );
+  on("set-username", () => {
+    const input = $("username-input") as HTMLInputElement;
+    const edit = $("username-edit");
+    const opening = edit.classList.contains("hidden");
+    edit.classList.toggle("hidden", !opening);
+    if (opening) {
+      input.value = getInitials();
+      input.focus();
+    }
+  });
+  on("username-save-btn", async () => {
+    const input = $("username-input") as HTMLInputElement;
+    const result = await renameInitials(input.value);
+    if (!result) {
+      toast("Type a username first");
+      input.focus();
+      return;
+    }
+    syncProfileUI();
+    toast("Username updated");
+  });
   // reset progress: double-tap to confirm, wipes every crush-* key
   let resetArmed = false;
   let resetTimer: ReturnType<typeof setTimeout> | undefined;

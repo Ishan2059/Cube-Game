@@ -34,18 +34,50 @@ export function setInitials(s: string): string {
   return clean;
 }
 
-export async function submitScore(score: number): Promise<SubmitResult | null> {
+// Settings-screen rename. Only ever called for a player who already has a
+// name. Persists locally immediately, then best-effort syncs player:{pid}'s
+// initials server-side so every existing/future leaderboard read (which
+// resolves names live, not from a frozen per-score copy) picks it up right
+// away instead of waiting for their next score submit.
+export async function renameInitials(newName: string): Promise<{ name: string; synced: boolean } | null> {
+  const clean = setInitials(newName);
+  if (!clean) return null;
   try {
-    const res = await fetch("/api/score", {
+    const res = await fetch("/api/rename", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ pid: getPid(), initials: getInitials() || "player", score }),
+      body: JSON.stringify({ pid: getPid(), initials: clean }),
     });
-    if (!res.ok) return null;
-    return await res.json();
+    return { name: clean, synced: res.ok };
   } catch {
-    return null; // offline / no backend — game still playable
+    return { name: clean, synced: false };
   }
+}
+
+// The server rate-limits to 1 submit / 2s / player (abuse guard). A returning
+// player who ends two runs in quick succession can legitimately hit that same
+// limit on their second (higher) score, so retry once past the window instead
+// of silently dropping a real result. Never resolve with a "success" unless
+// the server actually confirmed the write.
+export async function submitScore(score: number): Promise<SubmitResult | null> {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const res = await fetch("/api/score", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ pid: getPid(), initials: getInitials() || "player", score }),
+      });
+      if (res.ok) return await res.json();
+      if (res.status === 429 && attempt === 0) {
+        await new Promise((r) => setTimeout(r, 2100));
+        continue;
+      }
+      return null;
+    } catch {
+      return null; // offline / no backend — game still playable
+    }
+  }
+  return null;
 }
 
 export async function fetchBoard(): Promise<Board | null> {

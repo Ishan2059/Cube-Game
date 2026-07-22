@@ -1828,11 +1828,14 @@ if (earned > 0) playCoin();
 buzz(120);
 // Username is set once. After that every run auto-saves (server keeps the
 // highest). First-time players get prompted for a username in the board modal.
+// scoreSaved only flips true once the server actually confirms the write —
+// never optimistically — so a rate-limited/failed submit doesn't lie to the
+// player about their run being saved.
+scoreSaved = false;
 if (getInitials()) {
-  scoreSaved = true;
-  void submitScore(S.score);
-} else {
-  scoreSaved = false;
+  void submitScore(S.score).then((result) => {
+    if (result) markSaved();
+  });
 }
 $("gameover-screen").classList.remove("hidden");
 endCombo();
@@ -1885,11 +1888,25 @@ restartBtn.addEventListener("click", onRestart);
 // until the player types a username and hits SAVE.
 const initialsInput = $("initials-input") as HTMLInputElement;
 let scoreSaved = false;
+let boardCanSave = false; // last canSave passed to openBoard; lets async saves update the badge live
+
+// Marks the current run as confirmed-saved. Only ever called after the
+// server has actually accepted the write. If the board modal is already
+// open, flips the badge and refreshes the board so the new score shows up
+// immediately instead of only on the next open.
+function markSaved() {
+  scoreSaved = true;
+  if (!$("board-modal").classList.contains("hidden")) {
+    $("board-saved").classList.toggle("hidden", !boardCanSave);
+    void renderBoardInto();
+  }
+}
 
 // canSave: game-over path. Prompt for a username only the first time (no name
 // stored yet); once set it's locked and every run auto-saves. View-only when
 // opened from the start menu.
 function openBoard(canSave: boolean) {
+  boardCanSave = canSave;
   const needsName = canSave && S.score > 0 && !getInitials();
   $("board-save").classList.toggle("hidden", !needsName);
   $("board-saved").classList.toggle("hidden", !(canSave && scoreSaved));
@@ -1907,11 +1924,13 @@ const onSaveScore = async () => {
     return;
   }
   initialsInput.value = name;
-  scoreSaved = true;
-  await submitScore(S.score);
+  const result = await submitScore(S.score);
+  if (!result) {
+    toast("Couldn't save — try again");
+    return;
+  }
   $("board-save").classList.add("hidden");
-  $("board-saved").classList.remove("hidden");
-  void renderBoardInto();
+  markSaved();
 };
 
 const ranksBtn = $("gameover-ranks");

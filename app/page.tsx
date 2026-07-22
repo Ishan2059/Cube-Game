@@ -231,6 +231,25 @@ export default function Home() {
             </button>
           </div>
 
+          <div className="group-block hidden" id="profile-group">
+            <div className="group-label">PROFILE</div>
+            <div className="card">
+              <button id="set-username" className="setting-row">
+                <span className="setting-name"><i className="row-glyph">@</i>Username</span>
+                <span className="setting-value" id="username-current"></span>
+              </button>
+              <div id="username-edit" className="board-save-row hidden">
+                <input
+                  id="username-input"
+                  maxLength={12}
+                  autoComplete="off"
+                  placeholder="username"
+                />
+                <button id="username-save-btn" className="btn primary">SAVE</button>
+              </div>
+            </div>
+          </div>
+
           <div className="group-block">
             <div className="group-label">GAMEPLAY</div>
             <div className="card">

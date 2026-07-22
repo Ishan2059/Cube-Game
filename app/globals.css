@@ -1119,6 +1119,16 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
   color: #e8e2d4;
 }
 .setting-name .row-glyph { color: var(--venom); }
+.setting-value {
+  font-family: var(--font-m);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--dim);
+}
+#username-edit { padding-bottom: 13px; }
+.group-block.hidden { display: none; }
+.board-save-row.hidden { display: none; }
 .switch {
   position: relative;
   width: 46px; height: 26px;
