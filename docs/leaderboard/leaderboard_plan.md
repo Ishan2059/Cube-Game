@@ -14,10 +14,10 @@ Bring players back daily. Daily board resets each midnight (fresh #1 race), stre
 ### Local vs deploy (same client, env vars differ)
 `@upstash/redis` speaks HTTP REST, not raw Redis protocol. Local Redis fronted by **SRH** (`serverless-redis-http`) proxy so the same client works locally.
 
-| Env | `UPSTASH_REDIS_REST_URL` | `UPSTASH_REDIS_REST_TOKEN` | Backend |
-|-----|--------------------------|-----------------------------|---------|
+| Env | `KV_REST_API_URL` | `KV_REST_API_TOKEN` | Backend |
+|-----|--------------------|----------------------|---------|
 | Local | `http://localhost:8079` | `dev_token` (any string, must match SRH) | Docker: redis + SRH |
-| Deploy | real Upstash URL | real Upstash token | Upstash (Vercel integration) |
+| Deploy | real Upstash URL | real Upstash token | Upstash (Vercel Marketplace integration, `KV_*` names) |
 
 Local dev via `docker-compose.yml`:
 ```yaml
@@ -51,8 +51,8 @@ Upstash client from env. ~5 lines.
 ```ts
 import { Redis } from "@upstash/redis";
 export const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+  url: process.env.KV_REST_API_URL!,
+  token: process.env.KV_REST_API_TOKEN!,
 });
 ```
 
