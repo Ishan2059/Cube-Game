@@ -94,15 +94,21 @@ export const getEquippedAura = () => read<string>("crush-aura", "none");
 export const setEquippedAura = (id: string) => write("crush-aura", id);
 
 /* ---------- settings ---------- */
+export type ControlMode = "dpad" | "swipe";
 export interface Settings {
   sound: boolean;
   difficulty: "normal" | "casual";
   colorblind: boolean;
+  // Touch-only; ignored on desktop (keyboard is always the desktop scheme).
+  // Defaults to dpad — see game/device.ts for the touch-capability check
+  // that gates whether this ever surfaces in Settings or in-game.
+  controlMode: ControlMode;
 }
 const DEFAULT_SETTINGS: Settings = {
   sound: true,
   difficulty: "normal",
   colorblind: false,
+  controlMode: "dpad",
 };
 export const getSettings = (): Settings => ({
   ...DEFAULT_SETTINGS,

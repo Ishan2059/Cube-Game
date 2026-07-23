@@ -33,7 +33,9 @@ getEquippedSkin,
 getEquippedTrail,
 getEquippedAura,
 getSettings,
+type ControlMode,
 } from "./storage";
+import { isTouchDevice } from "./device";
 import { skinById, getSkinTexture } from "./skins";
 import { trailById } from "./trails";
 import { auraById } from "./auras";
@@ -2045,6 +2047,10 @@ window.addEventListener("blur", onBlur);
 
 // touch: hold & drag from the first-touch point like a virtual d-pad.
 // Keeps rolling in the held direction until the finger lifts (no tapping).
+// This is the "swipe" control scheme — untouched from before the on-screen
+// D-pad existed. touchDir is the single shared "held touch direction" the
+// tick loop reads below; the D-pad option further down drives the exact
+// same variable instead of adding a second code path for the tick to check.
 let touchX = 0,
 touchY = 0,
 touchId: number | null = null;
@@ -2085,10 +2091,91 @@ touchId = null;
 touchDir = null; // released: stop
 }
 };
+function attachSwipeListeners() {
 window.addEventListener("touchstart", onTouchStart, { passive: true });
 window.addEventListener("touchmove", onTouchMove, { passive: true });
 window.addEventListener("touchend", onTouchEnd, { passive: true });
 window.addEventListener("touchcancel", onTouchEnd, { passive: true });
+}
+function detachSwipeListeners() {
+window.removeEventListener("touchstart", onTouchStart);
+window.removeEventListener("touchmove", onTouchMove);
+window.removeEventListener("touchend", onTouchEnd);
+window.removeEventListener("touchcancel", onTouchEnd);
+touchId = null;
+touchDir = null; // don't leave a stale held direction from a detached source
+}
+
+// on-screen D-pad (touch only): buttons drive touchDir directly instead of
+// the drag math above. Held-buttons stack mirrors heldMoveCodes below —
+// newest press wins, releasing it falls back to whatever's still held.
+const dpadEl = $("touch-dpad");
+const DPAD_DIRS: Record<string, [number, number]> = {
+"dpad-up": [0, -1],
+"dpad-down": [0, 1],
+"dpad-left": [-1, 0],
+"dpad-right": [1, 0],
+};
+const dpadButtons = Object.keys(DPAD_DIRS).map((id) => $(id));
+const heldDpadIds: string[] = [];
+const onDpadPointerDown = (e: PointerEvent) => {
+const el = e.currentTarget as HTMLElement;
+el.setPointerCapture(e.pointerId);
+if (!heldDpadIds.includes(el.id)) heldDpadIds.push(el.id);
+touchDir = DPAD_DIRS[el.id];
+el.classList.add("pressed");
+audio();
+e.preventDefault();
+};
+const onDpadPointerUp = (e: PointerEvent) => {
+const el = e.currentTarget as HTMLElement;
+const i = heldDpadIds.indexOf(el.id);
+if (i !== -1) heldDpadIds.splice(i, 1);
+el.classList.remove("pressed");
+const last = heldDpadIds[heldDpadIds.length - 1];
+touchDir = last ? DPAD_DIRS[last] : null;
+};
+function attachDpadListeners() {
+for (const btn of dpadButtons) {
+btn.addEventListener("pointerdown", onDpadPointerDown);
+btn.addEventListener("pointerup", onDpadPointerUp);
+btn.addEventListener("pointercancel", onDpadPointerUp);
+}
+dpadEl.classList.remove("hidden");
+}
+function detachDpadListeners() {
+for (const btn of dpadButtons) {
+btn.removeEventListener("pointerdown", onDpadPointerDown);
+btn.removeEventListener("pointerup", onDpadPointerUp);
+btn.removeEventListener("pointercancel", onDpadPointerUp);
+btn.classList.remove("pressed");
+}
+dpadEl.classList.add("hidden");
+heldDpadIds.length = 0;
+touchDir = null;
+}
+
+// Mutually exclusive by construction: setControlMode always detaches
+// whichever pair of listeners is currently attached before attaching the
+// other, so swipe's window-level touch listeners and the D-pad's button
+// listeners are never both live at once — no dangling listener, no phantom
+// double-input. Desktop (no real touch) always resolves to "swipe"; the
+// D-pad UI itself only ever renders on a touch-capable device (see
+// isTouchDevice() in game/device.ts), regardless of the stored setting.
+let currentControlMode: ControlMode | null = null;
+function setControlMode(mode: ControlMode) {
+if (mode === currentControlMode) return;
+if (currentControlMode === "dpad") detachDpadListeners();
+else if (currentControlMode === "swipe") detachSwipeListeners();
+currentControlMode = mode;
+if (mode === "dpad") attachDpadListeners();
+else attachSwipeListeners();
+}
+const resolveControlMode = (): ControlMode =>
+isTouchDevice() ? getSettings().controlMode : "swipe";
+const onControlsChange = () => setControlMode(resolveControlMode());
+window.addEventListener("crush:controls", onControlsChange);
+setControlMode(resolveControlMode());
 
 /* ---------- main loop ---------- */
 placeCube();
@@ -2423,10 +2510,9 @@ window.removeEventListener("keydown", onKeyDown);
 window.removeEventListener("keyup", onKeyUp);
 window.removeEventListener("blur", onBlur);
 window.removeEventListener("resize", onResize);
-window.removeEventListener("touchstart", onTouchStart);
-window.removeEventListener("touchmove", onTouchMove);
-window.removeEventListener("touchend", onTouchEnd);
-window.removeEventListener("touchcancel", onTouchEnd);
+window.removeEventListener("crush:controls", onControlsChange);
+if (currentControlMode === "dpad") detachDpadListeners();
+else if (currentControlMode === "swipe") detachSwipeListeners();
 startBtn.removeEventListener("click", onStart);
 restartBtn.removeEventListener("click", onRestart);
 ranksBtn.removeEventListener("click", onOpenSavable);

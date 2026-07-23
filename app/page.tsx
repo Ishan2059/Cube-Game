@@ -28,6 +28,15 @@ export default function Home() {
 
       <button id="pause-btn" aria-label="Pause">❚❚</button>
 
+      {/* Touch-only D-pad. Hidden by default — engine.ts shows it only on a
+          touch-capable device with controlMode "dpad" (see game/device.ts). */}
+      <div id="touch-dpad" className="hidden">
+        <button id="dpad-up" className="dpad-btn dpad-up" aria-label="Move up">▲</button>
+        <button id="dpad-left" className="dpad-btn dpad-left" aria-label="Move left">◀</button>
+        <button id="dpad-right" className="dpad-btn dpad-right" aria-label="Move right">▶</button>
+        <button id="dpad-down" className="dpad-btn dpad-down" aria-label="Move down">▼</button>
+      </div>
+
       <div id="vignette"></div>
       <div id="damage-flash"></div>
       <div id="bite-glow"></div>
@@ -247,6 +256,21 @@ export default function Home() {
                 />
                 <button id="username-save-btn" className="btn primary">SAVE</button>
               </div>
+            </div>
+          </div>
+
+          {/* Touch-only — hidden on desktop even at narrow widths, see
+              syncSettingsUI()'s isTouchDevice() check in menus.ts. */}
+          <div className="group-block hidden" id="controls-group">
+            <div className="group-label">CONTROLS</div>
+            <div className="card">
+              <button id="set-control-mode" className="setting-row">
+                <span className="setting-name">Touch Controls</span>
+                <span className="seg-mini">
+                  <span className="seg-opt" data-v="dpad">D-PAD</span>
+                  <span className="seg-opt" data-v="swipe">SWIPE</span>
+                </span>
+              </button>
             </div>
           </div>
 

@@ -30,6 +30,7 @@ import {
   patchSettings,
   type Settings,
 } from "./storage";
+import { isTouchDevice } from "./device";
 import { getInitials, renameInitials } from "./leaderboard";
 import { SKINS, skinById, mountSkinPreview, getSkinThumbnail, type SkinDef } from "./skins";
 import { TRAILS, mountTrailPreview, type TrailDef } from "./trails";
@@ -78,6 +79,14 @@ function syncSettingsUI() {
     .querySelectorAll<HTMLElement>(".seg-opt")
     .forEach((el) =>
       el.classList.toggle("active", el.dataset.v === s.difficulty),
+    );
+  // D-pad vs swipe is a touch-only choice — never show it on desktop, even
+  // if the window happens to be narrow.
+  $("controls-group").classList.toggle("hidden", !isTouchDevice());
+  $("set-control-mode")
+    .querySelectorAll<HTMLElement>(".seg-opt")
+    .forEach((el) =>
+      el.classList.toggle("active", el.dataset.v === s.controlMode),
     );
   syncProfileUI();
 }
@@ -413,6 +422,14 @@ export function initMenus(): () => void {
   on("set-colorblind", () =>
     toggleSetting((s) => ({ colorblind: !s.colorblind })),
   );
+  on("set-control-mode", () => {
+    toggleSetting((s) => ({
+      controlMode: s.controlMode === "dpad" ? "swipe" : "dpad",
+    }));
+    // lets a mounted engine re-wire input listeners immediately, without a
+    // restart — see the crush:controls listener in engine.ts
+    window.dispatchEvent(new CustomEvent("crush:controls"));
+  });
   on("set-username", () => {
     const input = $("username-input") as HTMLInputElement;
     const edit = $("username-edit");

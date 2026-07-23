@@ -240,6 +240,42 @@ canvas { display: block; touch-action: none; }
 #pause-btn:hover { background: rgba(40, 34, 16, 0.85); transform: scale(1.06); }
 #pause-btn:active { transform: scale(0.94); }
 
+/* ---------- on-screen D-pad (touch, mobile only) ----------
+ * Bottom-left, mirroring #pause-btn's bottom-right placement — reachable by
+ * a thumb on either hand while holding the phone with both. Shown/hidden
+ * and wired up entirely from engine.ts (see attachDpadListeners); the
+ * `hidden` class here is just the CSS half of that toggle. */
+#touch-dpad {
+  position: fixed;
+  left: calc(16px + env(safe-area-inset-left));
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  z-index: 12;
+  display: grid;
+  grid-template-columns: repeat(3, 58px);
+  grid-template-rows: repeat(3, 58px);
+  gap: 6px;
+}
+#touch-dpad.hidden { display: none; }
+.dpad-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--text);
+  background: rgba(23, 19, 8, 0.65);
+  border: 1px solid var(--line2);
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.1s, transform 0.1s;
+}
+.dpad-btn.pressed { background: rgba(163, 217, 119, 0.35); transform: scale(0.92); }
+.dpad-up { grid-column: 2; grid-row: 1; }
+.dpad-left { grid-column: 1; grid-row: 2; }
+.dpad-right { grid-column: 3; grid-row: 2; }
+.dpad-down { grid-column: 2; grid-row: 3; }
+
 /* ---------- screen effects ---------- */
 #vignette {
   position: fixed; inset: 0;
