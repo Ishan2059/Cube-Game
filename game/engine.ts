@@ -572,12 +572,60 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0b0d0a);
 scene.fog = new THREE.Fog(0x0b0d0a, 15, 30);
 
+const CAM_FOV = 50; // vertical FOV — kept fixed; zoom below scales distance, not this
 const camera = new THREE.PerspectiveCamera(
-50,
+CAM_FOV,
 innerWidth / innerHeight,
 0.1,
 100,
 );
+
+/* ---------- mobile camera zoom ----------
+ * Investigation: the play area is world-units, not fixed screen pixels —
+ * camera.aspect already tracks innerWidth/innerHeight every resize (see
+ * onResize below), which is how three.js's perspective projection always
+ * works. The actual bug: CAM_OFFSET's distance and CAM_FOV were both plain
+ * constants, so the world-space region the camera captures never adapted to
+ * screen size at all. A narrow phone viewport gets exactly the same camera
+ * distance as a wide desktop one, and because horizontal FOV is derived
+ * from (fixed vertical FOV × aspect), the narrower aspect ratio of a phone
+ * screen quietly derives a narrower horizontal FOV from that fixed vertical
+ * FOV — less map shown side-to-side, with nothing compensating for it.
+ *
+ * Fix: push the camera back (scale CAM_OFFSET's magnitude, not its
+ * direction, so the shot angle is unchanged) as screen width shrinks,
+ * ramped continuously between DESKTOP_MIN_WIDTH (zoom = 1x, untouched) and
+ * MOBILE_REF_WIDTH (zoom's width-driven target, MAX_ZOOM_K) — no per-device
+ * hardcoding, every width in between gets its own interpolated value.
+ *
+ * Clamped by a minimum on-screen cube size so we never zoom out far enough
+ * that the cube (or a bug, roughly the same world size) becomes hard to
+ * see/tap — this floor wins even if the width curve above asks for more.
+ * 30px is a starting value — tune by eye via MIN_TILE_PX. */
+const MIN_TILE_PX = 30; // floor for the cube's on-screen size, in CSS px
+const DESKTOP_MIN_WIDTH = 820; // at/above this width, zoom is exactly 1x (unchanged)
+const MOBILE_REF_WIDTH = 360; // width at which zoom reaches MAX_ZOOM_K (phones run ~360-430px)
+const MAX_ZOOM_K = 1.4; // soft cap on how far the width curve alone will zoom out
+const camBaseDist = CAM_OFFSET.length();
+let camZoomK = 1;
+const camOffsetScaled = CAM_OFFSET.clone();
+function updateCamZoom() {
+// 0 at/above DESKTOP_MIN_WIDTH, 1 at/below MOBILE_REF_WIDTH, linear between.
+const t = Math.min(
+1,
+Math.max(0, (DESKTOP_MIN_WIDTH - innerWidth) / (DESKTOP_MIN_WIDTH - MOBILE_REF_WIDTH)),
+);
+const wanted = 1 + t * (MAX_ZOOM_K - 1);
+// Pixel-size floor: pxPerWorldUnit = innerHeight / (2 * dist * tan(fov/2)),
+// so solve for the largest dist (i.e. largest k) that keeps a 1-unit cube
+// at least MIN_TILE_PX tall, then never exceed it regardless of `wanted`.
+const maxKForFloor =
+innerHeight /
+(2 * camBaseDist * Math.tan((CAM_FOV * Math.PI) / 360) * MIN_TILE_PX);
+camZoomK = Math.max(1, Math.min(wanted, maxKForFloor));
+camOffsetScaled.copy(CAM_OFFSET).multiplyScalar(camZoomK);
+}
+updateCamZoom();
 
 // cap DPR lower on phones — huge fill-rate/thermal saving, imperceptible
 const DPR_CAP = matchMedia("(pointer: coarse)").matches ? 1.5 : 2;
@@ -2182,7 +2230,7 @@ placeCube();
 applyCubeStyle(); // equipped skin shows on the menu-background cube too
 updateWorld();
 updateHUD();
-camera.position.copy(cubeMesh.position).add(CAM_OFFSET);
+camera.position.copy(cubeMesh.position).add(camOffsetScaled);
 const clock = new THREE.Clock();
 let rafId = 0;
 let hudAcc = 0; // throttles heart re-renders during poison drain
@@ -2483,7 +2531,7 @@ sun.position.copy(cubeMesh.position).add(SUN_OFFSET);
 sun.target.position.copy(cubeMesh.position);
 
 // camera follow + shake
-_v2.copy(cubeMesh.position).add(CAM_OFFSET);
+_v2.copy(cubeMesh.position).add(camOffsetScaled);
 camera.position.lerp(_v2, 0.08);
 if (S.shake > 0) {
 S.shake = Math.max(0, S.shake - dt * 1.8);
@@ -2500,6 +2548,7 @@ const onResize = () => {
 camera.aspect = innerWidth / innerHeight;
 camera.updateProjectionMatrix();
 renderer.setSize(innerWidth, innerHeight);
+updateCamZoom(); // re-derive zoom for the new width/height (orientation change, resize)
 };
 window.addEventListener("resize", onResize);
 
