@@ -105,26 +105,28 @@ const SUN_OFFSET = new THREE.Vector3(6, 14, 4);
 const UP = new THREE.Vector3(0, 1, 0);
 
 /* ---------- coin economy ----------
- * No telemetry exists yet (Vercel Analytics here only tracks pageviews), so
- * this is tuned from the level table: a casual run dying somewhere between
- * GRUB (500) and HARDENED (1200) — the difficulty ramp (stick 0.15→0.34,
- * speed 1.0→1.3 across L1-L3) makes that an early-death zone for the
- * average player — lands in the 15-25 coin target at SCORE_PER_COIN=40.
- * At that rate Dragon (320) takes ~16 average runs, Rubix (500) ~25 —
- * matches the "keep coming back" goal. Retune by changing these, not the
- * formula in coinsForScore(). */
-const SCORE_PER_COIN = 40; // primary rate: this many score points = 1 coin
-const SOFT_CAP_SCORE = 3000; // score above this earns coins at a reduced rate
-const OVERFLOW_SCORE_PER_COIN = 160; // reduced rate applied past SOFT_CAP_SCORE
-const RUN_COIN_CAP = 90; // hard ceiling — no single run can shortcut the grind
+ * Coins are awarded per BUG KILLED, not per score point. Score is inflated by
+ * combo/rampage multipliers (up to 16x), so a score-based payout decoupled
+ * coins from actual kills and plateaued: past ~5400 score every run paid the
+ * same hard cap, making a 50-kill run and a 600-kill run both worth ~90.
+ *
+ * ~150 bugs/game average assumed; tune BUGS_PER_COIN once real per-session
+ * kill data is available. */
+const BUGS_PER_COIN = 5; // primary rate: this many kills = 1 coin
+// Past this many kills in one run, coins accrue at half rate (every 10 kills =
+// 1 coin) — a soft taper so a single marathon session can't trivialize the
+// grind. There is deliberately no hard cap on coins per run.
+const SESSION_TAPER_THRESHOLD = 300;
 
 /* ================= pure helpers ================= */
-/** Score-to-coins with diminishing returns past SOFT_CAP_SCORE and a hard
- *  ceiling, so one marathon run can't out-earn many average ones. */
-function coinsForScore(score: number): number {
-  const base = Math.min(score, SOFT_CAP_SCORE) / SCORE_PER_COIN;
-  const overflow = Math.max(0, score - SOFT_CAP_SCORE) / OVERFLOW_SCORE_PER_COIN;
-  return Math.min(RUN_COIN_CAP, Math.floor(base + overflow));
+/** Kills-to-coins: full rate up to SESSION_TAPER_THRESHOLD, half rate beyond.
+ *  No per-run cap, so more kills always means more coins. */
+function coinsForKills(kills: number): number {
+  const full = Math.min(kills, SESSION_TAPER_THRESHOLD);
+  const tapered = Math.max(0, kills - SESSION_TAPER_THRESHOLD);
+  return (
+    Math.floor(full / BUGS_PER_COIN) + Math.floor(tapered / (BUGS_PER_COIN * 2))
+  );
 }
 const tileToWorld = (ix: number, iz: number) =>
 new THREE.Vector3(ix * TILE, 0, iz * TILE);
@@ -1812,8 +1814,9 @@ S.running = false;
 const prevBest = S.best;
 S.best = Math.max(S.best, S.score);
 localStorage.setItem("crush-best", String(S.best));
-// coin payout: score converted at SCORE_PER_COIN, capped — see coinsForScore()
-const earned = coinsForScore(S.score);
+// coin payout: awarded per bug killed with a soft taper — see coinsForKills().
+// addCoins() adds to the persisted balance, it does not overwrite it.
+const earned = coinsForKills(S.totalKills);
 addCoins(earned);
 $("newbest-chip").classList.toggle("hidden", S.score <= prevBest);
 $("final-score").textContent = S.score.toLocaleString();
