@@ -326,9 +326,6 @@ export default function Home() {
               </div>
             </div>
 
-            <button id="resume-btn" className="btn primary big">
-              <span className="btn-glyph">▶</span> RESUME
-            </button>
             <div className="btn-row">
               <button id="pause-restart" className="btn secondary">
                 <span className="row-glyph venom-glyph">⟳</span> RESTART
@@ -336,10 +333,13 @@ export default function Home() {
               <button id="pause-settings" className="btn secondary">
                 <span className="row-glyph venom-glyph">⚙</span> SETTINGS
               </button>
-              <button id="pause-menu" className="btn danger">
-                ⏻ QUIT
-              </button>
             </div>
+            <button id="resume-btn" className="btn primary big">
+              <span className="btn-glyph">▶</span> RESUME
+            </button>
+            <button id="pause-menu" className="btn danger">
+              ⏻ QUIT
+            </button>
             <button id="pause-howto" className="pause-link">
               HOW TO PLAY →
             </button>

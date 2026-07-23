@@ -671,8 +671,8 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
 .btn-row { display: flex; gap: 9px; width: 100%; }
 .btn-row .btn { flex: 1; min-width: 0; }
 /* Syne runs wider than the old Space Grotesk body font — on narrow phones
- * three flex:1 buttons (RESTART / SETTINGS / QUIT) no longer fit at the
- * default padding/gap, so tighten both below 400px. */
+ * flex:1 buttons no longer fit at the default padding/gap, so tighten
+ * both below 400px. */
 @media (max-width: 400px) {
   .btn-row { gap: 6px; }
   .btn-row .btn { padding: 13px 6px; font-size: 11px; gap: 4px; }
