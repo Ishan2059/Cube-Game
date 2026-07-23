@@ -96,8 +96,12 @@ canvas { display: block; touch-action: none; }
   position: fixed;
   top: 38%; left: 50%;
   transform: translate(-50%, -50%) scale(0.7);
-  font-size: 40px;
-  letter-spacing: 6px;
+  /* vw-scaled so long "LEVEL N — TIERNAME" strings never overflow narrow
+   * viewports (was a fixed 40px/6px that only fit on desktop); caps at the
+   * original 40px/6px once the viewport is wide enough to afford it. */
+  font-size: clamp(16px, 5vw, 40px);
+  letter-spacing: clamp(1px, 0.6vw, 6px);
+  max-width: 94vw;
   color: #a3d977;
   text-shadow: 0 4px 26px rgba(143, 191, 106, 0.55);
   opacity: 0;
