@@ -1,3 +1,4 @@
+import { playerNameError } from "@/lib/player-name";
 import { NextResponse } from "next/server";
 import { redis } from "@/lib/redis";
 import { ALL_TIME_BOARD_KEY, ensureAllTimeBoard } from "@/lib/leaderboard-store";
@@ -21,6 +22,8 @@ export async function POST(req: Request) {
   if (score === null) {
     return NextResponse.json({ error: "bad score" }, { status: 400 });
   }
+  const nameError = playerNameError(body?.initials);
+  if (nameError) return NextResponse.json({ error: nameError }, { status: 400 });
   const initials = sanitizeInitials(body?.initials);
 
   // Rate limit: 1 submit / 2s / player.

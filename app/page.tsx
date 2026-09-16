@@ -250,12 +250,15 @@ export default function Home() {
               <div id="username-edit" className="board-save-row hidden">
                 <input
                   id="username-input"
+                  aria-label="Leaderboard username"
+                  aria-describedby="username-error"
                   maxLength={12}
                   autoComplete="off"
                   placeholder="username"
                 />
                 <button id="username-save-btn" className="btn primary">SAVE</button>
               </div>
+              <p id="username-error" className="name-error" aria-live="polite"></p>
             </div>
           </div>
 
@@ -407,12 +410,15 @@ export default function Home() {
             <div className="board-save-row">
               <input
                 id="initials-input"
+                aria-label="Leaderboard username"
+                aria-describedby="initials-error"
                 maxLength={12}
                 autoComplete="off"
                 placeholder="username"
               />
               <button id="board-save-btn" className="btn primary">SAVE</button>
             </div>
+            <p id="initials-error" className="name-error" aria-live="polite"></p>
           </div>
           <p id="board-saved" className="board-saved hidden">Saved ✓</p>
         </div>

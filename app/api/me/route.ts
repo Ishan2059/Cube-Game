@@ -1,3 +1,4 @@
+import { displayPlayerName } from "@/lib/player-name";
 import { NextResponse } from "next/server";
 import { redis } from "@/lib/redis";
 import { dayKey, yesterdayKey } from "@/lib/leaderboard-core";
@@ -17,7 +18,7 @@ export async function GET(req: Request) {
   const atRisk = !!p?.lastPlayed && p.lastPlayed === yesterdayKey(today);
 
   return NextResponse.json({
-    initials: p?.initials ?? "",
+    initials: p?.initials ? displayPlayerName(p.initials) : "",
     streak,
     best: Number(p?.best ?? 0),
     atRisk,

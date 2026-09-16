@@ -1,3 +1,4 @@
+import { displayPlayerName } from "@/lib/player-name";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redis } from "@/lib/redis";
@@ -10,7 +11,7 @@ async function loadPlayer(pid: string) {
   const p = (await redis.hgetall(`player:${pid}`)) as PlayerHash | null;
   if (!p || p.best == null) return null;
   return {
-    initials: String(p.initials || "player"),
+    initials: displayPlayerName(p.initials),
     best: Number(p.best) || 0,
     streak: Number(p.streak) || 0,
   };

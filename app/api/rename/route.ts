@@ -1,3 +1,4 @@
+import { playerNameError } from "@/lib/player-name";
 import { NextResponse } from "next/server";
 import { redis } from "@/lib/redis";
 import { sanitizeInitials } from "@/lib/leaderboard-core";
@@ -12,6 +13,8 @@ export async function POST(req: Request) {
   if (!/^[a-z0-9-]{8,64}$/i.test(pid)) {
     return NextResponse.json({ error: "bad pid" }, { status: 400 });
   }
+  const nameError = playerNameError(body?.initials);
+  if (nameError) return NextResponse.json({ error: nameError }, { status: 400 });
   const initials = sanitizeInitials(body?.initials);
   await redis.hset(`player:${pid}`, { initials });
   return NextResponse.json({ initials });

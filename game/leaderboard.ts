@@ -1,3 +1,4 @@
+import { cleanPlayerName, displayPlayerName, playerNameError } from "@/lib/player-name";
 // Client-side leaderboard: anonymous player id + initials in localStorage,
 // submit/fetch, and DOM rendering into the game-over screen.
 import { isValidPid, buildShareUrl } from "@/lib/leaderboard-core";
@@ -9,7 +10,7 @@ export function challengeUrl(): string {
 }
 
 type Row = { pid: string; initials: string; score: number; rank: number };
-type Board = { top10: Row[]; myRank: number | null; total: number; neighbors: Row[] };
+type Board = { top10: Row[]; myRank: number | null; total: number; neighbors: Row[]; me: Row | null };
 type SubmitResult = { rank: number | null; total: number; streak: number; best: number };
 
 function uuid(): string {
@@ -26,10 +27,12 @@ export function getPid(): string {
 }
 
 export function getInitials(): string {
-  return localStorage.getItem("crush-initials") || "";
+  const name = localStorage.getItem("crush-initials") || "";
+  return playerNameError(name) ? "" : name;
 }
 export function setInitials(s: string): string {
-  const clean = s.replace(/[^A-Za-z0-9_]/g, "").slice(0, 12);
+  if (playerNameError(s)) return "";
+  const clean = cleanPlayerName(s);
   localStorage.setItem("crush-initials", clean);
   return clean;
 }
@@ -40,7 +43,8 @@ export function setInitials(s: string): string {
 // resolves names live, not from a frozen per-score copy) picks it up right
 // away instead of waiting for their next score submit.
 export async function renameInitials(newName: string): Promise<{ name: string; synced: boolean } | null> {
-  const clean = setInitials(newName);
+  if (playerNameError(newName)) return null;
+  const clean = cleanPlayerName(newName);
   if (!clean) return null;
   try {
     const res = await fetch("/api/rename", {
@@ -48,9 +52,11 @@ export async function renameInitials(newName: string): Promise<{ name: string; s
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ pid: getPid(), initials: clean }),
     });
-    return { name: clean, synced: res.ok };
+    if (!res.ok) return null;
+    setInitials(clean);
+    return { name: clean, synced: true };
   } catch {
-    return { name: clean, synced: false };
+    return null;
   }
 }
 
@@ -146,7 +152,7 @@ export async function copyCardImage(
 
 function row(r: Row, me: number | null): string {
   const you = r.rank === me ? " lb-you" : "";
-  const name = r.initials || "player";
+  const name = displayPlayerName(r.initials);
   return `<div class="lb-row${you}"><span class="lb-rank">#${r.rank}</span><span class="lb-name">${name}</span><span class="lb-score">${r.score}</span></div>`;
 }
 
@@ -156,15 +162,16 @@ export function renderBoard(el: HTMLElement, b: Board | null): void {
     el.innerHTML = `<p class="lb-empty">Leaderboard offline</p>`;
     return;
   }
-  let html = `<div class="lb-title">ALL TIME · ${b.total} PLAYERS</div>`;
-  html += b.top10.length
-    ? b.top10.map((r) => row(r, b.myRank)).join("")
-    : `<p class="lb-empty">Be the first to post a score.</p>`;
-
-  const inTop = b.myRank !== null && b.myRank <= b.top10.length;
-  if (b.myRank && !inTop) {
-    html += `<div class="lb-title">YOU · #${b.myRank} of ${b.total}</div>`;
-    html += b.neighbors.map((r) => row(r, b.myRank)).join("");
+  const me = b.me ?? b.neighbors.find(r => r.rank === b.myRank) ?? b.top10.find(r => r.rank === b.myRank);
+  let html = '<section class="lb-position" aria-label="Your leaderboard position"><div class="lb-title">YOUR POSITION</div>';
+  html += me
+    ? '<div class="lb-position-stats"><div><span>RANK</span><strong>#' + me.rank + ' <small>of ' + b.total + '</small></strong></div><div><span>BEST SCORE</span><strong>' + me.score.toLocaleString() + '</strong></div></div>'
+    : '<p class="lb-empty">Not ranked yet. Finish a game and save your score to join.</p>';
+  html += '</section><div class="lb-title">TOP 10 · ALL TIME · ' + b.total + ' PLAYERS</div>';
+  html += b.top10.length ? b.top10.slice(0, 10).map(r => row(r, b.myRank)).join('') : '<p class="lb-empty">Be the first to post a score.</p>';
+  if (b.myRank !== null && b.myRank > 10) {
+    html += '<div class="lb-title">AROUND YOUR POSITION</div>';
+    html += b.neighbors.map(r => row(r, b.myRank)).join('');
   }
   el.innerHTML = html;
 }

@@ -1,3 +1,4 @@
+import { validateNameInput } from "./name-input";
 import * as THREE from "three";
 import {
 TYPES,
@@ -1943,6 +1944,8 @@ restartBtn.addEventListener("click", onRestart);
 // from the start-menu "LEADERBOARD" tile (view-only). Nothing is submitted
 // until the player types a username and hits SAVE.
 const initialsInput = $("initials-input") as HTMLInputElement;
+const onNameInput = () => { validateNameInput("initials-input", "initials-error", "board-save-btn"); };
+initialsInput.addEventListener("input", onNameInput);
 let scoreSaved = false;
 let boardCanSave = false; // last canSave passed to openBoard; lets async saves update the badge live
 
@@ -1963,6 +1966,7 @@ function markSaved() {
 // opened from the start menu.
 function openBoard(canSave: boolean) {
   boardCanSave = canSave;
+  onNameInput();
   const needsName = canSave && S.score > 0 && !getInitials();
   $("board-save").classList.toggle("hidden", !needsName);
   $("board-saved").classList.toggle("hidden", !(canSave && scoreSaved));
@@ -1973,6 +1977,7 @@ const closeBoard = () => $("board-modal").classList.add("hidden");
 
 // First-time save: set the username (write-once) and submit this run.
 const onSaveScore = async () => {
+  if (!validateNameInput("initials-input", "initials-error", "board-save-btn", true)) { initialsInput.focus(); return; }
   const name = setInitials(initialsInput.value); // sanitizes + persists
   if (!name) {
     toast("Type a username first");
@@ -2554,6 +2559,7 @@ window.addEventListener("resize", onResize);
 
 /* ---------- disposer ---------- */
 return function dispose() {
+initialsInput.removeEventListener("input", onNameInput);
 cancelAnimationFrame(rafId);
 window.removeEventListener("keydown", onKeyDown);
 window.removeEventListener("keyup", onKeyUp);

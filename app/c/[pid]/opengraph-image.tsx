@@ -1,3 +1,4 @@
+import { displayPlayerName } from "@/lib/player-name";
 import { ImageResponse } from "next/og";
 import { redis } from "@/lib/redis";
 import { isValidPid } from "@/lib/leaderboard-core";
@@ -19,7 +20,7 @@ export default async function Image({ params }: { params: Promise<{ pid: string 
   if (isValidPid(pid)) {
     const p = (await redis.hgetall(`player:${pid}`)) as PlayerHash | null;
     if (p && p.best != null) {
-      name = String(p.initials || "player");
+      name = displayPlayerName(p.initials);
       best = (Number(p.best) || 0).toLocaleString();
       streak = Number(p.streak) || 0;
     }

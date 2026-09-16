@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { redis } from "@/lib/redis";
 import { ALL_TIME_BOARD_KEY, ensureAllTimeBoard } from "@/lib/leaderboard-store";
 
+import { displayPlayerName } from "@/lib/player-name";
+import { isValidPid } from "@/lib/leaderboard-core";
+
 type Row = { pid: string; initials: string; score: number; rank: number };
 
 // zrange(withScores) returns a flat [member, score, member, score, ...].
@@ -20,7 +23,7 @@ async function toRows(flat: (string | number)[], startRank: number): Promise<Row
     const p = redis.pipeline();
     rows.forEach((r) => p.hget(`player:${r.pid}`, "initials"));
     const names = (await p.exec()) as (string | null)[];
-    rows.forEach((r, i) => (r.initials = names[i] || "???"));
+    rows.forEach((r, i) => (r.initials = displayPlayerName(names[i])));
   }
   return rows;
 }
@@ -31,7 +34,7 @@ export async function GET(req: Request) {
   const boardKey = ALL_TIME_BOARD_KEY;
 
   const total = await redis.zcard(boardKey);
-  const topFlat = (await redis.zrange(boardKey, 0, 49, {
+  const topFlat = (await redis.zrange(boardKey, 0, 9, {
     rev: true,
     withScores: true,
   })) as (string | number)[];
@@ -39,7 +42,7 @@ export async function GET(req: Request) {
 
   let myRank: number | null = null;
   let neighbors: Row[] = [];
-  if (pid) {
+  if (isValidPid(pid)) {
     const r = await redis.zrevrank(boardKey, pid);
     if (r !== null) {
       myRank = r + 1;
@@ -52,5 +55,6 @@ export async function GET(req: Request) {
     }
   }
 
-  return NextResponse.json({ top10, myRank, total, neighbors });
+  const me = neighbors.find(row => row.pid === pid) ?? null;
+  return NextResponse.json({ top10, myRank, total, neighbors, me }, { headers: { "Cache-Control": "no-store" } });
 }

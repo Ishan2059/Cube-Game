@@ -1,3 +1,4 @@
+import { validateNameInput } from "./name-input";
 /* ================= out-of-game menu screens =================
  * Owns the DOM screens around the run: Start, Guide, Shop, Settings, plus
  * the pause-menu quick toggles and toasts. The engine calls initMenus() once
@@ -430,6 +431,8 @@ export function initMenus(): () => void {
     // restart — see the crush:controls listener in engine.ts
     window.dispatchEvent(new CustomEvent("crush:controls"));
   });
+  const validateUsername = () => validateNameInput("username-input", "username-error", "username-save-btn");
+  on("username-input", validateUsername, "input");
   on("set-username", () => {
     const input = $("username-input") as HTMLInputElement;
     const edit = $("username-edit");
@@ -437,14 +440,16 @@ export function initMenus(): () => void {
     edit.classList.toggle("hidden", !opening);
     if (opening) {
       input.value = getInitials();
+      validateUsername();
       input.focus();
     }
   });
   on("username-save-btn", async () => {
     const input = $("username-input") as HTMLInputElement;
+    if (!validateNameInput("username-input", "username-error", "username-save-btn", true)) { input.focus(); return; }
     const result = await renameInitials(input.value);
     if (!result) {
-      toast("Type a username first");
+      toast("Could not update username. Please try again.");
       input.focus();
       return;
     }

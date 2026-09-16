@@ -1535,3 +1535,15 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
   transition: transform 0.1s, background 0.1s;
 }
 .challenge-cta:hover { transform: translateY(-2px) scale(1.03); background: #a3d977; }
+
+/* Personal leaderboard summary and inline name validation. */
+.lb-position { padding: 16px; margin: 8px 0 16px; border: 1px solid rgba(163,217,119,.4); border-radius: 12px; background: rgba(163,217,119,.08); }
+.lb-position .lb-title { margin: 0 0 12px; color: #a3d977; }
+.lb-position-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; text-align: left; }
+.lb-position-stats span { display: block; font-size: 10px; letter-spacing: 1px; color: #b5b5a8; margin-bottom: 6px; }
+.lb-position-stats strong { font-size: 22px; color: #e8e8e0; font-variant-numeric: tabular-nums; }
+.lb-position-stats small { font-size: 12px; font-weight: 400; color: #b5b5a8; }
+.name-error { color: #ffa59a; font-size: 12px; line-height: 1.5; margin: 8px 0; }
+.name-error:empty { display: none; }
+input[aria-invalid="true"] { border-color: #ffa59a !important; }
+#board-save-btn:disabled, #username-save-btn:disabled { opacity: .45; cursor: not-allowed; }
