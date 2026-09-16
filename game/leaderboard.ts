@@ -156,10 +156,10 @@ export function renderBoard(el: HTMLElement, b: Board | null): void {
     el.innerHTML = `<p class="lb-empty">Leaderboard offline</p>`;
     return;
   }
-  let html = `<div class="lb-title">TODAY · ${b.total} PLAYERS</div>`;
+  let html = `<div class="lb-title">ALL TIME · ${b.total} PLAYERS</div>`;
   html += b.top10.length
     ? b.top10.map((r) => row(r, b.myRank)).join("")
-    : `<p class="lb-empty">Be the first today.</p>`;
+    : `<p class="lb-empty">Be the first to post a score.</p>`;
 
   const inTop = b.myRank !== null && b.myRank <= b.top10.length;
   if (b.myRank && !inTop) {

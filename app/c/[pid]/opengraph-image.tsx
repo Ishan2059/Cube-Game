@@ -41,7 +41,7 @@ export default async function Image({ params }: { params: Promise<{ pid: string 
         }}
       >
         <div style={{ fontSize: 34, letterSpacing: 8, color: "#8fbf6a", display: "flex" }}>
-          CRUSH · DAILY CHALLENGE
+          CRUSH · ALL-TIME CHALLENGE
         </div>
         <div style={{ fontSize: 96, fontWeight: 800, marginTop: 24, display: "flex" }}>{name}</div>
         {best ? (

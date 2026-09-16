@@ -2,8 +2,7 @@
 
 export const MAX_SCORE = 100_000;
 
-// UTC day key so the daily board resets at the same instant for everyone
-// and doesn't drift with server timezone.
+// UTC day key for play streaks and referral counters, independent of rankings.
 export function dayKey(d: Date = new Date()): string {
   return d.toISOString().slice(0, 10); // YYYY-MM-DD
 }

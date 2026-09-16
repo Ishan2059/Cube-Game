@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { redis } from "@/lib/redis";
+import { ALL_TIME_BOARD_KEY, ensureAllTimeBoard } from "@/lib/leaderboard-store";
 import {
   dayKey,
   computeStreak,
@@ -27,16 +28,17 @@ export async function POST(req: Request) {
   if (!ok) return NextResponse.json({ error: "slow down" }, { status: 429 });
 
   const today = dayKey();
-  const boardKey = `lb:${today}`;
+  const boardKey = ALL_TIME_BOARD_KEY;
   const playerKey = `player:${pid}`;
 
-  // GT = only overwrite if greater, so the board holds each player's best today.
-  await redis.zadd(boardKey, { gt: true }, { score, member: pid });
-  await redis.expire(boardKey, 60 * 60 * 48); // 48h
-
+  await ensureAllTimeBoard(redis);
   const prev = (await redis.hgetall(playerKey)) as PlayerHash | null;
   const streak = computeStreak(prev?.lastPlayed, Number(prev?.streak ?? 0), today);
-  const best = Math.max(Number(prev?.best ?? 0), score);
+  // Permanent board, one personal best per player; lower runs never replace it.
+  await redis.zadd(boardKey, { gt: true }, {
+    score: Math.max(Number(prev?.best ?? 0), score), member: pid,
+  });
+  const best = Number(await redis.zscore(boardKey, pid));
   await redis.hset(playerKey, { initials, streak, lastPlayed: today, best });
 
   const rank = await redis.zrevrank(boardKey, pid); // 0-based, null if absent

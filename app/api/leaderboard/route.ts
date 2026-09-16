@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { redis } from "@/lib/redis";
-import { dayKey } from "@/lib/leaderboard-core";
+import { ALL_TIME_BOARD_KEY, ensureAllTimeBoard } from "@/lib/leaderboard-store";
 
 type Row = { pid: string; initials: string; score: number; rank: number };
 
@@ -27,7 +27,8 @@ async function toRows(flat: (string | number)[], startRank: number): Promise<Row
 
 export async function GET(req: Request) {
   const pid = new URL(req.url).searchParams.get("pid") ?? "";
-  const boardKey = `lb:${dayKey()}`;
+  await ensureAllTimeBoard(redis);
+  const boardKey = ALL_TIME_BOARD_KEY;
 
   const total = await redis.zcard(boardKey);
   const topFlat = (await redis.zrange(boardKey, 0, 49, {

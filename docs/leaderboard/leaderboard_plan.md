@@ -1,6 +1,8 @@
 # Leaderboard Feature Plan
 
-Retention-focused leaderboard for Cube-Game (Crush). Scope: **daily reset board + streak + neighbors**.
+Historical plan. The daily board has been replaced by the [all-time leaderboard](./all-time.md).
+
+Retention-focused leaderboard for Cube-Game (Crush). Original scope: **daily reset board + streak + neighbors**.
 
 ## Goal
 Bring players back daily. Daily board resets each midnight (fresh #1 race), streaks punish missed days, neighbor view makes climbing feel reachable.

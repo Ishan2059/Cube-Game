@@ -400,7 +400,7 @@ export default function Home() {
       <div id="board-modal" className="modal hidden">
         <div className="modal-card board-card">
           <button id="board-close" className="icon-btn modal-close" aria-label="Close">✕</button>
-          <div className="modal-title">DAILY LEADERBOARD</div>
+          <div className="modal-title">ALL-TIME LEADERBOARD</div>
           <div id="leaderboard"></div>
           <div id="board-save">
             <p className="board-save-q">Save your score to the leaderboard?</p>

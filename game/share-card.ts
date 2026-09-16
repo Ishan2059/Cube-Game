@@ -13,7 +13,7 @@ export type CardData = {
   kills: number;
   maxCombo: number;
   level: number; // 1-based
-  rank: number | null; // daily rank, null if unknown (offline)
+  rank: number | null; // all-time rank, null if unknown (offline)
   total: number; // players on today's board
   url: string; // challenge link, encoded into the QR + footer
 };
@@ -92,10 +92,10 @@ export function renderCard(canvas: HTMLCanvasElement, d: CardData): void {
   c.fillText(spaced("CRUSH"), cx + 36, 122);
   c.textBaseline = "alphabetic";
 
-  // scarcity kicker: daily + date
+  // challenge kicker + date
   c.fillStyle = "#6f746a";
   c.font = `700 23px ${FONT}`;
-  c.fillText(spaced(`DAILY CHALLENGE · ${dateStamp()}`), cx, 182);
+  c.fillText(spaced(`ALL-TIME CHALLENGE · ${dateStamp()}`), cx, 182);
 
   // player name + rank tier badge
   c.fillStyle = "#d7d7cc";

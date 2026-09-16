@@ -26,7 +26,7 @@ export async function generateMetadata({
   const title = p ? `${p.initials} scored ${p.best} in Crush` : "Crush";
   const description = p
     ? `${p.initials} is on a 🔥${p.streak} streak. Think you can beat ${p.best}?`
-    : "Crush the parasite horde. Climb the daily board.";
+    : "Crush the parasite horde. Climb the all-time board.";
   // og:image is wired automatically by opengraph-image.tsx in this folder.
   return { title, description, openGraph: { title, description }, twitter: { card: "summary_large_image", title, description } };
 }
@@ -50,7 +50,7 @@ export default async function ChallengePage({
   return (
     <main className="challenge">
       <div className="challenge-card">
-        <p className="challenge-kicker">CRUSH · DAILY CHALLENGE</p>
+        <p className="challenge-kicker">CRUSH · ALL-TIME CHALLENGE</p>
         {p ? (
           <>
             <h1 className="challenge-name">{p.initials}</h1>
