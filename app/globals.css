@@ -127,6 +127,21 @@ canvas { display: block; touch-action: none; }
   min-height: 17px;
 }
 
+#ai-debug {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #6ec6ff;
+  margin-top: 4px;
+  font-family: monospace;
+  line-height: 1.4;
+}
+.ai-choices {
+  font-size: 13px;
+  font-weight: 400;
+  color: #a9d7f2;
+}
+
 #combo-wrap { margin-top: 10px; height: 40px; }
 #combo-label {
   font-size: 18px;

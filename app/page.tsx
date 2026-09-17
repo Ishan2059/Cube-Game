@@ -9,6 +9,7 @@ export default function Home() {
           <div id="best">BEST 0</div>
           <div id="level">LVL 1 · SPROUT</div>
           <div id="buffs"></div>
+          <div id="ai-debug" className="hidden"></div>
           <div id="combo-wrap">
             <div id="combo-label"></div>
             <div id="combo-bar-outer">
@@ -289,6 +290,10 @@ export default function Home() {
               </button>
               <button id="set-colorblind" className="setting-row">
                 <span className="setting-name">Colorblind Mode</span>
+                <span className="switch"><span className="knob"></span></span>
+              </button>
+              <button id="set-ai-play" className="setting-row">
+                <span className="setting-name"><i className="row-glyph">🤖</i>Let Jev Play</span>
                 <span className="switch"><span className="knob"></span></span>
               </button>
             </div>

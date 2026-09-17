@@ -76,6 +76,7 @@ function syncSettingsUI() {
   // pill switches light up via an .on class
   $("set-sound").classList.toggle("on", s.sound);
   $("set-colorblind").classList.toggle("on", s.colorblind);
+  $("set-ai-play").classList.toggle("on", s.aiPlay);
   $("set-difficulty")
     .querySelectorAll<HTMLElement>(".seg-opt")
     .forEach((el) =>
@@ -423,6 +424,7 @@ export function initMenus(): () => void {
   on("set-colorblind", () =>
     toggleSetting((s) => ({ colorblind: !s.colorblind })),
   );
+  on("set-ai-play", () => toggleSetting((s) => ({ aiPlay: !s.aiPlay })));
   on("set-control-mode", () => {
     toggleSetting((s) => ({
       controlMode: s.controlMode === "dpad" ? "swipe" : "dpad",

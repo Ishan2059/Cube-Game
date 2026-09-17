@@ -43,6 +43,7 @@ import { auraById } from "./auras";
 import { createCubeMesh } from "./cubeMesh";
 import { createTrail, createAura } from "./effects";
 import { initMenus, showStart, toast } from "./menus";
+import { requestAiMove, type Direction, type AiDecision } from "./aiPlayer";
 
 /* ================= constants ================= */
 const TILE = 1;
@@ -1400,7 +1401,8 @@ levelEl = $("level"),
 levelupEl = $("levelup"),
 biteGlow = $("bite-glow"),
 poisonGlow = $("poison-glow"),
-buffsEl = $("buffs");
+buffsEl = $("buffs"),
+aiDebugEl = $("ai-debug");
 void flash; // kept for markup compatibility; bites use the glow overlay now
 
 // Cube look = equipped skin texture × current level colour. Textures are
@@ -2062,6 +2064,49 @@ KeyD: [1, 0],
 // (Don't drive movement off keydown auto-repeat: the OS typematic delay when
 // switching keys causes a ~1s stall. Tracking held keys makes it instant.)
 const heldMoveCodes: string[] = [];
+// Jev ("Let Jev Play" setting) drives the cube instead of held input —
+// gated by S.rolling like the human paths, plus a cooldown so a run of
+// "stay" answers can't spam the proxy every animation frame.
+let aiRequestInFlight = false;
+let aiNextRequestAt = 0;
+const AI_REQUEST_COOLDOWN = 200; // ms, matches the server-side rate limit
+function nearbyParasitesForAi(limit = 6) {
+return S.parasites
+.map((p) => ({ type: p.type as string, dx: p.ix - S.cube.ix, dz: p.iz - S.cube.iz }))
+.sort(
+  (a, b) =>
+    Math.abs(a.dx) + Math.abs(a.dz) - (Math.abs(b.dx) + Math.abs(b.dz)),
+)
+.slice(0, limit);
+}
+// Same walkability check tryRoll itself uses (rock or active pit blocks) —
+// Jev is only ever offered a direction that's actually open, see aiPlayer.ts.
+const AI_DIRS: Array<[Direction, number, number]> = [
+["up", 0, -1],
+["down", 0, 1],
+["left", -1, 0],
+["right", 1, 0],
+];
+function openDirectionsForAi(): Direction[] {
+return AI_DIRS.filter(([, dx, dz]) => freeTile(S.cube.ix + dx, S.cube.iz + dz)).map(
+([name]) => name,
+);
+}
+const AI_CHOICE_ORDER = ["up", "down", "left", "right", "stay"];
+function renderAiDecision(d: AiDecision) {
+const conf = d.confidence == null ? "?" : Math.round(d.confidence * 100) + "%";
+const choices = d.probabilities
+? AI_CHOICE_ORDER.filter((k) => k in d.probabilities!)
+  .map((k) => {
+    const pct = Math.round(d.probabilities![k] * 100) + "%";
+    return k === d.direction ? `<b>${k} ${pct}</b>` : `${k} ${pct}`;
+  })
+  .join(" · ")
+: "";
+aiDebugEl.innerHTML =
+`🤖 ${d.direction.toUpperCase()} · ${conf} conf · ${d.inputTokens} tok` +
+(choices ? `<br><span class="ai-choices">${choices}</span>` : "");
+}
 const onKeyDown = (e: KeyboardEvent) => {
 if ((e.code === "KeyP" || e.code === "Escape") && S.running) {
 togglePause();
@@ -2304,11 +2349,40 @@ if (S.comboTimer <= 0) endCombo();
 
 // held input: newest key wins, else touch drag — keep rolling while idle.
 // hornet daze inverts the direction for a couple seconds.
+if (getSettings().aiPlay) {
+aiDebugEl.classList.remove("hidden");
+const now = performance.now();
+if (!S.rolling && !aiRequestInFlight && now >= aiNextRequestAt) {
+aiRequestInFlight = true;
+aiNextRequestAt = now + AI_REQUEST_COOLDOWN;
+requestAiMove({
+  lives: S.lives,
+  combo: S.combo,
+  dazed: S.dazeT > 0,
+  slowed: S.slowT > 0,
+  poisoned: S.poisonT > 0,
+  stalled: S.stallT > 0,
+  nearby: nearbyParasitesForAi(),
+  open: openDirectionsForAi(),
+})
+  .then((decision) => {
+    if (!decision) return;
+    renderAiDecision(decision);
+    if (decision.move) tryRoll(decision.move[0], decision.move[1]);
+  })
+  .catch(() => {})
+  .finally(() => {
+    aiRequestInFlight = false;
+  });
+}
+} else {
+aiDebugEl.classList.add("hidden");
 const lastKey = heldMoveCodes[heldMoveCodes.length - 1];
 const heldDir = lastKey ? KEYMAP[lastKey] : touchDir;
 if (heldDir && !S.rolling) {
-const inv = S.dazeT > 0 ? -1 : 1;
-tryRoll(heldDir[0] * inv, heldDir[1] * inv);
+  const inv = S.dazeT > 0 ? -1 : 1;
+  tryRoll(heldDir[0] * inv, heldDir[1] * inv);
+}
 }
 
 updateRoll(dt);

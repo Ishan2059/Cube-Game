@@ -103,12 +103,16 @@ export interface Settings {
   // Defaults to dpad — see game/device.ts for the touch-capability check
   // that gates whether this ever surfaces in Settings or in-game.
   controlMode: ControlMode;
+  // When on, Jev (TypeSafe's decision model) drives the cube instead of
+  // keyboard/touch input — see game/aiPlayer.ts.
+  aiPlay: boolean;
 }
 const DEFAULT_SETTINGS: Settings = {
   sound: true,
   difficulty: "normal",
   colorblind: false,
   controlMode: "dpad",
+  aiPlay: false,
 };
 export const getSettings = (): Settings => ({
   ...DEFAULT_SETTINGS,
