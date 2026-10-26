@@ -30,7 +30,10 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 
     await page.locator("#settings-btn").click();
     await page.evaluate(()=>localStorage.setItem("crush-best","300000"));
     await page.locator("#reset-progress").click();
-    await page.locator("#reset-progress").click();
+    await Promise.all([
+      page.waitForEvent("load"),
+      page.locator("#reset-progress").click(),
+    ]);
     await expect(page.locator("#start-screen")).toBeVisible();
     await expect(page.locator("#menu-best")).toHaveText("0");
     expect(await page.evaluate(()=>localStorage.getItem("crush-best"))).toBeNull();
