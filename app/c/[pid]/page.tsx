@@ -1,14 +1,15 @@
+import { publicPlayer } from "@/lib/public-player";
 import { displayPlayerName } from "@/lib/player-name";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redis } from "@/lib/redis";
+import { key } from "@/lib/server-api";
 import { isValidPid, dayKey } from "@/lib/leaderboard-core";
 
-type PlayerHash = { initials?: string; best?: number | string; streak?: number | string };
 
 async function loadPlayer(pid: string) {
   if (!isValidPid(pid)) return null;
-  const p = (await redis.hgetall(`player:${pid}`)) as PlayerHash | null;
+  const p = await publicPlayer(pid);
   if (!p || p.best == null) return null;
   return {
     initials: displayPlayerName(p.initials),
@@ -42,8 +43,8 @@ export default async function ChallengePage({
 
   // Funnel counters (best-effort): landings per player + per day.
   if (p) {
-    void redis.incr(`share:land:${pid}`);
-    void redis.incr(`share:land:${dayKey()}`);
+    await redis.incr(key(`share:land:${pid}`)).catch(() => {});
+    await redis.incr(key(`share:land:${dayKey()}`)).catch(() => {});
   }
 
   const playHref = isValidPid(pid) ? `/?ref=${pid}` : "/";

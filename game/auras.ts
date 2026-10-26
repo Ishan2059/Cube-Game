@@ -3,7 +3,6 @@
  * at all times, movement-independent — the key difference from Trails.
  */
 
-import * as THREE from "three";
 import { createCubeMesh, disposeCubeMesh } from "./cubeMesh";
 import { createAura, AURA_RADIUS } from "./effects";
 import { mountItemPreview } from "./itemPreview";

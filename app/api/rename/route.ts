@@ -1,21 +1,19 @@
-import { playerNameError } from "@/lib/player-name";
-import { NextResponse } from "next/server";
+import { playerNameError, cleanPlayerName } from "@/lib/player-name";
 import { redis } from "@/lib/redis";
-import { sanitizeInitials } from "@/lib/leaderboard-core";
+import { ApiError, body, endpoint, ipLimit, json, key, requireSession, sameOrigin } from "@/lib/server-api";
 
-// Updates only the player's display name. The leaderboard/rank/challenge
-// pages all resolve initials live from player:{pid} at read time (never a
-// frozen copy stored alongside a score), so this alone makes a rename show
-// up everywhere immediately.
-export async function POST(req: Request) {
-  const body = await req.json().catch(() => null);
-  const pid = String(body?.pid ?? "");
-  if (!/^[a-z0-9-]{8,64}$/i.test(pid)) {
-    return NextResponse.json({ error: "bad pid" }, { status: 400 });
-  }
-  const nameError = playerNameError(body?.initials);
-  if (nameError) return NextResponse.json({ error: nameError }, { status: 400 });
-  const initials = sanitizeInitials(body?.initials);
-  await redis.hset(`player:${pid}`, { initials });
-  return NextResponse.json({ initials });
-}
+export const POST = endpoint(async (req) => {
+  sameOrigin(req);
+  await ipLimit(req, "rename", 20, 60);
+  const auth = await requireSession(req);
+  const data = await body(req, 1024);
+  const error = playerNameError(data.initials);
+  if (error) throw new ApiError(400, error);
+  const initials = cleanPlayerName(data.initials);
+  const ok = await redis.eval<(string | number)[], number>(`
+    if redis.call('GET', KEYS[1]) ~= ARGV[1] then return 0 end
+    redis.call('HSET', KEYS[2], 'initials', ARGV[2]); return 1`,
+  [auth.sessionKey, key(`player:${auth.pid}`)], [auth.pid, initials]);
+  if (!ok) throw new ApiError(401, "Session expired");
+  return json({ initials });
+});

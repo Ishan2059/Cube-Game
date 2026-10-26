@@ -1,25 +1,7 @@
 import * as THREE from "three";
 
-/* ================= parasite type table ================= */
-export const TYPES = {
-  worm: { points: 10, interval: 1.15, goo: 0x77c04a, name: "worm" },
-  bug: { points: 25, interval: 0.62, goo: 0xc46a3a, name: "bug" },
-  spider: { points: 40, interval: 0.85, goo: 0x8a5aa8, name: "spider" },
-  // rare — show up only sometimes (see spawn weights in engine.ts)
-  scorpion: { points: 80, interval: 0.5, goo: 0xc4903a, name: "scorpion" },
-  beetle: { points: 120, interval: 0.8, goo: 0x4a8a3a, name: "beetle" },
-  // —— variety wave: each carries a distinct ability handled in engine.ts ——
-  slug: { points: 20, interval: 1.45, goo: 0x9ab04a, name: "slug" }, // slime trail
-  termite: { points: 35, interval: 0.72, goo: 0xd8c088, name: "termite" }, // digs pits
-  hornet: { points: 60, interval: 0.55, goo: 0xd8a83a, name: "hornet" }, // bite dazes
-  mosquito: { points: 45, interval: 0.42, goo: 0xa83a3a, name: "mosquito" }, // bite drains extra
-  pillbug: { points: 55, interval: 0.8, goo: 0x8a7a6a, name: "pillbug" }, // only killable idle
-  flea: { points: 35, interval: 0.4, goo: 0x5a3a2a, name: "flea" }, // fast erratic hops
-  locust: { points: 70, interval: 0.72, goo: 0x8aa84a, name: "locust" }, // periodic dash
-  eggsac: { points: 40, interval: 2, goo: 0xd8d0b8, name: "egg sac" }, // hatches into more
-  spitter: { points: 90, interval: 0.95, goo: 0x7ac05a, name: "spitter" }, // ranged acid lob
-} as const;
-
+import { PARASITES } from "@/lib/game-rules";
+export const TYPES = PARASITES;
 export type ParasiteType = keyof typeof TYPES;
 export type ParasiteDef = (typeof TYPES)[ParasiteType];
 

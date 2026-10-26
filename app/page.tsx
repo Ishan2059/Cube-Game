@@ -295,6 +295,7 @@ export default function Home() {
           </div>
 
           <button id="reset-progress" className="btn danger">⟲ RESET PROGRESS</button>
+          <p className="sub">Clears this browser’s progress and its current online rankings. Historical scores cannot be claimed or removed using an old public ID.</p>
           <p className="footer-note">
             Desktop: arrows / WASD · P or Esc to pause · Mobile: hold &amp;
             drag to roll
@@ -404,6 +405,12 @@ export default function Home() {
         <div className="modal-card board-card">
           <button id="board-close" className="icon-btn modal-close" aria-label="Close">✕</button>
           <div className="modal-title">ALL-TIME LEADERBOARD</div>
+          <label htmlFor="board-mode">Ranking</label>
+          <select id="board-mode" defaultValue="normal" className="btn">
+            <option value="normal">Normal ? all time</option>
+            <option value="casual">Casual ? all time</option>
+            <option value="legacy">Historical ? mixed modes</option>
+          </select>
           <div id="leaderboard"></div>
           <div id="board-save">
             <p className="board-save-q">Save your score to the leaderboard?</p>

@@ -1,6 +1,6 @@
 // Pure leaderboard logic — no Redis, no I/O. Unit-testable.
 
-export const MAX_SCORE = 100_000;
+export const MAX_SCORE = Number.MAX_SAFE_INTEGER;
 
 // UTC day key for play streaks and referral counters, independent of rankings.
 export function dayKey(d: Date = new Date()): string {
@@ -70,7 +70,6 @@ export function sanitizeInitials(raw: unknown): string {
 // Returns clamped score, or null if invalid (reject, don't clamp silently down
 // from garbage like NaN / negative / non-integer).
 export function validateScore(raw: unknown): number | null {
-  const n = Number(raw);
-  if (!Number.isInteger(n) || n < 0 || n > MAX_SCORE) return null;
-  return n;
+  if (typeof raw !== "number" || !Number.isSafeInteger(raw) || raw < 0) return null;
+  return raw;
 }
