@@ -1,3 +1,5 @@
+import { beginRun, currentRun, finishRun, initScoreRetries, recordEvent, saveCandidate, saveRun } from "./run-client";
+import { COMBO_WINDOW, RAMPAGE_AT, killPoints } from "@/lib/game-rules";
 import { validateNameInput } from "./name-input";
 import * as THREE from "three";
 import {
@@ -20,11 +22,9 @@ playSpit,
 } from "./audio";
 import { LEVELS, type Level } from "./levels";
 import {
-  submitScore,
   fetchBoard,
   renderBoard,
   getInitials,
-  setInitials,
   fetchMe,
   trackRef,
 } from "./leaderboard";
@@ -48,8 +48,6 @@ import { initMenus, showStart, toast } from "./menus";
 const TILE = 1;
 const ROLL_TIME = 0.14; // seconds per roll
 const BITE_DAMAGE = 0.25; // fraction of one health icon lost per bite
-const COMBO_WINDOW = 2.5; // seconds to keep a combo alive
-const RAMPAGE_AT = 4; // combo count that triggers rampage
 const MAX_PARASITES = 24;
 const VIEW_R = 14; // world generation radius (tiles)
 const SPAWN_R_MIN = 9,
@@ -317,7 +315,7 @@ const a = (i / 8) * Math.PI * 2;
 const rr = r * (0.92 + hash2(r, i) * 0.16);
 const x = c + Math.cos(a) * rr,
 y = c + Math.sin(a) * rr;
-i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
 }
 ctx.stroke();
 }
@@ -340,7 +338,7 @@ const a = (i / 16) * Math.PI * 2;
 const r = 46 + hash2(i * 3, i * 7) * 16;
 const x = 64 + Math.cos(a) * r,
 y = 64 + Math.sin(a) * r;
-i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
 }
 ctx.closePath();
 ctx.fill();
@@ -1472,7 +1470,8 @@ playRampage();
 banner.classList.add("on");
 }
 const mult = Math.min(S.combo, 8) * (S.rampage ? 2 : 1);
-const pts = pz.def.points * mult;
+const pts = killPoints(pz.type, S.combo);
+recordEvent(S.time, pz.type);
 S.score += pts;
 scoreEl.classList.add("pop");
 setTimeout(() => scoreEl.classList.remove("pop"), 90);
@@ -1488,6 +1487,7 @@ updateHUD();
 }
 
 function endCombo() {
+if (S.combo > 0) recordEvent(S.time, "break");
 S.combo = 0;
 S.rampage = false;
 banner.classList.remove("on");
@@ -1799,8 +1799,17 @@ tryRoll(dx, dz);
 }
 
 /* ---------- game flow ---------- */
-function resetGame() {
+let starting = false;
+let disposed = false;
+async function resetGame() {
+if (starting) return;
+starting = true;
+S.running = false;
 casual = getSettings().difficulty === "casual";
+const ranked = await beginRun(casual ? "casual" : "normal");
+starting = false;
+if (disposed) return;
+if (!ranked) toast("Offline run — scores stay on this device");
 for (const pz of [...S.parasites]) removeParasite(pz);
 for (const pt of S.particles) releaseParticle(pt.mesh);
 for (const d of S.decals) {
@@ -1861,7 +1870,9 @@ updateHUD();
 }
 
 function gameOver() {
+if (!S.running) return;
 S.running = false;
+const finished = finishRun(S.time);
 const prevBest = S.best;
 S.best = Math.max(S.best, S.score);
 localStorage.setItem("crush-best", String(S.best));
@@ -1886,24 +1897,26 @@ buzz(120);
 // never optimistically — so a rate-limited/failed submit doesn't lie to the
 // player about their run being saved.
 scoreSaved = false;
-if (getInitials()) {
-  void submitScore(S.score).then((result) => {
-    if (result) markSaved();
+if (finished && getInitials()) {
+  void saveRun(finished, getInitials()).then(result => {
+    if (!result && !disposed) toast(finished.error || "Score queued — retrying when connected");
   });
 }
 $("gameover-screen").classList.remove("hidden");
 endCombo();
 // First-ever run: no username saved yet, so surface the save prompt right
 // here instead of requiring a manual trip into the leaderboard modal.
-if (!getInitials() && S.score > 0) openBoard(true);
+if (finished && !getInitials() && S.score > 0) openBoard(true);
 }
 
-// Fetch + render today's board into the modal. Best-effort — failures leave
+// Fetch + render the selected all-time board into the modal. Best-effort — failures leave
 // the game fully playable offline.
 async function renderBoardInto() {
   const board = $("leaderboard");
   board.innerHTML = '<p class="lb-empty">Loading…</p>';
-  renderBoard(board, await fetchBoard());
+  const mode = ($("board-mode") as HTMLSelectElement).value;
+  const result = await fetchBoard(mode);
+  if (!disposed && mode === ($("board-mode") as HTMLSelectElement).value) renderBoard(board, result);
 }
 
 /* ---------- input & buttons ---------- */
@@ -1924,10 +1937,12 @@ pauseBtn.textContent = p ? "▶" : "❚❚";
 }
 const togglePause = () => setPause(!S.paused);
 
-const onStart = () => {
+const onStart = async () => {
 audio();
-$("start-screen").classList.add("hidden");
-resetGame();
+startBtn.setAttribute("disabled", "true");
+await resetGame();
+startBtn.removeAttribute("disabled");
+if (!disposed) $("start-screen").classList.add("hidden");
 };
 const onRestart = () => {
 $("gameover-screen").classList.add("hidden");
@@ -1940,9 +1955,8 @@ startBtn.addEventListener("click", onStart);
 restartBtn.addEventListener("click", onRestart);
 
 // ---- Leaderboard modal ----
-// Opened from the game-over "LEADERBOARD" button (offers to save this run) and
-// from the start-menu "LEADERBOARD" tile (view-only). Nothing is submitted
-// until the player types a username and hits SAVE.
+// Both entry points allow retrying a pending run. Named players auto-submit;
+// first-time players can choose a name here before their queued run is sent.
 const initialsInput = $("initials-input") as HTMLInputElement;
 const onNameInput = () => { validateNameInput("initials-input", "initials-error", "board-save-btn"); };
 initialsInput.addEventListener("input", onNameInput);
@@ -1961,37 +1975,56 @@ function markSaved() {
   }
 }
 
-// canSave: game-over path. Prompt for a username only the first time (no name
-// stored yet); once set it's locked and every run auto-saves. View-only when
-// opened from the start menu.
+// canSave selects the latest run's difficulty when opened from game over.
+// Pending saves remain accessible from the start menu after a reload.
 function openBoard(canSave: boolean) {
   boardCanSave = canSave;
+  const candidate = saveCandidate();
+  initialsInput.value = getInitials() || candidate?.initials || initialsInput.value;
   onNameInput();
-  const needsName = canSave && S.score > 0 && !getInitials();
-  $("board-save").classList.toggle("hidden", !needsName);
+  $("board-save").classList.toggle("hidden", !candidate || (candidate === currentRun() && scoreSaved));
+  if (canSave && candidate) ($("board-mode") as HTMLSelectElement).value = candidate.mode;
   $("board-saved").classList.toggle("hidden", !(canSave && scoreSaved));
   $("board-modal").classList.remove("hidden");
   void renderBoardInto();
 }
+const onScoreSaved = (event: Event) => {
+  const { runId } = (event as CustomEvent<{ runId: string }>).detail;
+  if (runId === currentRun()?.runId) {
+    markSaved();
+    $("board-save").classList.add("hidden");
+  } else if (!$("board-modal").classList.contains("hidden")) {
+    $("board-save").classList.toggle("hidden", !saveCandidate());
+    void renderBoardInto();
+  }
+};
+const onSaveError = (event: Event) => toast((event as CustomEvent<string>).detail);
+const onBoardMode = () => { void renderBoardInto(); };
+window.addEventListener("crush:score-saved", onScoreSaved);
+window.addEventListener("crush:save-error", onSaveError);
+$("board-mode").addEventListener("change", onBoardMode);
+const stopRetries = initScoreRetries();
 const closeBoard = () => $("board-modal").classList.add("hidden");
 
-// First-time save: set the username (write-once) and submit this run.
+// Persist the run before sending; confirm the name only after server success.
 const onSaveScore = async () => {
   if (!validateNameInput("initials-input", "initials-error", "board-save-btn", true)) { initialsInput.focus(); return; }
-  const name = setInitials(initialsInput.value); // sanitizes + persists
+  const name = initialsInput.value;
   if (!name) {
     toast("Type a username first");
     initialsInput.focus();
     return;
   }
   initialsInput.value = name;
-  const result = await submitScore(S.score);
+  const candidate = saveCandidate();
+  if (!candidate) return;
+  const result = await saveRun(candidate, name);
   if (!result) {
-    toast("Couldn't save — try again");
+    toast(candidate.error || "Score queued — retrying when connected");
     return;
   }
   $("board-save").classList.add("hidden");
-  markSaved();
+  if (currentRun()?.runId === candidate.runId) markSaved();
 };
 
 const ranksBtn = $("gameover-ranks");
@@ -2091,6 +2124,7 @@ if (i !== -1) heldMoveCodes.splice(i, 1);
 };
 // lost focus mid-hold: drop keys so the cube doesn't roll on forever
 const onBlur = () => {
+if (S.running) setPause(true);
 heldMoveCodes.length = 0;
 touchDir = null;
 };
@@ -2559,6 +2593,11 @@ window.addEventListener("resize", onResize);
 
 /* ---------- disposer ---------- */
 return function dispose() {
+disposed = true;
+stopRetries();
+window.removeEventListener("crush:score-saved", onScoreSaved);
+window.removeEventListener("crush:save-error", onSaveError);
+$("board-mode").removeEventListener("change", onBoardMode);
 initialsInput.removeEventListener("input", onNameInput);
 cancelAnimationFrame(rafId);
 window.removeEventListener("keydown", onKeyDown);

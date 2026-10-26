@@ -1,13 +1,12 @@
+import { publicPlayer } from "@/lib/public-player";
 import { displayPlayerName } from "@/lib/player-name";
 import { ImageResponse } from "next/og";
-import { redis } from "@/lib/redis";
 import { isValidPid } from "@/lib/leaderboard-core";
 
 export const alt = "Crush challenge";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-type PlayerHash = { initials?: string; best?: number | string; streak?: number | string };
 
 // Dynamic unfurl card. Next auto-injects og:image / twitter:image from this file.
 // ponytail: shows all-time best + streak from the pid hash — no extra storage.
@@ -18,7 +17,7 @@ export default async function Image({ params }: { params: Promise<{ pid: string 
   let best = "";
   let streak = 0;
   if (isValidPid(pid)) {
-    const p = (await redis.hgetall(`player:${pid}`)) as PlayerHash | null;
+    const p = await publicPlayer(pid);
     if (p && p.best != null) {
       name = displayPlayerName(p.initials);
       best = (Number(p.best) || 0).toLocaleString();

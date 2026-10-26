@@ -1,26 +1,13 @@
 import { displayPlayerName } from "@/lib/player-name";
-import { NextResponse } from "next/server";
 import { redis } from "@/lib/redis";
 import { dayKey, yesterdayKey } from "@/lib/leaderboard-core";
+import { endpoint, json, key, session } from "@/lib/server-api";
 
-// Home streak-at-risk hook. Returns streak + whether it's about to break
-// (played yesterday but not yet today).
-export async function GET(req: Request) {
-  const pid = new URL(req.url).searchParams.get("pid") ?? "";
-  if (!pid) return NextResponse.json({ streak: 0, atRisk: false });
-
-  const p = (await redis.hgetall(`player:${pid}`)) as
-    | { initials?: string; streak?: number; lastPlayed?: string; best?: number }
-    | null;
-
+export const GET = endpoint(async (req) => {
+  const auth = await session(req);
+  if (!auth) return json({ streak: 0, atRisk: false });
+  const p = await redis.hgetall<{ initials: string; streak: number; lastPlayed: string; best: number }>(key(`player:${auth.pid}`));
   const today = dayKey();
-  const streak = Number(p?.streak ?? 0);
-  const atRisk = !!p?.lastPlayed && p.lastPlayed === yesterdayKey(today);
-
-  return NextResponse.json({
-    initials: p?.initials ? displayPlayerName(p.initials) : "",
-    streak,
-    best: Number(p?.best ?? 0),
-    atRisk,
-  });
-}
+  const active = p?.lastPlayed === today || p?.lastPlayed === yesterdayKey(today);
+  return json({ initials: displayPlayerName(p?.initials), streak: active ? Number(p?.streak ?? 0) : 0, best: Number(p?.best ?? 0), atRisk: p?.lastPlayed === yesterdayKey(today) });
+});
