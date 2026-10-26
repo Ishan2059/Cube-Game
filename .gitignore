@@ -6,3 +6,7 @@ next-env.d.ts
 .DS_Store
 .env*.local
 docker-compose.yml
+
+.qa/
+test-results/
+playwright-report/

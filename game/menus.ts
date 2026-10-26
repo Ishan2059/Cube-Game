@@ -1,3 +1,4 @@
+import { resetProgress } from "./run-client";
 import { validateNameInput } from "./name-input";
 /* ================= out-of-game menu screens =================
  * Owns the DOM screens around the run: Start, Guide, Shop, Settings, plus
@@ -5,8 +6,6 @@ import { validateNameInput } from "./name-input";
  * at boot; navigation between these screens self-wires. Markup/styling
  * follows the UI kit in docs/CubeCrush UI.html.
  *
- * Leaderboard ("RANKS") is intentionally a stub — that feature is being
- * built separately. The buttons exist (design hooks) but only show a toast.
  * Skins/Trails/Auras all share one shop grid (#skin-list) and buy/equip
  * flow — renderShop() swaps its contents based on the active tab.
  */
@@ -460,7 +459,7 @@ export function initMenus(): () => void {
   let resetArmed = false;
   let resetTimer: ReturnType<typeof setTimeout> | undefined;
   const RESET_LABEL = "⟲ RESET PROGRESS";
-  on("reset-progress", () => {
+  on("reset-progress", async () => {
     const btn = $("reset-progress");
     if (!resetArmed) {
       resetArmed = true;
@@ -477,16 +476,11 @@ export function initMenus(): () => void {
     resetArmed = false;
     btn.textContent = RESET_LABEL;
     btn.classList.remove("armed");
-    for (const k of Object.keys(localStorage)) {
-      if (k.startsWith("crush-")) localStorage.removeItem(k);
+    btn.setAttribute("disabled", "true");
+    if (!await resetProgress()) {
+      btn.removeAttribute("disabled");
+      toast("Connect to the internet to reset your saved profile. Nothing was cleared.");
     }
-    applySettingsEffects(getSettings());
-    syncSettingsUI();
-    updateMenuStats();
-    window.dispatchEvent(new CustomEvent("crush:skin"));
-    window.dispatchEvent(new CustomEvent("crush:trail"));
-    window.dispatchEvent(new CustomEvent("crush:aura"));
-    toast("Progress wiped. Fresh cube.");
   });
 
   const disposeItemModal = initItemModal();

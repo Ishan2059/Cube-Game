@@ -1,15 +1,14 @@
-import { NextResponse } from "next/server";
 import { redis } from "@/lib/redis";
 import { ALL_TIME_BOARD_KEY, ensureAllTimeBoard } from "@/lib/leaderboard-store";
 
 import { displayPlayerName } from "@/lib/player-name";
-import { isValidPid } from "@/lib/leaderboard-core";
+import { endpoint, json, key, session } from "@/lib/server-api";
 
 type Row = { pid: string; initials: string; score: number; rank: number };
 
 // zrange(withScores) returns a flat [member, score, member, score, ...].
 // Resolve each member's initials (pipeline) and attach 1-based ranks.
-async function toRows(flat: (string | number)[], startRank: number): Promise<Row[]> {
+async function toRows(flat: (string | number)[], startRank: number, legacy: boolean): Promise<Row[]> {
   const rows: Row[] = [];
   for (let i = 0; i < flat.length; i += 2) {
     rows.push({
@@ -21,28 +20,35 @@ async function toRows(flat: (string | number)[], startRank: number): Promise<Row
   }
   if (rows.length) {
     const p = redis.pipeline();
-    rows.forEach((r) => p.hget(`player:${r.pid}`, "initials"));
+    rows.forEach((r) => p.hget(legacy ? `player:${r.pid}` : key(`player:${r.pid}`), "initials"));
     const names = (await p.exec()) as (string | null)[];
     rows.forEach((r, i) => (r.initials = displayPlayerName(names[i])));
   }
   return rows;
 }
 
-export async function GET(req: Request) {
-  const pid = new URL(req.url).searchParams.get("pid") ?? "";
-  await ensureAllTimeBoard(redis);
-  const boardKey = ALL_TIME_BOARD_KEY;
+export const GET = endpoint(async (req) => {
+  const requested = new URL(req.url).searchParams.get("mode");
+  const mode = requested === "casual" || requested === "legacy" ? requested : "normal";
+  const legacy = mode === "legacy";
+  // Preview/local credentials may point at production accidentally: never read
+  // or backfill the unnamespaced historical database outside production.
+  const production = process.env.VERCEL_ENV === "production" || (!process.env.VERCEL_ENV && process.env.NODE_ENV === "production");
+  if (legacy && !production) return json({ top10: [], myRank: null, total: 0, neighbors: [], me: null, mode });
+  if (legacy) await ensureAllTimeBoard(redis);
+  const pid = legacy ? "" : (await session(req))?.pid ?? "";
+  const boardKey = legacy ? ALL_TIME_BOARD_KEY : key(`board:${mode}`);
 
   const total = await redis.zcard(boardKey);
   const topFlat = (await redis.zrange(boardKey, 0, 9, {
     rev: true,
     withScores: true,
   })) as (string | number)[];
-  const top10 = await toRows(topFlat, 1);
+  const top10 = await toRows(topFlat, 1, legacy);
 
   let myRank: number | null = null;
   let neighbors: Row[] = [];
-  if (isValidPid(pid)) {
+  if (pid) {
     const r = await redis.zrevrank(boardKey, pid);
     if (r !== null) {
       myRank = r + 1;
@@ -51,10 +57,10 @@ export async function GET(req: Request) {
         rev: true,
         withScores: true,
       })) as (string | number)[];
-      neighbors = await toRows(nFlat, start + 1);
+      neighbors = await toRows(nFlat, start + 1, legacy);
     }
   }
 
   const me = neighbors.find(row => row.pid === pid) ?? null;
-  return NextResponse.json({ top10, myRank, total, neighbors, me }, { headers: { "Cache-Control": "no-store" } });
-}
+  return json({ top10, myRank, total, neighbors, me, mode });
+});

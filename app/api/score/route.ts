@@ -1,56 +1,31 @@
-import { playerNameError } from "@/lib/player-name";
-import { NextResponse } from "next/server";
 import { redis } from "@/lib/redis";
-import { ALL_TIME_BOARD_KEY, ensureAllTimeBoard } from "@/lib/leaderboard-store";
-import {
-  dayKey,
-  computeStreak,
-  sanitizeInitials,
-  validateScore,
-} from "@/lib/leaderboard-core";
+import { playerNameError, cleanPlayerName } from "@/lib/player-name";
+import { dayKey, yesterdayKey } from "@/lib/leaderboard-core";
+import { scoreRun } from "@/lib/run-validation";
+import type { Difficulty } from "@/lib/game-rules";
+import { ApiError, body, endpoint, hash, ipLimit, json, key, rateLimit, requireSession, sameOrigin } from "@/lib/server-api";
+import { COMMIT_RUN } from "@/lib/score-scripts";
 
-type PlayerHash = { initials: string; streak: number; lastPlayed: string; best: number };
-
-export async function POST(req: Request) {
-  const body = await req.json().catch(() => null);
-  const pid = String(body?.pid ?? "");
-  if (!/^[a-z0-9-]{8,64}$/i.test(pid)) {
-    return NextResponse.json({ error: "bad pid" }, { status: 400 });
-  }
-
-  const score = validateScore(body?.score);
-  if (score === null) {
-    return NextResponse.json({ error: "bad score" }, { status: 400 });
-  }
-  const nameError = playerNameError(body?.initials);
-  if (nameError) return NextResponse.json({ error: nameError }, { status: 400 });
-  const initials = sanitizeInitials(body?.initials);
-
-  // Rate limit: 1 submit / 2s / player.
-  const ok = await redis.set(`rl:${pid}`, 1, { nx: true, ex: 2 });
-  if (!ok) return NextResponse.json({ error: "slow down" }, { status: 429 });
-
+export const POST = endpoint(async (req) => {
+  sameOrigin(req);
+  await ipLimit(req, "score", 120, 60);
+  const auth = await requireSession(req);
+  await rateLimit(`score:${auth.pid}`, 30, 60);
+  const data = await body(req);
+  if (typeof data.runId !== "string" || !/^[a-f0-9-]{36}$/.test(data.runId)) throw new ApiError(400, "Invalid run");
+  const nameError = playerNameError(data.initials);
+  if (nameError) throw new ApiError(400, nameError);
+  const runKey = key(`run:${data.runId}`);
+  const run = await redis.hgetall<{ pid: string; mode: Difficulty; version: number; startedAt: number }>(runKey);
+  if (!run || run.pid !== auth.pid || Number(run.version) !== auth.version) throw new ApiError(410, "Run expired or reset. Start a new game.");
+  const score = scoreRun(data.events, data.durationMs, Date.now() - Number(run.startedAt), run.mode);
+  if (score === null) throw new ApiError(400, "Run failed score validation");
+  const fingerprint = hash(JSON.stringify([data.events, data.durationMs]));
   const today = dayKey();
-  const boardKey = ALL_TIME_BOARD_KEY;
-  const playerKey = `player:${pid}`;
-
-  await ensureAllTimeBoard(redis);
-  const prev = (await redis.hgetall(playerKey)) as PlayerHash | null;
-  const streak = computeStreak(prev?.lastPlayed, Number(prev?.streak ?? 0), today);
-  // Permanent board, one personal best per player; lower runs never replace it.
-  await redis.zadd(boardKey, { gt: true }, {
-    score: Math.max(Number(prev?.best ?? 0), score), member: pid,
-  });
-  const best = Number(await redis.zscore(boardKey, pid));
-  await redis.hset(playerKey, { initials, streak, lastPlayed: today, best });
-
-  const rank = await redis.zrevrank(boardKey, pid); // 0-based, null if absent
-  const total = await redis.zcard(boardKey);
-
-  return NextResponse.json({
-    rank: rank === null ? null : rank + 1, // 1-based for display
-    total,
-    streak,
-    best,
-  });
-}
+  const result = await redis.eval<(string | number)[], string>(COMMIT_RUN, [
+    runKey, key(`player:${auth.pid}`), key(`board:${run.mode}`), auth.sessionKey,
+  ], [auth.pid, auth.version, score, cleanPlayerName(data.initials), today, yesterdayKey(today), fingerprint, run.mode]);
+  if (result === "expired") throw new ApiError(410, "Run expired or reset. Start a new game.");
+  if (result === "conflict") throw new ApiError(409, "This run was already submitted with different results");
+  return json(typeof result === "string" ? JSON.parse(result) : result);
+});

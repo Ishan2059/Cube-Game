@@ -1,3 +1,4 @@
+import { ensureSession, post } from "./run-client";
 import { cleanPlayerName, displayPlayerName, playerNameError } from "@/lib/player-name";
 // Client-side leaderboard: anonymous player id + initials in localStorage,
 // submit/fetch, and DOM rendering into the game-over screen.
@@ -10,20 +11,9 @@ export function challengeUrl(): string {
 }
 
 type Row = { pid: string; initials: string; score: number; rank: number };
-type Board = { top10: Row[]; myRank: number | null; total: number; neighbors: Row[]; me: Row | null };
-type SubmitResult = { rank: number | null; total: number; streak: number; best: number };
-
-function uuid(): string {
-  return (crypto as Crypto).randomUUID?.() ?? String(Date.now()) + Math.random().toString(16).slice(2);
-}
-
+type Board = { mode: string; top10: Row[]; myRank: number | null; total: number; neighbors: Row[]; me: Row | null };
 export function getPid(): string {
-  let id = localStorage.getItem("crush-pid");
-  if (!id) {
-    id = uuid();
-    localStorage.setItem("crush-pid", id);
-  }
-  return id;
+  return localStorage.getItem("crush-pid-v2") || "";
 }
 
 export function getInitials(): string {
@@ -37,20 +27,17 @@ export function setInitials(s: string): string {
   return clean;
 }
 
-// Settings-screen rename. Only ever called for a player who already has a
-// name. Persists locally immediately, then best-effort syncs player:{pid}'s
-// initials server-side so every existing/future leaderboard read (which
-// resolves names live, not from a frozen per-score copy) picks it up right
-// away instead of waiting for their next score submit.
+// Update the local name only after the authenticated server write succeeds.
 export async function renameInitials(newName: string): Promise<{ name: string; synced: boolean } | null> {
   if (playerNameError(newName)) return null;
   const clean = cleanPlayerName(newName);
   if (!clean) return null;
   try {
+    if (!await ensureSession()) return null;
     const res = await fetch("/api/rename", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ pid: getPid(), initials: clean }),
+      body: JSON.stringify({ initials: clean }),
     });
     if (!res.ok) return null;
     setInitials(clean);
@@ -60,35 +47,9 @@ export async function renameInitials(newName: string): Promise<{ name: string; s
   }
 }
 
-// The server rate-limits to 1 submit / 2s / player (abuse guard). A returning
-// player who ends two runs in quick succession can legitimately hit that same
-// limit on their second (higher) score, so retry once past the window instead
-// of silently dropping a real result. Never resolve with a "success" unless
-// the server actually confirmed the write.
-export async function submitScore(score: number): Promise<SubmitResult | null> {
-  for (let attempt = 0; attempt < 2; attempt++) {
-    try {
-      const res = await fetch("/api/score", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ pid: getPid(), initials: getInitials() || "player", score }),
-      });
-      if (res.ok) return await res.json();
-      if (res.status === 429 && attempt === 0) {
-        await new Promise((r) => setTimeout(r, 2100));
-        continue;
-      }
-      return null;
-    } catch {
-      return null; // offline / no backend — game still playable
-    }
-  }
-  return null;
-}
-
-export async function fetchBoard(): Promise<Board | null> {
+export async function fetchBoard(mode = "normal"): Promise<Board | null> {
   try {
-    const res = await fetch(`/api/leaderboard?pid=${encodeURIComponent(getPid())}`);
+    const res = await fetch(`/api/leaderboard?mode=${encodeURIComponent(mode)}`);
     if (!res.ok) return null;
     return await res.json();
   } catch {
@@ -104,11 +65,7 @@ export function trackRef(): void {
     if (!ref || !isValidPid(ref) || ref === getPid()) return;
     if (localStorage.getItem("crush-ref")) return; // already attributed
     localStorage.setItem("crush-ref", ref);
-    void fetch("/api/ref", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ pid: ref }),
-    });
+    void ensureSession().then(() => post("/api/ref", { pid: ref })).catch(() => {});
   } catch {
     // no-op — attribution is never allowed to break load
   }
@@ -116,7 +73,7 @@ export function trackRef(): void {
 
 export async function fetchMe(): Promise<{ streak: number; atRisk: boolean } | null> {
   try {
-    const res = await fetch(`/api/me?pid=${encodeURIComponent(getPid())}`);
+    const res = await fetch("/api/me");
     if (!res.ok) return null;
     return await res.json();
   } catch {
@@ -167,7 +124,8 @@ export function renderBoard(el: HTMLElement, b: Board | null): void {
   html += me
     ? '<div class="lb-position-stats"><div><span>RANK</span><strong>#' + me.rank + ' <small>of ' + b.total + '</small></strong></div><div><span>BEST SCORE</span><strong>' + me.score.toLocaleString() + '</strong></div></div>'
     : '<p class="lb-empty">Not ranked yet. Finish a game and save your score to join.</p>';
-  html += '</section><div class="lb-title">TOP 10 · ALL TIME · ' + b.total + ' PLAYERS</div>';
+  const label = b.mode === "legacy" ? "HISTORICAL (MIXED MODES)" : b.mode === "casual" ? "CASUAL · ALL TIME" : "NORMAL · ALL TIME";
+  html += '</section><div class="lb-title">TOP 10 · ' + label + ' · ' + b.total + ' PLAYERS</div>';
   html += b.top10.length ? b.top10.slice(0, 10).map(r => row(r, b.myRank)).join('') : '<p class="lb-empty">Be the first to post a score.</p>';
   if (b.myRank !== null && b.myRank > 10) {
     html += '<div class="lb-title">AROUND YOUR POSITION</div>';
