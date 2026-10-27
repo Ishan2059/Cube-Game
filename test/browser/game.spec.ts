@@ -22,7 +22,9 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 
     await expect(page.locator("#leaderboard")).toContainText("CASUAL");
     await page.locator("#board-close").click();
     await page.locator("#start-btn").click();
-    await expect(page.locator("#start-screen")).toBeHidden();
+    // Startup builds the exploration scene after obtaining the run ticket.
+    // Software WebGL on CI can spend over five seconds on that first frame.
+    await expect(page.locator("#start-screen")).toBeHidden({ timeout: 30000 });
     await page.keyboard.press("ArrowRight");
     await page.locator("#pause-btn").click();
     await expect(page.locator("#pause-screen")).toBeVisible();
