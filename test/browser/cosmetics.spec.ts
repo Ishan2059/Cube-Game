@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import bank from "../../game/audio-bank.json";
 
-test("paid cosmetics, legacy selection, previews and guide", async ({ page }) => {
+test("paid cosmetics, legacy selection and guide", async ({ page }) => {
   test.setTimeout(180000);
   const errors: string[]=[];
   page.on("pageerror",e=>errors.push(e.message));
@@ -20,31 +20,21 @@ test("paid cosmetics, legacy selection, previews and guide", async ({ page }) =>
   await expect(page.locator("#tab-auras")).toHaveCount(0);
   await expect(page.locator(".skin-card")).toHaveCount(11);
   await expect(page.locator('[data-item="mossling"]')).toContainText("EQUIPPED");
-  const skinIds=await page.locator(".skin-card").evaluateAll(cards=>cards.map(c=>(c as HTMLElement).dataset.item!));
-  for(const id of skinIds) {
-    await page.locator(`[data-item="${id}"]`).click();
-    await expect(page.locator("#item-modal-preview canvas")).toBeVisible();
-    if(id==="boba") {
-      await expect(page.locator("#item-modal-action")).toContainText("BUY");
-      await expect(page.locator("#item-modal-price")).toContainText("600");
-      await page.locator("#item-modal-action").click();
-      await expect(page.locator("#shop-coins")).toHaveText("29,400");
-    } else await page.locator("#item-modal-close").click();
-    await expect(page.locator("#item-modal-preview canvas")).toHaveCount(0);
-  }
+  await page.locator('[data-item="boba"]').click();
+  await expect(page.locator("#item-modal-preview canvas")).toBeVisible();
+  await expect(page.locator("#item-modal-action")).toContainText("BUY");
+  await expect(page.locator("#item-modal-price")).toContainText("600");
+  await page.locator("#item-modal-action").click();
+  await expect(page.locator("#shop-coins")).toHaveText("29,400");
+  await expect(page.locator("#item-modal-preview canvas")).toHaveCount(0);
   await page.locator("#tab-trails").click();
   await expect(page.locator(".skin-card")).toHaveCount(11);
   await expect(page.locator('[data-item="afterburn"]')).toContainText("EQUIPPED");
-  const trailIds=await page.locator(".skin-card").evaluateAll(cards=>cards.map(c=>(c as HTMLElement).dataset.item!));
-  for(const id of trailIds) {
-    await page.locator(`[data-item="${id}"]`).click();
-    await expect(page.locator("#item-modal-preview canvas")).toBeVisible();
-    if(id==="bubble-pop"){
-      await expect(page.locator("#item-modal-action")).toContainText("BUY");
-      await page.locator("#item-modal-action").click();
-      await expect(page.locator("#shop-coins")).toHaveText("28,800");
-    }else await page.locator("#item-modal-close").click();
-  }
+  await page.locator('[data-item="bubble-pop"]').click();
+  await expect(page.locator("#item-modal-preview canvas")).toBeVisible();
+  await expect(page.locator("#item-modal-action")).toContainText("BUY");
+  await page.locator("#item-modal-action").click();
+  await expect(page.locator("#shop-coins")).toHaveText("28,800");
   await page.locator("#shop-back").click();
   await expect(page.locator("#hero-skin-label")).toHaveText("BOBA BUDDY");
   await page.locator("#howto-btn").click();
@@ -61,6 +51,32 @@ test("paid cosmetics, legacy selection, previews and guide", async ({ page }) =>
   expect(await page.evaluate(()=>JSON.parse(localStorage.getItem("crush-trails-owned")||"[]"))).toContain("bubble-pop");
   expect(errors).toEqual([]);
 });
+
+// Each live WebGL preview gets its own time budget and trace. A single
+// catalog-sized test exhausts its shared budget on CI's software renderer.
+const catalogs = {
+  skins: ["classic", "magma", "boba", "gummy", "glacier", "mossling", "arcade", "nebula", "honey", "koi", "prism"],
+  trails: ["none", "afterburn", "frostwake", "neon-surge", "starfall", "petal-drift", "bubble-pop", "pixel-rush", "gold-rush", "void-rift", "rainbow-run"],
+};
+for (const [category, ids] of Object.entries(catalogs)) {
+  for (const id of ids) {
+    test(`${category} preview opens and disposes: ${id}`, async ({ page }) => {
+      const errors: string[] = [];
+      page.on("pageerror", error => errors.push(error.message));
+      await page.route("**/api/**", route => route.fulfill({ json: { top10: [], neighbors: [], me: null, streak: 0 } }));
+      await page.goto("/");
+      await page.locator("#shop-btn").click();
+      if (category === "trails") await page.locator("#tab-trails").click();
+      await expect(page.locator(".skin-card")).toHaveCount(ids.length);
+      await page.locator(`[data-item="${id}"]`).click();
+      await expect(page.locator("#item-modal-preview canvas")).toBeVisible();
+      await page.locator("#item-modal-close").click();
+      await expect(page.locator("#item-modal-preview canvas")).toHaveCount(0);
+      await expect(page.locator("#item-modal")).toBeHidden();
+      expect(errors).toEqual([]);
+    });
+  }
+}
 
 test("every sound cue has a browser-decodable sample", async ({ page }) => {
   test.setTimeout(120000);
