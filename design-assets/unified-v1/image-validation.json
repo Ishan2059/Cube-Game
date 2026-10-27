@@ -1,0 +1,309 @@
+{
+  "assets": 25,
+  "transparentCornersPass": false,
+  "failures": [
+    "bubble-pop.png"
+  ],
+  "images": [
+    {
+      "file": "broken-planter.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1847130
+    },
+    {
+      "file": "concrete-footing.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1561532
+    },
+    {
+      "file": "rooted-stump.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1769149
+    },
+    {
+      "file": "rusted-valve.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1559583
+    },
+    {
+      "file": "sandbag-block.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1303625
+    },
+    {
+      "file": "arcade.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1318666
+    },
+    {
+      "file": "boba.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1266674
+    },
+    {
+      "file": "glacier.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1615340
+    },
+    {
+      "file": "gummy.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1107004
+    },
+    {
+      "file": "honey.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1288061
+    },
+    {
+      "file": "koi.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1364938
+    },
+    {
+      "file": "magma.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1607599
+    },
+    {
+      "file": "mossling.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1906333
+    },
+    {
+      "file": "nebula.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1457298
+    },
+    {
+      "file": "prism.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1171378
+    },
+    {
+      "file": "afterburn.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 611768
+    },
+    {
+      "file": "bubble-pop.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "bytes": 558422
+    },
+    {
+      "file": "frostwake.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 561700
+    },
+    {
+      "file": "gold-rush.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 535745
+    },
+    {
+      "file": "neon-surge.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 557708
+    },
+    {
+      "file": "petal-drift.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 492544
+    },
+    {
+      "file": "pixel-rush.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 560717
+    },
+    {
+      "file": "rainbow-run.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 598487
+    },
+    {
+      "file": "starfall.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 624246
+    },
+    {
+      "file": "void-rift.png",
+      "width": 1254,
+      "height": 1254,
+      "alphaCorners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 724392
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "tool": "builtin image_gen",
+  "prompt": "Use case: precise-object-edit. Convert this approved game trail artwork into a production UV texture sheet while preserving exactly its material appearance, saturated colors, glossy highlights and distinctive particle shapes. Transparent square 1024x1024 canvas. STRICT layout: LEFT HALF x0-511 contains ONLY one straight vertical continuous ribbon, centered at x256, width about 420 pixels, running from top edge to bottom edge WITHOUT taper. Unbend the S-shaped reference streak into this straight vertical strip. Preserve its internal bright streaks, layered material, edge accents and fine texture. Tileable along vertical direction. No cube, no eyes, no curved path in this ribbon. RIGHT HALF x512-1023 contains ONLY one large representative detached particle from the reference centered at (768,512), roughly 300 pixels wide, transparent surrounding it, preserving its 3D shaded polished material. No labels, no text, no dividing lines, no background, no shadows outside shapes. These two separate UV regions will animate in a 3D mesh; exact source-art resemblance is the priority.",
+  "assets": [
+    {
+      "id": "afterburn",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-8871e0ff-8173-43e6-9fb9-4ddaea6f2a1a.png",
+      "reference": "design-assets/unified-v1/trails/afterburn.png"
+    },
+    {
+      "id": "frostwake",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-617ab628-444d-4bea-8bac-38a8dbb22001.png",
+      "reference": "design-assets/unified-v1/trails/frostwake.png"
+    },
+    {
+      "id": "neon-surge",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-a1240df0-4ba5-4afa-9aab-5e99bcd48ce9.png",
+      "reference": "design-assets/unified-v1/trails/neon-surge.png"
+    },
+    {
+      "id": "starfall",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-e7bfcf38-2828-4ccb-b3f2-274b98635b04.png",
+      "reference": "design-assets/unified-v1/trails/starfall.png"
+    },
+    {
+      "id": "petal-drift",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-98f513a5-1012-4e25-893b-10d76fcb989d.png",
+      "reference": "design-assets/unified-v1/trails/petal-drift.png"
+    },
+    {
+      "id": "bubble-pop",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-bcd7f784-e090-4d51-ba82-790df0a462f4.png",
+      "reference": "design-assets/unified-v1/trails/bubble-pop.png"
+    },
+    {
+      "id": "pixel-rush",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-b37c30f1-edda-4cd1-907b-8d212741b552.png",
+      "reference": "design-assets/unified-v1/trails/pixel-rush.png"
+    },
+    {
+      "id": "gold-rush",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-67a23a7c-e3ab-4a17-adca-79c2140f2f70.png",
+      "reference": "design-assets/unified-v1/trails/gold-rush.png"
+    },
+    {
+      "id": "void-rift",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-9a356ec4-8413-4447-a7ec-c853f03f4007.png",
+      "reference": "design-assets/unified-v1/trails/void-rift.png"
+    },
+    {
+      "id": "rainbow-run",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-78a9b6fd-ef76-4723-afc7-6f80e0ead4d8.png",
+      "reference": "design-assets/unified-v1/trails/rainbow-run.png"
+    }
+  ]
+}

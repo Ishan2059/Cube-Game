@@ -1,0 +1,126 @@
+{
+  "generator": "Built-in image_gen",
+  "reference": ".qa/figma-redesign/referenced-cube.png",
+  "skins": [
+    {
+      "slug": "magma",
+      "name": "MAGMA",
+      "theme": "A volcanic obsidian cube with thick matte charcoal rock plates and bright molten orange lava visible through generous cracks. Two small warm ivory oval eyes with black pupils on the forward face. Very restrained ember sparks close to edges. Rich rough stone versus glossy emissive lava; confident, mischievous personality.",
+      "color": "#FF9B57",
+      "rarity": "LEGENDARY",
+      "price": "1,600",
+      "tag": "Born from the meltdown.",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium cosmetic cube skin render for CubeCrush game shop. Reference image is only for the original cube identity and three-quarter camera, NOT a background or target to preserve. Create a new skin design. One single cube centered in a square image, visible top, front-left face and right face. Same chunky cubic proportions and appealing small eyes as reference, softened bevels, no arms/legs. High quality stylized 3D game collectible, tactile physically convincing materials, clean visual design readable at 150px and beautiful at 500px. Cube occupies about 78% of canvas, full silhouette visible with generous equal margins. Soft studio key light upper left and gentle rim light, restrained material highlights. Genuinely transparent background, no floor, no pedestal, no text, no typography, no UI, no watermark, no backdrop glow or shadow rectangle. Skin theme: A volcanic obsidian cube with thick matte charcoal rock plates and bright molten orange lava visible through generous cracks. Two small warm ivory oval eyes with black pupils on the forward face. Very restrained ember sparks close to edges. Rich rough stone versus glossy emissive lava; confident, mischievous personality.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-da9a64f7-9c32-4105-9634-9f6783fc1fdd.png",
+      "file": "design-assets/cube-skins/magma.png"
+    },
+    {
+      "slug": "boba",
+      "name": "BOBA BUDDY",
+      "theme": "A cube-shaped clear glass milk-tea jelly character, warm caramel tea above dark glossy tapioca pearls clustered inside the bottom third. Creamy rounded top seal and one short striped caramel straw. Two small ivory oval eyes with dark pupils on the forward face and tiny cheek blush. Delicious toy-like materials, clearly cubic body, no cup handle.",
+      "color": "#EBC197",
+      "rarity": "RARE",
+      "price": "600",
+      "tag": "A little sweetness. A lot of bounce.",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium cosmetic cube skin render for CubeCrush game shop. Reference image is only for the original cube identity and three-quarter camera, NOT a background or target to preserve. Create a new skin design. One single cube centered in a square image, visible top, front-left face and right face. Same chunky cubic proportions and appealing small eyes as reference, softened bevels, no arms/legs. High quality stylized 3D game collectible, tactile physically convincing materials, clean visual design readable at 150px and beautiful at 500px. Cube occupies about 78% of canvas, full silhouette visible with generous equal margins. Soft studio key light upper left and gentle rim light, restrained material highlights. Genuinely transparent background, no floor, no pedestal, no text, no typography, no UI, no watermark, no backdrop glow or shadow rectangle. Skin theme: A cube-shaped clear glass milk-tea jelly character, warm caramel tea above dark glossy tapioca pearls clustered inside the bottom third. Creamy rounded top seal and one short striped caramel straw. Two small ivory oval eyes with dark pupils on the forward face and tiny cheek blush. Delicious toy-like materials, clearly cubic body, no cup handle.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-ccd5d07b-1a3c-42b0-8c0e-e9486023b2ad.png",
+      "file": "design-assets/cube-skins/boba.png"
+    },
+    {
+      "slug": "gummy",
+      "name": "GUMMY POP",
+      "theme": "A delicious translucent watermelon-pink gummy cube, softly rounded cubic corners, tiny sugar crystals lightly dusting the top and edges, deep saturated pink core and warm peach light through edges. Two ivory oval eyes with small dark pupils and a tiny smile on forward face. No limbs, no ears. Playful squeezable candy collectible.",
+      "color": "#FF8EBB",
+      "rarity": "RARE",
+      "price": "600",
+      "tag": "Soft look. Serious moves.",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium cosmetic cube skin render for CubeCrush game shop. Reference image is only for the original cube identity and three-quarter camera, NOT a background or target to preserve. Create a new skin design. One single cube centered in a square image, visible top, front-left face and right face. Same chunky cubic proportions and appealing small eyes as reference, softened bevels, no arms/legs. High quality stylized 3D game collectible, tactile physically convincing materials, clean visual design readable at 150px and beautiful at 500px. Cube occupies about 78% of canvas, full silhouette visible with generous equal margins. Soft studio key light upper left and gentle rim light, restrained material highlights. Genuinely transparent background, no floor, no pedestal, no text, no typography, no UI, no watermark, no backdrop glow or shadow rectangle. Skin theme: A delicious translucent watermelon-pink gummy cube, softly rounded cubic corners, tiny sugar crystals lightly dusting the top and edges, deep saturated pink core and warm peach light through edges. Two ivory oval eyes with small dark pupils and a tiny smile on forward face. No limbs, no ears. Playful squeezable candy collectible.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-cb8e26b8-1fbb-4e3c-8a02-9689b6aba9cd.png",
+      "file": "design-assets/cube-skins/gummy.png"
+    },
+    {
+      "slug": "glacier",
+      "name": "GLACIER",
+      "theme": "A translucent arctic-blue ice cube with elegant pale turquoise interior fractures, sparkling frosted corners, a few tiny trapped air bubbles and bright icy silver highlights. Two small white oval eyes with dark blue pupils. Subtle frost crystalline facets contained within cube silhouette. Premium cool glassy material, charming quiet personality.",
+      "color": "#8CDBF7",
+      "rarity": "EPIC",
+      "price": "1,000",
+      "tag": "Stay cool under pressure.",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium cosmetic cube skin render for CubeCrush game shop. Reference image is only for the original cube identity and three-quarter camera, NOT a background or target to preserve. Create a new skin design. One single cube centered in a square image, visible top, front-left face and right face. Same chunky cubic proportions and appealing small eyes as reference, softened bevels, no arms/legs. High quality stylized 3D game collectible, tactile physically convincing materials, clean visual design readable at 150px and beautiful at 500px. Cube occupies about 78% of canvas, full silhouette visible with generous equal margins. Soft studio key light upper left and gentle rim light, restrained material highlights. Genuinely transparent background, no floor, no pedestal, no text, no typography, no UI, no watermark, no backdrop glow or shadow rectangle. Skin theme: A translucent arctic-blue ice cube with elegant pale turquoise interior fractures, sparkling frosted corners, a few tiny trapped air bubbles and bright icy silver highlights. Two small white oval eyes with dark blue pupils. Subtle frost crystalline facets contained within cube silhouette. Premium cool glassy material, charming quiet personality.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-7c2cc116-20db-4818-a38b-4af26fa8ba7b.png",
+      "file": "design-assets/cube-skins/glacier.png"
+    },
+    {
+      "slug": "mossling",
+      "name": "MOSSLING",
+      "theme": "A living woodland cube made of rich dark bark and velvety emerald moss, tiny cream and orange mushrooms at the top corner, a small leafy sprout and fine soft moss tufts. Two warm ivory oval eyes with black pupils on forward bark face. Cosy forest spirit, hand-painted high-end game texture with convincing moss material. Still strongly cubic.",
+      "color": "#A8D879",
+      "rarity": "RARE",
+      "price": "600",
+      "tag": "Small cube. Forest energy.",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium cosmetic cube skin render for CubeCrush game shop. Reference image is only for the original cube identity and three-quarter camera, NOT a background or target to preserve. Create a new skin design. One single cube centered in a square image, visible top, front-left face and right face. Same chunky cubic proportions and appealing small eyes as reference, softened bevels, no arms/legs. High quality stylized 3D game collectible, tactile physically convincing materials, clean visual design readable at 150px and beautiful at 500px. Cube occupies about 78% of canvas, full silhouette visible with generous equal margins. Soft studio key light upper left and gentle rim light, restrained material highlights. Genuinely transparent background, no floor, no pedestal, no text, no typography, no UI, no watermark, no backdrop glow or shadow rectangle. Skin theme: A living woodland cube made of rich dark bark and velvety emerald moss, tiny cream and orange mushrooms at the top corner, a small leafy sprout and fine soft moss tufts. Two warm ivory oval eyes with black pupils on forward bark face. Cosy forest spirit, hand-painted high-end game texture with convincing moss material. Still strongly cubic.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-5b7f93e1-17f0-4774-83cf-b02156944236.png",
+      "file": "design-assets/cube-skins/mossling.png"
+    },
+    {
+      "slug": "arcade",
+      "name": "ARCADE",
+      "theme": "A cube-shaped retro arcade robot collectible in warm off-white plastic with cobalt blue side panels, coral-red tiny arcade buttons on side, and a dark curved glass screen integrated into forward face showing two simple glowing cyan pixel eyes. Small inset ventilation grid on side. No text or logos, no controller, cubic body no limbs. Charming 1980s premium collectible.",
+      "color": "#77B7FF",
+      "rarity": "EPIC",
+      "price": "1,000",
+      "tag": "One more run. Always.",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium cosmetic cube skin render for CubeCrush game shop. Reference image is only for the original cube identity and three-quarter camera, NOT a background or target to preserve. Create a new skin design. One single cube centered in a square image, visible top, front-left face and right face. Same chunky cubic proportions and appealing small eyes as reference, softened bevels, no arms/legs. High quality stylized 3D game collectible, tactile physically convincing materials, clean visual design readable at 150px and beautiful at 500px. Cube occupies about 78% of canvas, full silhouette visible with generous equal margins. Soft studio key light upper left and gentle rim light, restrained material highlights. Genuinely transparent background, no floor, no pedestal, no text, no typography, no UI, no watermark, no backdrop glow or shadow rectangle. Skin theme: A cube-shaped retro arcade robot collectible in warm off-white plastic with cobalt blue side panels, coral-red tiny arcade buttons on side, and a dark curved glass screen integrated into forward face showing two simple glowing cyan pixel eyes. Small inset ventilation grid on side. No text or logos, no controller, cubic body no limbs. Charming 1980s premium collectible.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-fb7d98ba-141e-4a0f-aa9c-fd295c6808cd.png",
+      "file": "design-assets/cube-skins/arcade.png"
+    },
+    {
+      "slug": "nebula",
+      "name": "NEBULA",
+      "theme": "A deeply glossy midnight-purple cosmic glass cube containing luminous violet nebula wisps and tiny star points suspended inside, strong purple rim light and subtle magenta edge refraction. Two small luminous ivory oval eyes with black pupils float on the forward surface. Captivating dimensional depth, still opaque enough to read at thumbnail. No rings orbiting, no scene, no outside galaxy background.",
+      "color": "#BD9BFF",
+      "rarity": "LEGENDARY",
+      "price": "1,600",
+      "tag": "Carry a tiny universe.",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium cosmetic cube skin render for CubeCrush game shop. Reference image is only for the original cube identity and three-quarter camera, NOT a background or target to preserve. Create a new skin design. One single cube centered in a square image, visible top, front-left face and right face. Same chunky cubic proportions and appealing small eyes as reference, softened bevels, no arms/legs. High quality stylized 3D game collectible, tactile physically convincing materials, clean visual design readable at 150px and beautiful at 500px. Cube occupies about 78% of canvas, full silhouette visible with generous equal margins. Soft studio key light upper left and gentle rim light, restrained material highlights. Genuinely transparent background, no floor, no pedestal, no text, no typography, no UI, no watermark, no backdrop glow or shadow rectangle. Skin theme: A deeply glossy midnight-purple cosmic glass cube containing luminous violet nebula wisps and tiny star points suspended inside, strong purple rim light and subtle magenta edge refraction. Two small luminous ivory oval eyes with black pupils float on the forward surface. Captivating dimensional depth, still opaque enough to read at thumbnail. No rings orbiting, no scene, no outside galaxy background.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-91eb59d9-3fdf-4f95-8b19-6c6ccdafc163.png",
+      "file": "design-assets/cube-skins/nebula.png"
+    },
+    {
+      "slug": "honey",
+      "name": "HONEY DROP",
+      "theme": "A translucent golden amber honey cube with hexagonal honeycomb cells visible inside, soft honey drips over just the top edge, one small ivory wax cap detail. Two ivory oval eyes with brown pupils on front and gentle smile. Warm glowing amber refraction, premium glossy delicious finish. No bees or separate objects, strongly cubic body.",
+      "color": "#F3CE74",
+      "rarity": "RARE",
+      "price": "600",
+      "tag": "Golden from every angle.",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium cosmetic cube skin render for CubeCrush game shop. Reference image is only for the original cube identity and three-quarter camera, NOT a background or target to preserve. Create a new skin design. One single cube centered in a square image, visible top, front-left face and right face. Same chunky cubic proportions and appealing small eyes as reference, softened bevels, no arms/legs. High quality stylized 3D game collectible, tactile physically convincing materials, clean visual design readable at 150px and beautiful at 500px. Cube occupies about 78% of canvas, full silhouette visible with generous equal margins. Soft studio key light upper left and gentle rim light, restrained material highlights. Genuinely transparent background, no floor, no pedestal, no text, no typography, no UI, no watermark, no backdrop glow or shadow rectangle. Skin theme: A translucent golden amber honey cube with hexagonal honeycomb cells visible inside, soft honey drips over just the top edge, one small ivory wax cap detail. Two ivory oval eyes with brown pupils on front and gentle smile. Warm glowing amber refraction, premium glossy delicious finish. No bees or separate objects, strongly cubic body.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-cbcaaba6-7b0e-484c-8ac7-0d25c2c0a687.png",
+      "file": "design-assets/cube-skins/honey.png"
+    },
+    {
+      "slug": "koi",
+      "name": "TIDEPOOL",
+      "theme": "A tiny aquarium contained within a beautifully clear aqua glass cube; shallow turquoise water, one single tiny orange koi fish swimming inside, pale sand and two little aquatic plants at bottom. Two small ivory oval eyes with black pupils on forward glass face. High-end toy-like glass material and clear readable scene inside, sparkling aqua edges. No fish outside cube, no stand.",
+      "color": "#7EE0CC",
+      "rarity": "EPIC",
+      "price": "1,000",
+      "tag": "Your own pocket ocean.",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium cosmetic cube skin render for CubeCrush game shop. Reference image is only for the original cube identity and three-quarter camera, NOT a background or target to preserve. Create a new skin design. One single cube centered in a square image, visible top, front-left face and right face. Same chunky cubic proportions and appealing small eyes as reference, softened bevels, no arms/legs. High quality stylized 3D game collectible, tactile physically convincing materials, clean visual design readable at 150px and beautiful at 500px. Cube occupies about 78% of canvas, full silhouette visible with generous equal margins. Soft studio key light upper left and gentle rim light, restrained material highlights. Genuinely transparent background, no floor, no pedestal, no text, no typography, no UI, no watermark, no backdrop glow or shadow rectangle. Skin theme: A tiny aquarium contained within a beautifully clear aqua glass cube; shallow turquoise water, one single tiny orange koi fish swimming inside, pale sand and two little aquatic plants at bottom. Two small ivory oval eyes with black pupils on forward glass face. High-end toy-like glass material and clear readable scene inside, sparkling aqua edges. No fish outside cube, no stand.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-995fd1fb-df2b-4e66-a99e-a96796384d46.png",
+      "file": "design-assets/cube-skins/koi.png"
+    },
+    {
+      "slug": "prism",
+      "name": "PRISM",
+      "theme": "A stunning satin-liquid-chrome cube with subtly beveled edges and clean holographic iridescence shifting from lavender through cyan to peach on its broad smooth faces. Two small dark expressive oval eyes with pale rims on forward face. Premium collectible sculpture with soft broad reflections, not messy or crumpled metal. No additional geometry, no rings or crown.",
+      "color": "#D2BAFF",
+      "rarity": "LEGENDARY",
+      "price": "1,600",
+      "tag": "Every angle hits different.",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium cosmetic cube skin render for CubeCrush game shop. Reference image is only for the original cube identity and three-quarter camera, NOT a background or target to preserve. Create a new skin design. One single cube centered in a square image, visible top, front-left face and right face. Same chunky cubic proportions and appealing small eyes as reference, softened bevels, no arms/legs. High quality stylized 3D game collectible, tactile physically convincing materials, clean visual design readable at 150px and beautiful at 500px. Cube occupies about 78% of canvas, full silhouette visible with generous equal margins. Soft studio key light upper left and gentle rim light, restrained material highlights. Genuinely transparent background, no floor, no pedestal, no text, no typography, no UI, no watermark, no backdrop glow or shadow rectangle. Skin theme: A stunning satin-liquid-chrome cube with subtly beveled edges and clean holographic iridescence shifting from lavender through cyan to peach on its broad smooth faces. Two small dark expressive oval eyes with pale rims on forward face. Premium collectible sculpture with soft broad reflections, not messy or crumpled metal. No additional geometry, no rings or crown.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-261e6c52-dc49-4ecc-83aa-06dbf37ad88b.png",
+      "file": "design-assets/cube-skins/prism.png"
+    }
+  ]
+}

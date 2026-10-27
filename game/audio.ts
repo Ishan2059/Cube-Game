@@ -1,204 +1,125 @@
-/* ================= audio (synthesized, no files) ================= */
+import bank from "./audio-bank.json";
+import type { ParasiteType } from "./parasites";
 
-let AC: AudioContext | null = null;
-let NOISE: AudioBuffer | null = null;
-let MASTER: GainNode | null = null;
-let muted = false;
-
+export type AudioCue = keyof typeof bank;
+type Voice = { source: AudioBufferSourceNode; gain: GainNode; cue: AudioCue; priority: number };
+const MAX_VOICES = 12;
+const MAX_BUFFERS = 64;
+let context: AudioContext | undefined, master: GainNode | undefined, muted=false, generation=0;
+const buffers=new Map<string,AudioBuffer>();
+const loading=new Map<string,Promise<AudioBuffer | null>>();
+const lastPlayed=new Map<string,number>(), variants=new Map<AudioCue,number>();
+const voices: Voice[]=[];
+const warm: AudioCue[]=["exploration.roll_grass","exploration.roll_stone","exploration.roll_wood","exploration.roll_mud","exploration.roll_water","exploration.roll_ash","exploration.splash","exploration.water_exit","exploration.bush_rustle","exploration.door_open","exploration.portal_enter","kills.worm","kills.bug","gameplay.crush_impact","gameplay.obstacle_knock",
+  "gameplay.parasite_bite","rewards.score_gain_1","rewards.coin_payout","session.start","session.game_over",
+  "ui.navigate","ui.back","ui.tab_switch","ui.modal_open","ui.modal_close","shop.purchase","shop.equip_skin","shop.equip_trail"];
+let warming=false, inFlight=0, movementEpoch=0;
+let movementSurface="";
+const isMovement=(cue:string)=>cue.startsWith("exploration.roll_")||["exploration.splash","exploration.water_exit","exploration.bridge_creak","exploration.mud_release","gameplay.cube_roll"].includes(cue);
+const jobs: (()=>void)[]=[];
+function drain() { while(inFlight<4 && jobs.length) { inFlight++; jobs.shift()!(); } }
+function load(stem: string): Promise<AudioBuffer | null> {
+  if(buffers.has(stem)) {
+    const b=buffers.get(stem)!; buffers.delete(stem);buffers.set(stem,b);return Promise.resolve(b);
+  }
+  if(loading.has(stem)) return loading.get(stem)!;
+  const pending=new Promise<AudioBuffer | null>(resolve=>{
+    jobs.push(()=>{ void (async()=>{
+      try {
+        for(const ext of ["ogg","wav"]) {
+          try {
+            const response=await fetch(stem+"."+ext); if(!response.ok) continue;
+            const bytes=await response.arrayBuffer();
+            const decoded=await context!.decodeAudioData(bytes);
+            if(buffers.size>=MAX_BUFFERS) buffers.delete(buffers.keys().next().value!);
+            buffers.set(stem,decoded);resolve(decoded);return;
+          } catch { /* Safari/older browser codec fallback; sound is optional. */ }
+        }
+        resolve(null);
+      } finally { loading.delete(stem);inFlight--;drain(); }
+    })(); });
+  });
+  loading.set(stem,pending);drain();return pending;
+}
+/** Only call from a user gesture; game events never try to bypass autoplay. */
 export function audio(): AudioContext {
-  if (!AC) {
-    const Ctor =
-      window.AudioContext ||
-      (window as unknown as { webkitAudioContext: typeof AudioContext })
-        .webkitAudioContext;
-    AC = new Ctor();
+  if(!context) {
+    context=new AudioContext();
+    master=context.createGain();master.gain.value=muted?0:.72;
+    const limiter=context.createDynamicsCompressor();
+    limiter.threshold.value=-10;limiter.knee.value=12;limiter.ratio.value=6;
+    master.connect(limiter);limiter.connect(context.destination);
   }
-  if (AC.state === "suspended") AC.resume();
-  return AC;
+  if(context.state==="suspended") void context.resume().catch(()=>{});
+  if(!warming) { warming=true;warm.forEach(cue=>void load(bank[cue].files[0])); }
+  return context;
+}
+function release(voice: Voice) {
+  const index=voices.indexOf(voice);if(index>=0) voices.splice(index,1);
+  voice.source.disconnect();voice.gain.disconnect();
+}
+export function stopAudio() {
+  generation++;
+  for(const voice of [...voices]) { voice.source.onended=null;try {voice.source.stop();} catch {} release(voice); }
+}
+export function setMuted(value: boolean) {
+  muted=value;
+  if(master && context) master.gain.setValueAtTime(value?0:.72,context.currentTime);
+  if(value) stopAudio();
+}
+export function playCue(cue: AudioCue, volume=1) {
+  if(muted||!context||context.state!=="running"||document.hidden) return;
+  const config=bank[cue],now=performance.now(),family=cue.startsWith("kills.")?"kills":cue.startsWith("rewards.score_gain")?"score":cue;
+  if(now-(lastPlayed.get(family)??-Infinity)<config.cooldownMs) return;
+  lastPlayed.set(family,now);
+  const n=variants.get(cue)??0;variants.set(cue,n+1);
+  const stem=config.files[n%config.files.length],epoch=generation,motionEpoch=movementEpoch;
+  const start=(buffer: AudioBuffer | null)=>{
+    if(!buffer||muted||epoch!==generation||isMovement(cue)&&motionEpoch!==movementEpoch||!context||context.state!=="running"||document.hidden||performance.now()-now>180) return;
+    if(voices.filter(v=>v.cue===cue).length>=config.maxVoices) return;
+    if(voices.length>=MAX_VOICES) {
+      const quietest=voices.reduce((a,b)=>a.priority<=b.priority?a:b);
+      if(quietest.priority>config.priority) return;
+      quietest.source.stop();release(quietest);
+    }
+    const source=context.createBufferSource(),gain=context.createGain();
+    source.buffer=buffer;gain.gain.value=volume;
+    source.connect(gain);gain.connect(master!);
+    const voice={source,gain,cue,priority:config.priority};
+    voices.push(voice);source.onended=()=>release(voice);source.start();
+  };
+  const cached=buffers.get(stem);
+  if(cached) start(cached); else void load(stem).then(start);
+  // Prepare the next variant without delaying the current event.
+  if(config.files.length>1) void load(config.files[(n+1)%config.files.length]);
+}
+export const playSplat=(type?:ParasiteType)=>playCue(type ? `kills.${type}` : "kills.generic");
+export const playKnock=()=>playCue("gameplay.obstacle_knock");
+export const playLatch=()=>playCue("gameplay.parasite_latch");
+export const playHurt=()=>playCue("gameplay.player_hurt");
+export const playBite=()=>playCue("gameplay.parasite_bite");
+export const playHeal=()=>playCue("powerups.heal");
+export const playCoin=()=>playCue("rewards.coin_payout");
+export const playSpit=()=>playCue("hazards.acid_spit");
+export const playRampage=()=>playCue("powerups.rampage_start");
+export function playScore(combo:number) {
+  playCue(`rewards.score_gain_${Math.min(8,Math.max(1,combo))}` as AudioCue,.5);
 }
 
-// every sound routes through one master gain so a settings toggle can mute all
-function master(): GainNode {
-  const ac = audio();
-  if (!MASTER) {
-    MASTER = ac.createGain();
-    MASTER.gain.value = muted ? 0 : 1;
-    MASTER.connect(ac.destination);
+/** The destination owns landing foley; only crossing the shoreline gets a large splash. */
+export function playSurfaceRoll(surface: import("./world-rules").Surface, previous?:import("./world-rules").Surface) {
+  if(surface!==movementSurface){
+    movementSurface=surface;movementEpoch++;
+    for(const voice of [...voices])if(isMovement(voice.cue)){
+      if(context){
+        voice.gain.gain.setValueAtTime(voice.gain.gain.value,context.currentTime);
+        voice.gain.gain.linearRampToValueAtTime(0,context.currentTime+.012);
+        try{voice.source.stop(context.currentTime+.012);}catch{release(voice);}
+      }
+    }
   }
-  return MASTER;
-}
-
-export function setMuted(m: boolean) {
-  muted = m;
-  if (MASTER) MASTER.gain.value = m ? 0 : 1;
-}
-
-function env(node: AudioNode, t0: number, peak: number, dur: number) {
-  const g = audio().createGain();
-  g.gain.setValueAtTime(0.0001, t0);
-  g.gain.exponentialRampToValueAtTime(peak, t0 + 0.008);
-  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-  node.connect(g).connect(master());
-  return g;
-}
-
-function noiseBuffer(): AudioBuffer {
-  const ac = audio();
-  const b = ac.createBuffer(1, ac.sampleRate * 0.3, ac.sampleRate);
-  const d = b.getChannelData(0);
-  for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
-  return b;
-}
-
-export function playThud(strong = false) {
-  const ac = audio(),
-    t = ac.currentTime;
-  const o = ac.createOscillator();
-  o.type = "sine";
-  o.frequency.setValueAtTime(strong ? 110 : 85, t);
-  o.frequency.exponentialRampToValueAtTime(35, t + 0.12);
-  env(o, t, strong ? 0.5 : 0.22, 0.14);
-  o.start(t);
-  o.stop(t + 0.16);
-}
-
-export function playSplat() {
-  const ac = audio(),
-    t = ac.currentTime;
-  if (!NOISE) NOISE = noiseBuffer();
-  const src = ac.createBufferSource();
-  src.buffer = NOISE;
-  const f = ac.createBiquadFilter();
-  f.type = "bandpass";
-  f.frequency.setValueAtTime(900, t);
-  f.frequency.exponentialRampToValueAtTime(250, t + 0.12);
-  f.Q.value = 1.2;
-  src.connect(f);
-  env(f, t, 0.4, 0.16);
-  src.start(t);
-  src.stop(t + 0.2);
-}
-
-export function playKnock() {
-  const ac = audio(),
-    t = ac.currentTime;
-  const o = ac.createOscillator();
-  o.type = "triangle";
-  o.frequency.setValueAtTime(160, t);
-  o.frequency.exponentialRampToValueAtTime(90, t + 0.06);
-  env(o, t, 0.15, 0.08);
-  o.start(t);
-  o.stop(t + 0.1);
-}
-
-export function playLatch() {
-  const ac = audio(),
-    t = ac.currentTime;
-  const o = ac.createOscillator();
-  o.type = "sawtooth";
-  o.frequency.setValueAtTime(300, t);
-  o.frequency.linearRampToValueAtTime(520, t + 0.09);
-  env(o, t, 0.12, 0.12);
-  o.start(t);
-  o.stop(t + 0.14);
-}
-
-export function playHurt() {
-  const ac = audio(),
-    t = ac.currentTime;
-  const o = ac.createOscillator();
-  o.type = "square";
-  o.frequency.setValueAtTime(220, t);
-  o.frequency.exponentialRampToValueAtTime(70, t + 0.3);
-  env(o, t, 0.3, 0.32);
-  o.start(t);
-  o.stop(t + 0.35);
-}
-
-export function playBite() {
-  const ac = audio(),
-    t = ac.currentTime;
-  if (!NOISE) NOISE = noiseBuffer();
-  // wet chomp: noise burst through a closing lowpass
-  const src = ac.createBufferSource();
-  src.buffer = NOISE;
-  const f = ac.createBiquadFilter();
-  f.type = "lowpass";
-  f.frequency.setValueAtTime(1300, t);
-  f.frequency.exponentialRampToValueAtTime(300, t + 0.1);
-  src.connect(f);
-  env(f, t, 0.32, 0.12);
-  src.start(t);
-  src.stop(t + 0.14);
-  // low crunch under it
-  const o = ac.createOscillator();
-  o.type = "square";
-  o.frequency.setValueAtTime(95, t);
-  o.frequency.exponentialRampToValueAtTime(48, t + 0.1);
-  env(o, t, 0.18, 0.12);
-  o.start(t);
-  o.stop(t + 0.14);
-}
-
-export function playHeal() {
-  const ac = audio(),
-    t = ac.currentTime;
-  [660, 880, 1174].forEach((freq, i) => {
-    const o = ac.createOscillator();
-    o.type = "sine";
-    o.frequency.value = freq;
-    env(o, t + i * 0.08, 0.2, 0.2);
-    o.start(t + i * 0.08);
-    o.stop(t + i * 0.08 + 0.22);
-  });
-}
-
-export function playCoin() {
-  const ac = audio(),
-    t = ac.currentTime;
-  // bright two-note ding, classic pickup sparkle
-  [1318, 1760].forEach((freq, i) => {
-    const o = ac.createOscillator();
-    o.type = "sine";
-    o.frequency.value = freq;
-    env(o, t + i * 0.06, 0.16, 0.18);
-    o.start(t + i * 0.06);
-    o.stop(t + i * 0.06 + 0.2);
-  });
-}
-
-export function playSpit() {
-  const ac = audio(),
-    t = ac.currentTime;
-  // wet "ptoo": quick pitch-drop blip with a noise puff
-  const o = ac.createOscillator();
-  o.type = "triangle";
-  o.frequency.setValueAtTime(600, t);
-  o.frequency.exponentialRampToValueAtTime(180, t + 0.09);
-  env(o, t, 0.14, 0.1);
-  o.start(t);
-  o.stop(t + 0.12);
-  if (!NOISE) NOISE = noiseBuffer();
-  const src = ac.createBufferSource();
-  src.buffer = NOISE;
-  const f = ac.createBiquadFilter();
-  f.type = "highpass";
-  f.frequency.value = 1800;
-  src.connect(f);
-  env(f, t, 0.08, 0.07);
-  src.start(t);
-  src.stop(t + 0.09);
-}
-
-export function playRampage() {
-  const ac = audio(),
-    t = ac.currentTime;
-  [523, 659, 784, 1046].forEach((f, i) => {
-    const o = ac.createOscillator();
-    o.type = "triangle";
-    o.frequency.value = f;
-    env(o, t + i * 0.06, 0.18, 0.15);
-    o.start(t + i * 0.06);
-    o.stop(t + i * 0.06 + 0.18);
-  });
+  const key=surface==="lava"?"ash":surface;
+  if(surface==="water"&&previous!=="water")playCue("exploration.splash",.65);
+  else playCue(`exploration.roll_${key}`,surface==="water"?.58:surface==="wood"?.3:.28);
+  if(previous==="water"&&surface!=="water")playCue("exploration.water_exit",.32);
 }

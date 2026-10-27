@@ -1,0 +1,324 @@
+{
+  "version": 1,
+  "date": "2026-10-27",
+  "tool": "image_gen.imagegen",
+  "mode": "edit with referenced_image_paths",
+  "transparent_background": true,
+  "assets": [
+    {
+      "group": "skins",
+      "id": "magma",
+      "name": "MAGMA",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-skins/magma.png",
+      "prompt": "Use case: style-transfer. Image 1 is the cube skin TO EDIT. Image 2 is only a reference for the unified game's smooth 3D shapes, satin highlights and soft lighting; do not copy its anatomy or purple color. Preserve the skin identity, palette, charming small eyes, chunky CUBE geometry and three-quarter view from image 1. Create polished, tactile, restrained stylized 3D game art with broad simple shapes, smooth normals, consistent moderate bevels, and a shared upper-left key light. Premium and appealing, not pixelated, not a flat icon, not exaggerated cartoon. Reduce noisy microscopic detail and apparent simulation complexity so this can be made with one low-poly bevelled cube plus a baked color/normal map and at most two tiny accessory meshes. Material richness comes from broad color and roughness variation; no expensive transparency, no dense geometry. Full object centered on a square genuinely transparent canvas with 10% padding, no background, floor, pedestal, external glow, text or watermark. Specific skin constraints: Keep the charcoal lava cube and its two ivory eyes. Use only 5–7 broad plates per visible face and a few bold orange seams. Remove the photographic rock pores and tiny secondary cracks. Lava is a flat warm color/emissive-mask accent with no sparks and no external bloom.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-1600ed3c-4976-44bc-8fc5-8c8e3c81148d.png",
+      "file": "design-assets/unified-v1/skins/magma.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-skins/magma.png",
+        "D:/Projects/Cube-Game/design-assets/creatures/spider.png"
+      ]
+    },
+    {
+      "group": "skins",
+      "id": "boba",
+      "name": "BOBA BUDDY",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-skins/boba.png",
+      "prompt": "Use case: style-transfer. Image 1 is the cube skin TO EDIT. Image 2 is only a reference for the unified game's smooth 3D shapes, satin highlights and soft lighting; do not copy its anatomy or purple color. Preserve the skin identity, palette, charming small eyes, chunky CUBE geometry and three-quarter view from image 1. Create polished, tactile, restrained stylized 3D game art with broad simple shapes, smooth normals, consistent moderate bevels, and a shared upper-left key light. Premium and appealing, not pixelated, not a flat icon, not exaggerated cartoon. Reduce noisy microscopic detail and apparent simulation complexity so this can be made with one low-poly bevelled cube plus a baked color/normal map and at most two tiny accessory meshes. Material richness comes from broad color and roughness variation; no expensive transparency, no dense geometry. Full object centered on a square genuinely transparent canvas with 10% padding, no background, floor, pedestal, external glow, text or watermark. Specific skin constraints: Keep the caramel milk-tea cube, small eyes, cream top and short straw. Render the body as opaque caramel with a smooth darker bottom band and roughly six visible tapioca pearl motifs, baked/decal-like not physically suspended in refracting glass. One clean rim and broad highlights; no translucency sorting or refraction.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-1a0d95f1-d6ba-43b8-8010-a75d308f1f7b.png",
+      "file": "design-assets/unified-v1/skins/boba.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-skins/boba.png",
+        "D:/Projects/Cube-Game/design-assets/creatures/spider.png"
+      ]
+    },
+    {
+      "group": "skins",
+      "id": "gummy",
+      "name": "GUMMY POP",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-skins/gummy.png",
+      "prompt": "Use case: style-transfer. Image 1 is the cube skin TO EDIT. Image 2 is only a reference for the unified game's smooth 3D shapes, satin highlights and soft lighting; do not copy its anatomy or purple color. Preserve the skin identity, palette, charming small eyes, chunky CUBE geometry and three-quarter view from image 1. Create polished, tactile, restrained stylized 3D game art with broad simple shapes, smooth normals, consistent moderate bevels, and a shared upper-left key light. Premium and appealing, not pixelated, not a flat icon, not exaggerated cartoon. Reduce noisy microscopic detail and apparent simulation complexity so this can be made with one low-poly bevelled cube plus a baked color/normal map and at most two tiny accessory meshes. Material richness comes from broad color and roughness variation; no expensive transparency, no dense geometry. Full object centered on a square genuinely transparent canvas with 10% padding, no background, floor, pedestal, external glow, text or watermark. Specific skin constraints: Keep the berry-red gummy cube with eyes. Smooth opaque satin gel appearance suggested by broad color gradients, no sugar granules, no bubbles/objects embedded inside, no real glass refraction or transparent shell. A soft bevel and two tiny facial details only.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-426be85d-e30d-4155-aa4f-67c4e5abff51.png",
+      "file": "design-assets/unified-v1/skins/gummy.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-skins/gummy.png",
+        "D:/Projects/Cube-Game/design-assets/creatures/spider.png"
+      ]
+    },
+    {
+      "group": "skins",
+      "id": "glacier",
+      "name": "GLACIER",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-skins/glacier.png",
+      "prompt": "Use case: style-transfer. Image 1 is the cube skin TO EDIT. Image 2 is only a reference for the unified game's smooth 3D shapes, satin highlights and soft lighting; do not copy its anatomy or purple color. Preserve the skin identity, palette, charming small eyes, chunky CUBE geometry and three-quarter view from image 1. Create polished, tactile, restrained stylized 3D game art with broad simple shapes, smooth normals, consistent moderate bevels, and a shared upper-left key light. Premium and appealing, not pixelated, not a flat icon, not exaggerated cartoon. Reduce noisy microscopic detail and apparent simulation complexity so this can be made with one low-poly bevelled cube plus a baked color/normal map and at most two tiny accessory meshes. Material richness comes from broad color and roughness variation; no expensive transparency, no dense geometry. Full object centered on a square genuinely transparent canvas with 10% padding, no background, floor, pedestal, external glow, text or watermark. Specific skin constraints: Keep the pale cyan ice cube and eyes. Use an opaque frosted-blue material, broad white frosted edge accents, and 3–4 large angular crack motifs baked flat per visible face. Remove internal ice shards, caustics and transparent refraction; no particles.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-071791af-a7d5-4272-8f37-c149921db0a3.png",
+      "file": "design-assets/unified-v1/skins/glacier.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-skins/glacier.png",
+        "D:/Projects/Cube-Game/design-assets/creatures/spider.png"
+      ]
+    },
+    {
+      "group": "skins",
+      "id": "mossling",
+      "name": "MOSSLING",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-skins/mossling.png",
+      "prompt": "Use case: style-transfer. Image 1 is the cube skin TO EDIT. Image 2 is only a reference for the unified game's smooth 3D shapes, satin highlights and soft lighting; do not copy its anatomy or purple color. Preserve the skin identity, palette, charming small eyes, chunky CUBE geometry and three-quarter view from image 1. Create polished, tactile, restrained stylized 3D game art with broad simple shapes, smooth normals, consistent moderate bevels, and a shared upper-left key light. Premium and appealing, not pixelated, not a flat icon, not exaggerated cartoon. Reduce noisy microscopic detail and apparent simulation complexity so this can be made with one low-poly bevelled cube plus a baked color/normal map and at most two tiny accessory meshes. Material richness comes from broad color and roughness variation; no expensive transparency, no dense geometry. Full object centered on a square genuinely transparent canvas with 10% padding, no background, floor, pedestal, external glow, text or watermark. Specific skin constraints: Keep a brown stone/wood cube with the moss-green top and eyes. Replace hundreds of leaves and roots with 4–6 broad moss patches and a few large vine markings. One solid cube silhouette with very short rounded moss lobes. No dense foliage geometry or tiny hanging roots.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-9679a6ab-bb7c-48e1-8120-ae9cb78ed14d.png",
+      "file": "design-assets/unified-v1/skins/mossling.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-skins/mossling.png",
+        "D:/Projects/Cube-Game/design-assets/creatures/spider.png"
+      ]
+    },
+    {
+      "group": "skins",
+      "id": "arcade",
+      "name": "ARCADE",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-skins/arcade.png",
+      "prompt": "Use case: style-transfer. Image 1 is the cube skin TO EDIT. Image 2 is only a reference for the unified game's smooth 3D shapes, satin highlights and soft lighting; do not copy its anatomy or purple color. Preserve the skin identity, palette, charming small eyes, chunky CUBE geometry and three-quarter view from image 1. Create polished, tactile, restrained stylized 3D game art with broad simple shapes, smooth normals, consistent moderate bevels, and a shared upper-left key light. Premium and appealing, not pixelated, not a flat icon, not exaggerated cartoon. Reduce noisy microscopic detail and apparent simulation complexity so this can be made with one low-poly bevelled cube plus a baked color/normal map and at most two tiny accessory meshes. Material richness comes from broad color and roughness variation; no expensive transparency, no dense geometry. Full object centered on a square genuinely transparent canvas with 10% padding, no background, floor, pedestal, external glow, text or watermark. Specific skin constraints: Keep the cream and navy arcade-machine cube, cyan screen eyes and orange controls. One clean bevelled cube shell, one flat front screen and 3 simple large buttons. Satin ceramic/painted-metal surfaces, broad shading, no scratches or tiny text. Preserve its classic arcade identity.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-7e7049c8-8a6e-47f8-b79d-ee8720aac70a.png",
+      "file": "design-assets/unified-v1/skins/arcade.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-skins/arcade.png",
+        "D:/Projects/Cube-Game/design-assets/creatures/spider.png"
+      ]
+    },
+    {
+      "group": "skins",
+      "id": "nebula",
+      "name": "NEBULA",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-skins/nebula.png",
+      "prompt": "Use case: style-transfer. Image 1 is the cube skin TO EDIT. Image 2 is only a reference for the unified game's smooth 3D shapes, satin highlights and soft lighting; do not copy its anatomy or purple color. Preserve the skin identity, palette, charming small eyes, chunky CUBE geometry and three-quarter view from image 1. Create polished, tactile, restrained stylized 3D game art with broad simple shapes, smooth normals, consistent moderate bevels, and a shared upper-left key light. Premium and appealing, not pixelated, not a flat icon, not exaggerated cartoon. Reduce noisy microscopic detail and apparent simulation complexity so this can be made with one low-poly bevelled cube plus a baked color/normal map and at most two tiny accessory meshes. Material richness comes from broad color and roughness variation; no expensive transparency, no dense geometry. Full object centered on a square genuinely transparent canvas with 10% padding, no background, floor, pedestal, external glow, text or watermark. Specific skin constraints: Keep the deep purple cosmic cube and eyes. Make a solid opaque dark-indigo cube with two broad violet aurora bands and no more than 8 tiny star motifs across visible faces. These are baked flat surface graphics. No internal galaxy volume, no external clouds, no refraction or particle halo.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-ec106a1c-933c-4bab-b641-0fbb9434a3d7.png",
+      "file": "design-assets/unified-v1/skins/nebula.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-skins/nebula.png",
+        "D:/Projects/Cube-Game/design-assets/creatures/spider.png"
+      ]
+    },
+    {
+      "group": "skins",
+      "id": "honey",
+      "name": "HONEY DROP",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-skins/honey.png",
+      "prompt": "Use case: style-transfer. Image 1 is the cube skin TO EDIT. Image 2 is only a reference for the unified game's smooth 3D shapes, satin highlights and soft lighting; do not copy its anatomy or purple color. Preserve the skin identity, palette, charming small eyes, chunky CUBE geometry and three-quarter view from image 1. Create polished, tactile, restrained stylized 3D game art with broad simple shapes, smooth normals, consistent moderate bevels, and a shared upper-left key light. Premium and appealing, not pixelated, not a flat icon, not exaggerated cartoon. Reduce noisy microscopic detail and apparent simulation complexity so this can be made with one low-poly bevelled cube plus a baked color/normal map and at most two tiny accessory meshes. Material richness comes from broad color and roughness variation; no expensive transparency, no dense geometry. Full object centered on a square genuinely transparent canvas with 10% padding, no background, floor, pedestal, external glow, text or watermark. Specific skin constraints: Keep the warm golden honey cube and eyes. Solid satin amber material with approximately 4 large honeycomb cells per visible face as shallow baked-shading motifs, one or two short solid honey drips maximum. No deep holes, no transparent fluid volume, no dozens of cells, no floating droplets.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-c5b99428-cf5f-4c6b-aea5-17f6d5698cd0.png",
+      "file": "design-assets/unified-v1/skins/honey.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-skins/honey.png",
+        "D:/Projects/Cube-Game/design-assets/creatures/spider.png"
+      ]
+    },
+    {
+      "group": "skins",
+      "id": "koi",
+      "name": "TIDEPOOL",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-skins/koi.png",
+      "prompt": "Use case: style-transfer. Image 1 is the cube skin TO EDIT. Image 2 is only a reference for the unified game's smooth 3D shapes, satin highlights and soft lighting; do not copy its anatomy or purple color. Preserve the skin identity, palette, charming small eyes, chunky CUBE geometry and three-quarter view from image 1. Create polished, tactile, restrained stylized 3D game art with broad simple shapes, smooth normals, consistent moderate bevels, and a shared upper-left key light. Premium and appealing, not pixelated, not a flat icon, not exaggerated cartoon. Reduce noisy microscopic detail and apparent simulation complexity so this can be made with one low-poly bevelled cube plus a baked color/normal map and at most two tiny accessory meshes. Material richness comes from broad color and roughness variation; no expensive transparency, no dense geometry. Full object centered on a square genuinely transparent canvas with 10% padding, no background, floor, pedestal, external glow, text or watermark. Specific skin constraints: Keep the turquoise tidepool cube and eyes. Opaque teal body with a calm painted water gradient, two simple orange-and-ivory koi surface motifs and 2 pale coral silhouettes near the base. Treat the fish and coral as flat baked artwork, not creatures inside a refracting aquarium. No caustics or many sea objects.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-fc18c855-1c60-4bb9-a870-46748a5f367c.png",
+      "file": "design-assets/unified-v1/skins/koi.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-skins/koi.png",
+        "D:/Projects/Cube-Game/design-assets/creatures/spider.png"
+      ]
+    },
+    {
+      "group": "skins",
+      "id": "prism",
+      "name": "PRISM",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-skins/prism.png",
+      "prompt": "Use case: style-transfer. Image 1 is the cube skin TO EDIT. Image 2 is only a reference for the unified game's smooth 3D shapes, satin highlights and soft lighting; do not copy its anatomy or purple color. Preserve the skin identity, palette, charming small eyes, chunky CUBE geometry and three-quarter view from image 1. Create polished, tactile, restrained stylized 3D game art with broad simple shapes, smooth normals, consistent moderate bevels, and a shared upper-left key light. Premium and appealing, not pixelated, not a flat icon, not exaggerated cartoon. Reduce noisy microscopic detail and apparent simulation complexity so this can be made with one low-poly bevelled cube plus a baked color/normal map and at most two tiny accessory meshes. Material richness comes from broad color and roughness variation; no expensive transparency, no dense geometry. Full object centered on a square genuinely transparent canvas with 10% padding, no background, floor, pedestal, external glow, text or watermark. Specific skin constraints: Keep the pearlescent pastel cube and eyes. Solid opaque softly beveled form, smooth lavender/cyan/peach color gradients across faces and a restrained satin highlight. Suggest iridescence with a baked color gradient rather than glass, multilayer transmission, physical dispersion or particle sparkle.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-087a48cc-28f5-4cc9-b509-02d6c40cb17a.png",
+      "file": "design-assets/unified-v1/skins/prism.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-skins/prism.png",
+        "D:/Projects/Cube-Game/design-assets/creatures/spider.png"
+      ]
+    },
+    {
+      "group": "obstacles",
+      "id": "rooted-stump",
+      "name": "ROOTED STUMP",
+      "input": "D:/Projects/Cube-Game/design-assets/obstacles/rooted-stump.png",
+      "prompt": "Use case: style-transfer for a premium real-time game. Image 1 is the OBJECT TO EDIT; image 2 is a MATERIAL/SHAPE STYLE REFERENCE ONLY. Preserve the first object's identity, silhouette, main colors, view direction and compact single-tile footprint. Unify it with the second image's polished stylized 3D rendering: rounded intentional forms, smooth normals, restrained satin highlights, broad clean surface treatment and soft upper-left studio lighting. Grounded stylized realism, not cute cartoon and not photoreal scan. Remove photographic micro-grain, gritty high-frequency noise, tiny scratches, speckles and unnecessary mesh-like surface detail. Keep 2–4 large recognizable material features. Surface markings should read like a small baked texture rather than hundreds of physical parts. No glossy plastic coating, no eyes or faces added, no giant bevels, no simplification into flat icon art. Beautiful finished 3D game art that remains clear at 96px. Same composition, full object inside square canvas with 10% empty padding. Genuinely transparent background; no ground, no backdrop, no cast-shadow rectangle, no halo. No text, UI or watermark. Use broad sculpted bark grooves (roughly 8 major ridges), simple top growth rings and a few compact root lobes. Matte warm brown with sparse subdued moss, preserve one large split. Smooth purposeful forms instead of photogrammetry bark.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-b658074d-f675-4a15-9237-5227071e1064.png",
+      "file": "design-assets/unified-v1/obstacles/rooted-stump.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/obstacles/rooted-stump.png",
+        "D:/Projects/Cube-Game/design-assets/creatures/spider.png"
+      ]
+    },
+    {
+      "group": "obstacles",
+      "id": "broken-planter",
+      "name": "BROKEN PLANTER",
+      "input": "D:/Projects/Cube-Game/design-assets/obstacles/broken-planter.png",
+      "prompt": "Use case: style-transfer for a premium real-time game. Image 1 is the OBJECT TO EDIT; image 2 is a MATERIAL/SHAPE STYLE REFERENCE ONLY. Preserve the first object's identity, silhouette, main colors, view direction and compact single-tile footprint. Unify it with the second image's polished stylized 3D rendering: rounded intentional forms, smooth normals, restrained satin highlights, broad clean surface treatment and soft upper-left studio lighting. Grounded stylized realism, not cute cartoon and not photoreal scan. Remove photographic micro-grain, gritty high-frequency noise, tiny scratches, speckles and unnecessary mesh-like surface detail. Keep 2–4 large recognizable material features. Surface markings should read like a small baked texture rather than hundreds of physical parts. No glossy plastic coating, no eyes or faces added, no giant bevels, no simplification into flat icon art. Beautiful finished 3D game art that remains clear at 96px. Same composition, full object inside square canvas with 10% empty padding. Genuinely transparent background; no ground, no backdrop, no cast-shadow rectangle, no halo. No text, UI or watermark. Terracotta becomes smooth worn matte clay with one main broken rim wedge and three broad cracks. Soil is a single calm dark mass with 3–4 broad clods, no granular earth noise. Keep the one embedded root simple.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-af1a1488-2a98-40e5-926c-e3ed31351dfe.png",
+      "file": "design-assets/unified-v1/obstacles/broken-planter.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/obstacles/broken-planter.png",
+        "D:/Projects/Cube-Game/design-assets/creatures/spider.png"
+      ]
+    },
+    {
+      "group": "obstacles",
+      "id": "rusted-valve",
+      "name": "RUSTED VALVE",
+      "input": "D:/Projects/Cube-Game/design-assets/obstacles/rusted-valve.png",
+      "prompt": "Use case: style-transfer for a premium real-time game. Image 1 is the OBJECT TO EDIT; image 2 is a MATERIAL/SHAPE STYLE REFERENCE ONLY. Preserve the first object's identity, silhouette, main colors, view direction and compact single-tile footprint. Unify it with the second image's polished stylized 3D rendering: rounded intentional forms, smooth normals, restrained satin highlights, broad clean surface treatment and soft upper-left studio lighting. Grounded stylized realism, not cute cartoon and not photoreal scan. Remove photographic micro-grain, gritty high-frequency noise, tiny scratches, speckles and unnecessary mesh-like surface detail. Keep 2–4 large recognizable material features. Surface markings should read like a small baked texture rather than hundreds of physical parts. No glossy plastic coating, no eyes or faces added, no giant bevels, no simplification into flat icon art. Beautiful finished 3D game art that remains clear at 96px. Same composition, full object inside square canvas with 10% empty padding. Genuinely transparent background; no ground, no backdrop, no cast-shadow rectangle, no halo. No text, UI or watermark. Keep solid cast-iron body, base, wheel and major bolts. Limit bolts to the ones needed to read the form; use large muted rust patches rather than speckle. Six clean wheel spokes and no engraving. Dark satin oxidized iron.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-a4bcf038-4db3-4b7e-8890-9a1a77cabf08.png",
+      "file": "design-assets/unified-v1/obstacles/rusted-valve.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/obstacles/rusted-valve.png",
+        "D:/Projects/Cube-Game/design-assets/creatures/spider.png"
+      ]
+    },
+    {
+      "group": "obstacles",
+      "id": "sandbag-block",
+      "name": "SANDBAG BLOCK",
+      "input": "D:/Projects/Cube-Game/design-assets/obstacles/sandbag-block.png",
+      "prompt": "Use case: style-transfer for a premium real-time game. Image 1 is the OBJECT TO EDIT; image 2 is a MATERIAL/SHAPE STYLE REFERENCE ONLY. Preserve the first object's identity, silhouette, main colors, view direction and compact single-tile footprint. Unify it with the second image's polished stylized 3D rendering: rounded intentional forms, smooth normals, restrained satin highlights, broad clean surface treatment and soft upper-left studio lighting. Grounded stylized realism, not cute cartoon and not photoreal scan. Remove photographic micro-grain, gritty high-frequency noise, tiny scratches, speckles and unnecessary mesh-like surface detail. Keep 2–4 large recognizable material features. Surface markings should read like a small baked texture rather than hundreds of physical parts. No glossy plastic coating, no eyes or faces added, no giant bevels, no simplification into flat icon art. Beautiful finished 3D game art that remains clear at 96px. Same composition, full object inside square canvas with 10% empty padding. Genuinely transparent background; no ground, no backdrop, no cast-shadow rectangle, no halo. No text, UI or watermark. Four tightly packed sacks with flattened contact faces, low broad folds and a single simple seam per bag. Matte muted khaki canvas; weave detail removed. Weighted and substantial, not puffy plush cushions.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-4d259f4a-8866-4135-b609-229788b744ca.png",
+      "file": "design-assets/unified-v1/obstacles/sandbag-block.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/obstacles/sandbag-block.png",
+        "D:/Projects/Cube-Game/design-assets/creatures/spider.png"
+      ]
+    },
+    {
+      "group": "obstacles",
+      "id": "concrete-footing",
+      "name": "CONCRETE FOOTING",
+      "input": "D:/Projects/Cube-Game/design-assets/obstacles/concrete-footing.png",
+      "prompt": "Use case: style-transfer for a premium real-time game. Image 1 is the OBJECT TO EDIT; image 2 is a MATERIAL/SHAPE STYLE REFERENCE ONLY. Preserve the first object's identity, silhouette, main colors, view direction and compact single-tile footprint. Unify it with the second image's polished stylized 3D rendering: rounded intentional forms, smooth normals, restrained satin highlights, broad clean surface treatment and soft upper-left studio lighting. Grounded stylized realism, not cute cartoon and not photoreal scan. Remove photographic micro-grain, gritty high-frequency noise, tiny scratches, speckles and unnecessary mesh-like surface detail. Keep 2–4 large recognizable material features. Surface markings should read like a small baked texture rather than hundreds of physical parts. No glossy plastic coating, no eyes or faces added, no giant bevels, no simplification into flat icon art. Beautiful finished 3D game art that remains clear at 96px. Same composition, full object inside square canvas with 10% empty padding. Genuinely transparent background; no ground, no backdrop, no cast-shadow rectangle, no halo. No text, UI or watermark. Squared concrete base with few deliberate corner chips and two short rebar stubs. Warm gray matte surface with three broad value patches. Remove granular aggregate, pores and tiny rubble; preserve the manufactured block silhouette.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-61f3ce59-420a-4f6d-b5dd-52228ce2cece.png",
+      "file": "design-assets/unified-v1/obstacles/concrete-footing.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/obstacles/concrete-footing.png",
+        "D:/Projects/Cube-Game/design-assets/creatures/spider.png"
+      ]
+    },
+    {
+      "group": "trails",
+      "id": "afterburn",
+      "name": "AFTERBURN",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-trails/afterburn.png",
+      "prompt": "Use case: style-transfer. Edit the attached game trail preview into the same polished tactile stylized 3D game art family as smooth satin cube characters. Preserve the trail's palette and distinct identity, the small neutral ivory cube with two tiny dark eyes at upper right, and an elegant shallow S-shaped path to the lower left. Simplify dramatically: ONE main flat ribbon with broad colors, at most one thin accent stroke and just a few large signature particles. Premium game collectible visual, crisp silhouette, smooth bevelled cube, soft upper-left light, controlled highlights. This must look achievable with one textured ribbon mesh and pooled sprite particles. No volumetric clouds, no refraction, no dense micro particles, no multiple wispy tendrils, no big external bloom. Keep the ribbon narrow enough to avoid obscuring the game. Composition fits entirely inside square with 10% padding, genuinely transparent background, no floor, text, labels, frame, checkerboard, watermark or UI. Specific design: AFTERBURN: warm amber-orange ribbon with one bright golden center stroke and two broad flame tips at tail. Only FOUR detached ember shapes, bold and intentional. No smoke, turbulence, tiny sparks or dozens of tongues.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-284519d9-76ae-4523-9957-15068ea332b0.png",
+      "file": "design-assets/unified-v1/trails/afterburn.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-trails/afterburn.png"
+      ]
+    },
+    {
+      "group": "trails",
+      "id": "frostwake",
+      "name": "FROSTWAKE",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-trails/frostwake.png",
+      "prompt": "Use case: style-transfer. Edit the attached game trail preview into the same polished tactile stylized 3D game art family as smooth satin cube characters. Preserve the trail's palette and distinct identity, the small neutral ivory cube with two tiny dark eyes at upper right, and an elegant shallow S-shaped path to the lower left. Simplify dramatically: ONE main flat ribbon with broad colors, at most one thin accent stroke and just a few large signature particles. Premium game collectible visual, crisp silhouette, smooth bevelled cube, soft upper-left light, controlled highlights. This must look achievable with one textured ribbon mesh and pooled sprite particles. No volumetric clouds, no refraction, no dense micro particles, no multiple wispy tendrils, no big external bloom. Keep the ribbon narrow enough to avoid obscuring the game. Composition fits entirely inside square with 10% padding, genuinely transparent background, no floor, text, labels, frame, checkerboard, watermark or UI. Specific design: FROSTWAKE: pale cyan-blue ribbon with a clean ivory edge; FOUR large opaque ice chips with simple bevelled facets. No frosty noise, snowflake dust or transparent crystal volumes.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-1550a0d2-0b28-4d06-af26-249ccc949ca2.png",
+      "file": "design-assets/unified-v1/trails/frostwake.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-trails/frostwake.png"
+      ]
+    },
+    {
+      "group": "trails",
+      "id": "neon-surge",
+      "name": "NEON SURGE",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-trails/neon-surge.png",
+      "prompt": "Use case: style-transfer. Edit the attached game trail preview into the same polished tactile stylized 3D game art family as smooth satin cube characters. Preserve the trail's palette and distinct identity, the small neutral ivory cube with two tiny dark eyes at upper right, and an elegant shallow S-shaped path to the lower left. Simplify dramatically: ONE main flat ribbon with broad colors, at most one thin accent stroke and just a few large signature particles. Premium game collectible visual, crisp silhouette, smooth bevelled cube, soft upper-left light, controlled highlights. This must look achievable with one textured ribbon mesh and pooled sprite particles. No volumetric clouds, no refraction, no dense micro particles, no multiple wispy tendrils, no big external bloom. Keep the ribbon narrow enough to avoid obscuring the game. Composition fits entirely inside square with 10% padding, genuinely transparent background, no floor, text, labels, frame, checkerboard, watermark or UI. Specific design: NEON SURGE: electric cyan ribbon with a single sharp ivory zigzag following its length; FOUR small angular blue sparks. No branching bolts, fog or atmospheric halo.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-7f4de9c1-f989-4b6c-9943-7069f874a91a.png",
+      "file": "design-assets/unified-v1/trails/neon-surge.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-trails/neon-surge.png"
+      ]
+    },
+    {
+      "group": "trails",
+      "id": "starfall",
+      "name": "STARFALL",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-trails/starfall.png",
+      "prompt": "Use case: style-transfer. Edit the attached game trail preview into the same polished tactile stylized 3D game art family as smooth satin cube characters. Preserve the trail's palette and distinct identity, the small neutral ivory cube with two tiny dark eyes at upper right, and an elegant shallow S-shaped path to the lower left. Simplify dramatically: ONE main flat ribbon with broad colors, at most one thin accent stroke and just a few large signature particles. Premium game collectible visual, crisp silhouette, smooth bevelled cube, soft upper-left light, controlled highlights. This must look achievable with one textured ribbon mesh and pooled sprite particles. No volumetric clouds, no refraction, no dense micro particles, no multiple wispy tendrils, no big external bloom. Keep the ribbon narrow enough to avoid obscuring the game. Composition fits entirely inside square with 10% padding, genuinely transparent background, no floor, text, labels, frame, checkerboard, watermark or UI. Specific design: STARFALL: deep periwinkle-purple ribbon with a thin warm gold inner streak and FOUR chunky gold five-point stars at spaced intervals. No starfield, glitter dust or glow clouds.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-558920f5-d216-4844-af75-f44076c8193c.png",
+      "file": "design-assets/unified-v1/trails/starfall.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-trails/starfall.png"
+      ]
+    },
+    {
+      "group": "trails",
+      "id": "petal-drift",
+      "name": "PETAL DRIFT",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-trails/petal-drift.png",
+      "prompt": "Use case: style-transfer. Edit the attached game trail preview into the same polished tactile stylized 3D game art family as smooth satin cube characters. Preserve the trail's palette and distinct identity, the small neutral ivory cube with two tiny dark eyes at upper right, and an elegant shallow S-shaped path to the lower left. Simplify dramatically: ONE main flat ribbon with broad colors, at most one thin accent stroke and just a few large signature particles. Premium game collectible visual, crisp silhouette, smooth bevelled cube, soft upper-left light, controlled highlights. This must look achievable with one textured ribbon mesh and pooled sprite particles. No volumetric clouds, no refraction, no dense micro particles, no multiple wispy tendrils, no big external bloom. Keep the ribbon narrow enough to avoid obscuring the game. Composition fits entirely inside square with 10% padding, genuinely transparent background, no floor, text, labels, frame, checkerboard, watermark or UI. Specific design: PETAL DRIFT: warm dusty pink ribbon with a single ivory edge, FIVE individual satin pink petals and ONE small simple blossom. No dense petal swarm, glowing specks or hairline flower stamens.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-c00fff9a-d4f0-4ef6-9a8d-0626db7d49dd.png",
+      "file": "design-assets/unified-v1/trails/petal-drift.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-trails/petal-drift.png"
+      ]
+    },
+    {
+      "group": "trails",
+      "id": "bubble-pop",
+      "name": "BUBBLE POP",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-trails/bubble-pop.png",
+      "prompt": "Use case: style-transfer. Edit the attached game trail preview into the same polished tactile stylized 3D game art family as smooth satin cube characters. Preserve the trail's palette and distinct identity, the small neutral ivory cube with two tiny dark eyes at upper right, and an elegant shallow S-shaped path to the lower left. Simplify dramatically: ONE main flat ribbon with broad colors, at most one thin accent stroke and just a few large signature particles. Premium game collectible visual, crisp silhouette, smooth bevelled cube, soft upper-left light, controlled highlights. This must look achievable with one textured ribbon mesh and pooled sprite particles. No volumetric clouds, no refraction, no dense micro particles, no multiple wispy tendrils, no big external bloom. Keep the ribbon narrow enough to avoid obscuring the game. Composition fits entirely inside square with 10% padding, genuinely transparent background, no floor, text, labels, frame, checkerboard, watermark or UI. Specific design: BUBBLE POP: turquoise ribbon with one soft pink edge, FIVE separate stylized bubbles with painted soft highlights. Bubbles are simple sprite-like discs, not refractive transparent 3D glass. No microbubbles.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-7d94b781-c898-4ef5-a2f4-2e47bcee9100.png",
+      "file": "design-assets/unified-v1/trails/bubble-pop.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-trails/bubble-pop.png"
+      ]
+    },
+    {
+      "group": "trails",
+      "id": "pixel-rush",
+      "name": "PIXEL RUSH",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-trails/pixel-rush.png",
+      "prompt": "Use case: style-transfer. Edit the attached game trail preview into the same polished tactile stylized 3D game art family as smooth satin cube characters. Preserve the trail's palette and distinct identity, the small neutral ivory cube with two tiny dark eyes at upper right, and an elegant shallow S-shaped path to the lower left. Simplify dramatically: ONE main flat ribbon with broad colors, at most one thin accent stroke and just a few large signature particles. Premium game collectible visual, crisp silhouette, smooth bevelled cube, soft upper-left light, controlled highlights. This must look achievable with one textured ribbon mesh and pooled sprite particles. No volumetric clouds, no refraction, no dense micro particles, no multiple wispy tendrils, no big external bloom. Keep the ribbon narrow enough to avoid obscuring the game. Composition fits entirely inside square with 10% padding, genuinely transparent background, no floor, text, labels, frame, checkerboard, watermark or UI. Specific design: PIXEL RUSH: mint-teal ribbon with slightly stepped edges, six distinct blue/mint square chips. Keep pixel identity in particle shape but premium smooth lighting on the cube. No dense voxel field.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-479e59c1-bfa7-4609-a306-01c8032fb8f9.png",
+      "file": "design-assets/unified-v1/trails/pixel-rush.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-trails/pixel-rush.png"
+      ]
+    },
+    {
+      "group": "trails",
+      "id": "gold-rush",
+      "name": "GOLD RUSH",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-trails/gold-rush.png",
+      "prompt": "Use case: style-transfer. Edit the attached game trail preview into the same polished tactile stylized 3D game art family as smooth satin cube characters. Preserve the trail's palette and distinct identity, the small neutral ivory cube with two tiny dark eyes at upper right, and an elegant shallow S-shaped path to the lower left. Simplify dramatically: ONE main flat ribbon with broad colors, at most one thin accent stroke and just a few large signature particles. Premium game collectible visual, crisp silhouette, smooth bevelled cube, soft upper-left light, controlled highlights. This must look achievable with one textured ribbon mesh and pooled sprite particles. No volumetric clouds, no refraction, no dense micro particles, no multiple wispy tendrils, no big external bloom. Keep the ribbon narrow enough to avoid obscuring the game. Composition fits entirely inside square with 10% padding, genuinely transparent background, no floor, text, labels, frame, checkerboard, watermark or UI. Specific design: GOLD RUSH: rich amber-gold ribbon, one pale yellow central highlight, FOUR simple flat gold diamond flakes. No glitter cloud, coins, reflective metal debris or micro specks.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-2825a352-b36f-43fb-93f6-799c1d90f0b3.png",
+      "file": "design-assets/unified-v1/trails/gold-rush.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-trails/gold-rush.png"
+      ]
+    },
+    {
+      "group": "trails",
+      "id": "void-rift",
+      "name": "VOID RIFT",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-trails/void-rift.png",
+      "prompt": "Use case: style-transfer. Edit the attached game trail preview into the same polished tactile stylized 3D game art family as smooth satin cube characters. Preserve the trail's palette and distinct identity, the small neutral ivory cube with two tiny dark eyes at upper right, and an elegant shallow S-shaped path to the lower left. Simplify dramatically: ONE main flat ribbon with broad colors, at most one thin accent stroke and just a few large signature particles. Premium game collectible visual, crisp silhouette, smooth bevelled cube, soft upper-left light, controlled highlights. This must look achievable with one textured ribbon mesh and pooled sprite particles. No volumetric clouds, no refraction, no dense micro particles, no multiple wispy tendrils, no big external bloom. Keep the ribbon narrow enough to avoid obscuring the game. Composition fits entirely inside square with 10% padding, genuinely transparent background, no floor, text, labels, frame, checkerboard, watermark or UI. Specific design: VOID RIFT: dark plum-purple ribbon with a bright narrow violet edge and FOUR bold dark angular fragments edged lilac. No volumetric smoke, nebula clouds or dozens of shards.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-ab7032f3-81c5-43b2-8410-f3b41a4a5cf7.png",
+      "file": "design-assets/unified-v1/trails/void-rift.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-trails/void-rift.png"
+      ]
+    },
+    {
+      "group": "trails",
+      "id": "rainbow-run",
+      "name": "RAINBOW RUN",
+      "input": "D:/Projects/Cube-Game/design-assets/cube-trails/rainbow-run.png",
+      "prompt": "Use case: style-transfer. Edit the attached game trail preview into the same polished tactile stylized 3D game art family as smooth satin cube characters. Preserve the trail's palette and distinct identity, the small neutral ivory cube with two tiny dark eyes at upper right, and an elegant shallow S-shaped path to the lower left. Simplify dramatically: ONE main flat ribbon with broad colors, at most one thin accent stroke and just a few large signature particles. Premium game collectible visual, crisp silhouette, smooth bevelled cube, soft upper-left light, controlled highlights. This must look achievable with one textured ribbon mesh and pooled sprite particles. No volumetric clouds, no refraction, no dense micro particles, no multiple wispy tendrils, no big external bloom. Keep the ribbon narrow enough to avoid obscuring the game. Composition fits entirely inside square with 10% padding, genuinely transparent background, no floor, text, labels, frame, checkerboard, watermark or UI. Specific design: RAINBOW RUN: ONE ribbon made of four broad parallel coral, gold, mint and periwinkle bands, with FOUR simple white glints. No separate looping strands, rainbow fog or glitter cloud.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-297dae0d-7618-42a8-884d-5c4c478d2c1f.png",
+      "file": "design-assets/unified-v1/trails/rainbow-run.png",
+      "referenced_image_paths": [
+        "D:/Projects/Cube-Game/design-assets/cube-trails/rainbow-run.png"
+      ]
+    }
+  ]
+}

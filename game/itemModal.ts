@@ -1,5 +1,5 @@
 /* ================= generic item preview modal =================
- * Opens when a shop card (Skins now; Trails/Auras reuse this later) is
+ * Opens when a shop card (Skins and Trails) is
  * tapped. Knows nothing about what the item actually IS — the caller
  * supplies a name/price/owned/equipped snapshot, a mountPreview() that
  * renders whatever preview makes sense for that item kind (a live
@@ -7,6 +7,8 @@
  * actual purchase/equip logic (and are responsible for closing the modal
  * once done, via closeItemModal()).
  */
+
+import { playCue } from "./audio";
 
 const $ = (id: string) => document.getElementById(id) as HTMLElement;
 
@@ -59,6 +61,9 @@ function renderState(coins: number) {
 /** Opens the modal for `item`. `coins` is the player's current wallet —
  *  a fresh snapshot each open, used only to decide the action button's state. */
 export function openItemModal(item: ItemModalItem, coins: number) {
+  unmountPreview?.();
+  unmountPreview = null;
+  playCue("ui.modal_open");
   current = item;
   lastFocused = (document.activeElement as HTMLElement) ?? null;
   renderState(coins);
@@ -76,6 +81,7 @@ export function openItemModal(item: ItemModalItem, coins: number) {
 
 export function closeItemModal() {
   if (!current) return;
+  playCue("ui.modal_close", .5);
   unmountPreview?.();
   unmountPreview = null;
   current = null;
@@ -107,6 +113,7 @@ export function initItemModal(): () => void {
   document.addEventListener("keydown", onKey);
 
   return () => {
+    closeItemModal();
     modal.removeEventListener("click", onBackdrop);
     $("item-modal-close").removeEventListener("click", closeItemModal);
     $("item-modal-action").removeEventListener("click", onAction);

@@ -1,0 +1,51 @@
+{
+  "tool": "image_gen.imagegen",
+  "purpose": "UV-ready material references derived from approved skin portraits",
+  "assets": [
+    {
+      "id": "magma",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-9599de02-02cd-464d-8a2a-8019e9dfbdb1.png",
+      "reference": "design-assets/unified-v1/skins/magma.png"
+    },
+    {
+      "id": "glacier",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-01bf3a94-311f-4bb9-ace8-7b896c5c04b5.png",
+      "reference": "design-assets/unified-v1/skins/glacier.png"
+    },
+    {
+      "id": "mossling",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-6e8bc9cc-5f3f-4ee7-a145-1426617cf5da.png",
+      "reference": "design-assets/unified-v1/skins/mossling.png"
+    },
+    {
+      "id": "honey",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-df18240e-02c3-464e-9554-9e35f18306c7.png",
+      "reference": "design-assets/unified-v1/skins/honey.png"
+    },
+    {
+      "id": "nebula",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-19dcad62-d94c-4ab9-8239-3efcea4eebe2.png",
+      "reference": "design-assets/unified-v1/skins/nebula.png"
+    },
+    {
+      "id": "prism",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-b592ec3b-129e-471e-8aa1-ddbac7c04283.png",
+      "reference": "design-assets/unified-v1/skins/prism.png"
+    },
+    {
+      "id": "boba",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-84c5dea5-d964-4933-b631-f86442bcfee6.png",
+      "reference": "design-assets/unified-v1/skins/boba.png"
+    },
+    {
+      "id": "koi",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-46fd329f-6ef0-47a1-962e-73f1b473a914.png",
+      "reference": "design-assets/unified-v1/skins/koi.png"
+    },
+    {
+      "id": "arcade",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-fbe77796-c8f6-4e75-a10c-93fb24ff28a3.png",
+      "reference": "design-assets/unified-v1/skins/arcade.png"
+    }
+  ]
+}

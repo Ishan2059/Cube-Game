@@ -1,0 +1,106 @@
+{
+  "fileKey": "NhPdfBjEKmYDBiWRLzweEA",
+  "sectionId": "66513:13389",
+  "screens": [
+    {
+      "id": "66513:13449",
+      "name": "Field Guide / SPIDER",
+      "selectedId": "spider",
+      "heroId": "66513:13554",
+      "selectorCount": 14
+    },
+    {
+      "id": "66513:13635",
+      "name": "Field Guide / SPITTER",
+      "selectedId": "spitter",
+      "heroId": "66513:13740",
+      "selectorCount": 14
+    }
+  ],
+  "masters": [
+    {
+      "id": "worm",
+      "name": "WORM",
+      "componentId": "66513:13390",
+      "imageNodeId": "66513:13391"
+    },
+    {
+      "id": "bug",
+      "name": "BUG",
+      "componentId": "66513:13393",
+      "imageNodeId": "66513:13394"
+    },
+    {
+      "id": "spider",
+      "name": "SPIDER",
+      "componentId": "66513:13396",
+      "imageNodeId": "66513:13397"
+    },
+    {
+      "id": "scorpion",
+      "name": "SCORPION",
+      "componentId": "66513:13399",
+      "imageNodeId": "66513:13400"
+    },
+    {
+      "id": "beetle",
+      "name": "BEETLE",
+      "componentId": "66513:13402",
+      "imageNodeId": "66513:13403"
+    },
+    {
+      "id": "slug",
+      "name": "SLUG",
+      "componentId": "66513:13405",
+      "imageNodeId": "66513:13406"
+    },
+    {
+      "id": "termite",
+      "name": "TERMITE",
+      "componentId": "66513:13408",
+      "imageNodeId": "66513:13409"
+    },
+    {
+      "id": "hornet",
+      "name": "HORNET",
+      "componentId": "66513:13411",
+      "imageNodeId": "66513:13412"
+    },
+    {
+      "id": "mosquito",
+      "name": "MOSQUITO",
+      "componentId": "66513:13414",
+      "imageNodeId": "66513:13415"
+    },
+    {
+      "id": "pillbug",
+      "name": "PILLBUG",
+      "componentId": "66513:13417",
+      "imageNodeId": "66513:13418"
+    },
+    {
+      "id": "flea",
+      "name": "FLEA",
+      "componentId": "66513:13420",
+      "imageNodeId": "66513:13421"
+    },
+    {
+      "id": "locust",
+      "name": "LOCUST",
+      "componentId": "66513:13423",
+      "imageNodeId": "66513:13424"
+    },
+    {
+      "id": "eggsac",
+      "name": "EGG SAC",
+      "componentId": "66513:13426",
+      "imageNodeId": "66513:13427"
+    },
+    {
+      "id": "spitter",
+      "name": "SPITTER",
+      "componentId": "66513:13429",
+      "imageNodeId": "66513:13430"
+    }
+  ]
+}

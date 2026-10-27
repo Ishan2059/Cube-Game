@@ -1,0 +1,35 @@
+{
+  "tool": "builtin image_gen",
+  "assets": [
+    {
+      "id": "grass",
+      "prompt": "Use case: stylized-concept. Asset type: seamless PBR base-color texture for a polished realistic 3D exploration game. Square 1024x1024, perfectly orthographic straight overhead, flat material scan filling every pixel, rich tactile microdetail at game-readable scale, neutral diffuse illumination with tiny local crevice shading only, no perspective, no objects, no borders, no text, no watermark. Seamless repeat on all four edges. Lush meadow ground: dense small blades of vivid natural fern and meadow green grass, moss patches, tiny olive clover leaves, scattered minute dark earth glimpses. Vibrant green without neon, realistic botanical fibers, slightly varied organic coverage.",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-46e9a664-3cf1-4a45-a1b6-da5c5b46f3f9.png"
+    },
+    {
+      "id": "mud",
+      "prompt": "Use case: stylized-concept. Asset type: seamless PBR base-color texture for a polished realistic 3D exploration game. Square 1024x1024, perfectly orthographic straight overhead, flat material scan filling every pixel, rich tactile microdetail at game-readable scale, neutral diffuse illumination with tiny local crevice shading only, no perspective, no objects, no borders, no text, no watermark. Seamless repeat on all four edges. Wet swamp mud: dark chocolate and umber soft silt, shallow waterlogged grooves, subtle earthy ridges and tiny pebbles, reflective damp patches suggested by local blue-gray variation but no baked bright specular highlights. Rich viscous wet tactile ground, mostly dark brown.",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-758b63ef-0177-456e-b639-3807f2bbf889.png"
+    },
+    {
+      "id": "stone",
+      "prompt": "Use case: stylized-concept. Asset type: seamless PBR base-color texture for a polished realistic 3D exploration game. Square 1024x1024, perfectly orthographic straight overhead, flat material scan filling every pixel, rich tactile microdetail at game-readable scale, neutral diffuse illumination with tiny local crevice shading only, no perspective, no objects, no borders, no text, no watermark. Seamless repeat on all four edges. Weathered country road: small warm gray irregular cobblestones, tight dark dirt-filled joints, occasional moss in crevices, worn rounded edges, surface grain and chipped stone. Rough realistic medieval forest path, muted earthy tones.",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-c7fb2783-05cf-4371-8abb-cba7061370d3.png"
+    },
+    {
+      "id": "wood",
+      "prompt": "Use case: stylized-concept. Asset type: seamless PBR base-color texture for a polished realistic 3D exploration game. Square 1024x1024, perfectly orthographic straight overhead, flat material scan filling every pixel, rich tactile microdetail at game-readable scale, neutral diffuse illumination with tiny local crevice shading only, no perspective, no objects, no borders, no text, no watermark. Seamless repeat on all four edges. Old cabin floor: warm honey walnut planks with realistic fine wood grain, knots, faint scratches and dark narrow seams. Parallel broad boards running vertically, offset ends, subtle age, polished by footsteps. No surrounding room or props.",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-b42a0bf0-1bd3-4bf7-8812-b1cd0ba5ea17.png"
+    },
+    {
+      "id": "ash",
+      "prompt": "Use case: stylized-concept. Asset type: seamless PBR base-color texture for a polished realistic 3D exploration game. Square 1024x1024, perfectly orthographic straight overhead, flat material scan filling every pixel, rich tactile microdetail at game-readable scale, neutral diffuse illumination with tiny local crevice shading only, no perspective, no objects, no borders, no text, no watermark. Seamless repeat on all four edges. Volcanic hell terrain: rough charcoal basalt and burnt black soil, irregular fractured crust, sparse thin molten ember-red cracks within crevices, fine ash grain. Dark warm gray stone dominates 85 percent, red orange fissures 15 percent, authentic geological texture rather than cartoon lava.",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-1eb1dfa0-7d2a-4d89-98bf-42d4fc5a609a.png"
+    },
+    {
+      "id": "bark",
+      "prompt": "Use case: stylized-concept. Asset type: seamless PBR base-color texture for a polished realistic 3D exploration game. Square 1024x1024, perfectly orthographic straight overhead, flat material scan filling every pixel, rich tactile microdetail at game-readable scale, neutral diffuse illumination with tiny local crevice shading only, no perspective, no objects, no borders, no text, no watermark. Seamless repeat on all four edges. Old tree bark: rugged oak bark in muted brown umber, long narrow ridges, deep dark fissures and some restrained moss in crevices, crisp fibrous tactile wood detail. Seamless vertical trunk material.",
+      "source": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-927137eb-f8cb-4b11-8124-c517b6536e4d.png"
+    }
+  ]
+}

@@ -10,7 +10,10 @@ type ParasiteDef,
 } from "./parasites";
 import {
 audio,
-playThud,
+playCue,
+playScore,
+stopAudio,
+playSurfaceRoll,
 playSplat,
 playKnock,
 playLatch,
@@ -20,7 +23,7 @@ playRampage,
 playCoin,
 playSpit,
 } from "./audio";
-import { LEVELS, type Level } from "./levels";
+import { explorationPressure, enemyWeights, INITIAL_SWARM } from "@/lib/exploration-rules";
 import {
   fetchBoard,
   renderBoard,
@@ -32,26 +35,39 @@ import {
 addCoins,
 getEquippedSkin,
 getEquippedTrail,
-getEquippedAura,
 getSettings,
 type ControlMode,
 } from "./storage";
 import { isTouchDevice } from "./device";
-import { skinById, getSkinTexture } from "./skins";
+import { skinById, applySkin } from "./skins";
 import { trailById } from "./trails";
-import { auraById } from "./auras";
+import { bushAt, createCover } from "./cover";
+import { createBushes } from "./bushes";
+import { createBridge } from "./bridges";
+import { createTerrain } from "./terrain";
+import { createLandmarks } from "./landmarks";
+import { worldTile, bridgeConnections, canTraverse, isDestructible, houseLoot, REALM_NAMES, HELL_LOCK_MS, hellLockRemaining, type Realm } from "./world-rules";
+import { createCoinField, makeCoinMesh } from "./coins";
+import { coinsForKills, COIN_BOOST_SECONDS, COIN_MULTIPLIER } from "./coin-rules";
+import { jumpProfile, canJump } from "./jump-rules";
+import { createDebris } from "./destruction";
+import { createLandingDust } from "./landing-effects";
+import { createObstacleLibrary } from "./obstacles";
+import { getStudioEnvironment } from "./lighting";
+import { disposeModel } from "./model";
 import { createCubeMesh } from "./cubeMesh";
-import { createTrail, createAura } from "./effects";
+import { createTrail } from "./effects";
 import { initMenus, showStart, toast } from "./menus";
 
 /* ================= constants ================= */
 const TILE = 1;
 const ROLL_TIME = 0.14; // seconds per roll
 const BITE_DAMAGE = 0.25; // fraction of one health icon lost per bite
-const MAX_PARASITES = 24;
+const MAX_PARASITES = 12;
+const HARD_PARASITE_CAP = 32;
 const VIEW_R = 14; // world generation radius (tiles)
-const SPAWN_R_MIN = 9,
-SPAWN_R_MAX = 12;
+const SPAWN_R_MIN = 5,
+SPAWN_R_MAX = 8;
 const DESPAWN_R = 18;
 // health pickups (hearts)
 const HEART_SPAWN_MIN = 6,
@@ -105,30 +121,7 @@ const CAM_OFFSET = new THREE.Vector3(0, 11, 8.5);
 const SUN_OFFSET = new THREE.Vector3(6, 14, 4);
 const UP = new THREE.Vector3(0, 1, 0);
 
-/* ---------- coin economy ----------
- * Coins are awarded per BUG KILLED, not per score point. Score is inflated by
- * combo/rampage multipliers (up to 16x), so a score-based payout decoupled
- * coins from actual kills and plateaued: past ~5400 score every run paid the
- * same hard cap, making a 50-kill run and a 600-kill run both worth ~90.
- *
- * ~150 bugs/game average assumed; tune BUGS_PER_COIN once real per-session
- * kill data is available. */
-const BUGS_PER_COIN = 5; // primary rate: this many kills = 1 coin
-// Past this many kills in one run, coins accrue at half rate (every 10 kills =
-// 1 coin) — a soft taper so a single marathon session can't trivialize the
-// grind. There is deliberately no hard cap on coins per run.
-const SESSION_TAPER_THRESHOLD = 300;
-
 /* ================= pure helpers ================= */
-/** Kills-to-coins: full rate up to SESSION_TAPER_THRESHOLD, half rate beyond.
- *  No per-run cap, so more kills always means more coins. */
-function coinsForKills(kills: number): number {
-  const full = Math.min(kills, SESSION_TAPER_THRESHOLD);
-  const tapered = Math.max(0, kills - SESSION_TAPER_THRESHOLD);
-  return (
-    Math.floor(full / BUGS_PER_COIN) + Math.floor(tapered / (BUGS_PER_COIN * 2))
-  );
-}
 const tileToWorld = (ix: number, iz: number) =>
 new THREE.Vector3(ix * TILE, 0, iz * TILE);
 const key2 = (x: number, z: number) => x + "," + z;
@@ -137,17 +130,6 @@ const key2 = (x: number, z: number) => x + "," + z;
 function hash2(x: number, z: number) {
 const h = Math.sin(x * 127.1 + z * 311.7) * 43758.5453;
 return h - Math.floor(h);
-}
-
-const obstacleCache = new Map<string, boolean>();
-function isObstacle(ix: number, iz: number) {
-const k = key2(ix, iz);
-const cached = obstacleCache.get(k);
-if (cached !== undefined) return cached;
-let v = hash2(ix, iz) < 0.065;
-if (Math.abs(ix) <= 1 && Math.abs(iz) <= 1) v = false; // safe start zone
-obstacleCache.set(k, v);
-return v;
 }
 
 function makeGroundTexture() {
@@ -159,20 +141,20 @@ const ctx = cv.getContext("2d")!;
 for (let i = 0; i < N; i++) {
 for (let j = 0; j < N; j++) {
 const v = hash2(i * 13 + 5, j * 17 + 3);
-const g = 26 + v * 10;
-ctx.fillStyle = `rgb(${(g * 0.85) | 0}, ${(g + 6) | 0}, ${(g * 0.62) | 0})`;
+const g = 32 + v * 12;
+ctx.fillStyle = `rgb(${(g * 0.72) | 0}, ${(g + 18) | 0}, ${(g * 0.58) | 0})`;
 ctx.fillRect(i * T, j * T, T, T);
 // speckle
 for (let s = 0; s < 22; s++) {
 const sx = i * T + hash2(i * 31 + s, j * 7) * T;
 const sy = j * T + hash2(i * 3, j * 41 + s) * T;
 const sv = hash2(s * 11 + i, s * 5 + j);
-const sg = 20 + sv * 24;
-ctx.fillStyle = `rgba(${(sg * 0.9) | 0}, ${(sg + 8) | 0}, ${(sg * 0.6) | 0}, 0.7)`;
+const sg = 28 + sv * 27;
+ctx.fillStyle = `rgba(${(sg * 0.75) | 0}, ${(sg + 18) | 0}, ${(sg * 0.6) | 0}, 0.7)`;
 ctx.fillRect(sx, sy, 2 + sv * 3, 2 + sv * 3);
 }
 // subtle tile edge
-ctx.strokeStyle = "rgba(70, 88, 52, 0.28)";
+ctx.strokeStyle = "rgba(86, 125, 57, 0.25)";
 ctx.lineWidth = 2;
 ctx.strokeRect(i * T + 1, j * T + 1, T - 2, T - 2);
 }
@@ -419,6 +401,9 @@ spitT: number; // spitter: seconds until its next acid lob
 }
 
 interface RollState {
+smash?:boolean;
+jump?: {start:THREE.Vector3;height:number;tiles:number};
+surface: import("./world-rules").Surface;
 t: number;
 dur: number; // seconds for this roll (speed/slow effects bake in here)
 anchor: THREE.Vector3;
@@ -442,7 +427,7 @@ life: number;
 }
 
 interface Pickup {
-kind: "bolt" | "star";
+kind: "bolt" | "star" | "coin";
 mesh: THREE.Group;
 ix: number;
 iz: number;
@@ -477,7 +462,6 @@ time: number;
 score: number;
 best: number;
 lastHitBy: string; // parasite type that last bit us (game-over cause line)
-level: number;
 lives: number;
 combo: number;
 maxCombo: number;
@@ -501,6 +485,8 @@ powerup: Pickup | null;
 powerupCooldown: number; // seconds until the next power-up may spawn
 hazards: Hazard[];
 globs: Glob[]; // spitter acid shots in flight
+coinBoostT: number;
+runCoins: number;
 speedT: number; // ⚡ time left
 giantT: number; // ★ time left
 slowT: number; // webbed-slow time left
@@ -513,6 +499,23 @@ dazeT: number; // hornet daze time left (controls inverted)
 // Boots a fresh game inside `container`, returns a disposer that tears the
 // whole thing down (RAF loop, listeners, GL context) for React unmount.
 export function startGame(container: HTMLElement): () => void {
+let realm: Realm = "meadow";
+let roomKey = "";
+let lootSeed = Math.floor(Math.random()*2147483647);
+let houseReturn = { realm: "meadow" as Realm, x: 0, z: 0 };
+let hellReturn = { x: 0, z: 1 };
+let hellUntil = Number(localStorage.getItem("crush-hell-until") || 0);
+if (!Number.isFinite(hellUntil)) hellUntil = 0;
+const openedLoot = new Set<string>(), collectedRoomPowerups = new Set<string>();
+const regionKey = () => realm === "cabin" ? roomKey : realm;
+const brokenObstacles=new Set<string>();
+const brokenAt=(x:number,z:number)=>brokenObstacles.has(`${regionKey()}:${x}:${z}`);
+const isObstacle = (x: number, z: number) => worldTile(x,z,realm).blocked&&!brokenAt(x,z);
+let transition: { time: number; swapped: boolean; realm: Realm; x: number; z: number; heal: boolean } | null = null;
+let ambienceT = 0, lavaT = 0, insectShadowBudget=0;
+const cover=createCover();
+let momentum=0,jumpCooldown=0,jumpPending=false,landingSquash=0;
+let momentumDir:[number,number]=[0,-1];
 /* ---------- state ---------- */
 const S: GameState = {
 running: false,
@@ -521,7 +524,6 @@ time: 0,
 score: 0,
 best: Number(localStorage.getItem("crush-best") || 0),
 lastHitBy: "",
-level: 0,
 lives: 3,
 combo: 0,
 maxCombo: 0,
@@ -545,6 +547,8 @@ powerup: null,
 powerupCooldown: 10,
 hazards: [],
 globs: [],
+coinBoostT: 0,
+runCoins: 0,
 speedT: 0,
 giantT: 0,
 slowT: 0,
@@ -568,8 +572,9 @@ const buzz = (ms: number) => {
 
 /* ---------- scene ---------- */
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0b0d0a);
-scene.fog = new THREE.Fog(0x0b0d0a, 15, 30);
+scene.environment = getStudioEnvironment();
+scene.background = new THREE.Color(0x0c140a);
+scene.fog = new THREE.Fog(0x0c140a, 15, 30);
 
 const CAM_FOV = 50; // vertical FOV — kept fixed; zoom below scales distance, not this
 const camera = new THREE.PerspectiveCamera(
@@ -638,11 +643,11 @@ powerPreference: "high-performance",
 renderer.setSize(innerWidth, innerHeight);
 renderer.setPixelRatio(dpr);
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFShadowMap;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 container.appendChild(renderer.domElement);
 
-scene.add(new THREE.HemisphereLight(0xb8c8d8, 0x2c2418, 0.65));
-const sun = new THREE.DirectionalLight(0xffe6c0, 1.35);
+scene.add(new THREE.HemisphereLight(0xd3e1cb, 0x4d4934, 1.35));
+const sun = new THREE.DirectionalLight(0xffe6c0, 1.85);
 sun.castShadow = true;
 sun.shadow.mapSize.set(1024, 1024);
 sun.shadow.camera.left = -14;
@@ -657,89 +662,61 @@ const groundTex = makeGroundTexture();
 groundTex.repeat.set(GROUND_SIZE / 8, GROUND_SIZE / 8);
 const ground = new THREE.Mesh(
 new THREE.PlaneGeometry(GROUND_SIZE, GROUND_SIZE),
-new THREE.MeshStandardMaterial({ map: groundTex, roughness: 0.95 }),
+new THREE.ShadowMaterial({ opacity: .3 }),
 );
 ground.rotation.x = -Math.PI / 2;
 ground.receiveShadow = true;
 scene.add(ground);
+const terrain=createTerrain(scene,groundTex);
+const landmarks=createLandmarks(scene);
+const bushes=createBushes(scene);
 
 function snapGround() {
 // snap to whole tiles so the texture pattern appears world-fixed
 const gx = Math.round(cubeMesh.position.x / 8) * 8;
 const gz = Math.round(cubeMesh.position.z / 8) * 8;
-ground.position.set(gx + 0.5, 0, gz + 0.5);
+ground.position.set(gx + 0.5, .019, gz + 0.5);
 }
 
-/* ---------- world props: rocks (obstacles), tufts, pebbles ---------- */
+/* ---------- world props: five obstacle variations, tufts, pebbles ---------- */
 const worldMeshes = new Map<string, THREE.Group | null>();
-const rockGeo = new THREE.IcosahedronGeometry(0.45, 0);
-const rockMats = [0x6b6257, 0x5d564c, 0x756a5a].map(
-(c) =>
-new THREE.MeshStandardMaterial({
-color: c,
-flatShading: true,
-roughness: 0.9,
-}),
-);
+const obstacles = createObstacleLibrary();
+const bridges=createBridge();
 const tuftGeo = new THREE.ConeGeometry(0.045, 0.22, 5);
 const tuftMat = new THREE.MeshStandardMaterial({
 color: 0x4a6b30,
 roughness: 0.9,
 });
 const pebbleGeo = new THREE.SphereGeometry(0.06, 6, 5);
-const pebbleMat = new THREE.MeshStandardMaterial({
-color: 0x555048,
-roughness: 0.95,
-});
+const pebbleMat = new THREE.MeshStandardMaterial({color:0x555048,roughness:.95});
+const grassBatch=new THREE.InstancedMesh(tuftGeo,tuftMat,512),pebbleBatch=new THREE.InstancedMesh(pebbleGeo,pebbleMat,256);
+grassBatch.frustumCulled=pebbleBatch.frustumCulled=false;grassBatch.count=pebbleBatch.count=0;scene.add(grassBatch,pebbleBatch);
+const propDummy=new THREE.Object3D();
+function updateGroundDetails(){
+  let grassCount=0,pebbleCount=0;
+  if(realm!=="cabin")for(const k of worldMeshes.keys()){
+    const [x,z]=k.split(",").map(Number),tile=worldTile(x,z,realm);if(tile.blocked||tile.surface!=="grass"&&tile.surface!=="ash")continue;
+    const d=hash2(x+500,z-500);
+    if(d<.045){for(let i=0;i<3&&grassCount<512;i++){
+      propDummy.position.set(x+(hash2(x+i,z)-.5)*.5,.1,z+(hash2(x,z+i)-.5)*.5);propDummy.rotation.set(0,0,(hash2(x+i,z+i)-.5)*.5);propDummy.scale.setScalar(1);propDummy.updateMatrix();grassBatch.setMatrixAt(grassCount++,propDummy.matrix);
+    }}else if(d<.085&&pebbleCount<256){propDummy.position.set(x+(hash2(x+99,z)-.5)*.6,.03,z+(hash2(x,z+99)-.5)*.6);propDummy.rotation.set(0,0,0);propDummy.scale.set(1,.6,1);propDummy.updateMatrix();pebbleBatch.setMatrixAt(pebbleCount++,propDummy.matrix);}
+  }
+  grassBatch.count=grassCount;pebbleBatch.count=pebbleCount;grassBatch.instanceMatrix.needsUpdate=pebbleBatch.instanceMatrix.needsUpdate=true;
+}
 
 function buildTileProp(ix: number, iz: number): THREE.Group | null {
 const g = new THREE.Group();
 const p = tileToWorld(ix, iz);
-if (isObstacle(ix, iz)) {
-const rock = new THREE.Mesh(
-rockGeo,
-rockMats[(hash2(ix + 7, iz + 3) * 3) | 0],
-);
-rock.scale.set(
-0.8 + hash2(ix, iz + 50) * 0.45,
-0.6 + hash2(ix + 50, iz) * 0.5,
-0.8 + hash2(ix - 50, iz) * 0.45,
-);
-rock.rotation.set(
-hash2(ix, iz + 9) * 0.5,
-hash2(ix + 9, iz) * Math.PI * 2,
-hash2(ix, iz - 9) * 0.5,
-);
-rock.position.set(p.x, 0.22, p.z);
-rock.castShadow = true;
-rock.receiveShadow = true;
-g.add(rock);
-} else {
-const d = hash2(ix + 500, iz - 500);
-if (d < 0.045) {
-for (let i = 0; i < 3; i++) {
-const t = new THREE.Mesh(tuftGeo, tuftMat);
-t.position.set(
-p.x + (hash2(ix + i, iz) - 0.5) * 0.5,
-0.1,
-p.z + (hash2(ix, iz + i) - 0.5) * 0.5,
-);
-t.rotation.z = (hash2(ix + i, iz + i) - 0.5) * 0.5;
-g.add(t);
-}
-} else if (d < 0.085) {
-const pb = new THREE.Mesh(pebbleGeo, pebbleMat);
-pb.position.set(
-p.x + (hash2(ix + 99, iz) - 0.5) * 0.6,
-0.03,
-p.z + (hash2(ix, iz + 99) - 0.5) * 0.6,
-);
-pb.scale.y = 0.6;
-g.add(pb);
-} else {
-return null;
-}
-}
+const tile=worldTile(ix,iz,realm);
+if(realm==="cabin")return null;
+if(tile.bridge){const bridge=bridges.create(bridgeConnections(ix,iz));bridge.position.copy(p);g.add(bridge);return g;}
+if (tile.blocked&&!brokenAt(ix,iz)) {
+if(!isDestructible(ix,iz,realm))return null;
+const obstacle = obstacles.create(Math.floor(hash2(ix + 7, iz + 3) * 5));
+obstacle.position.set(p.x, 0, p.z);
+obstacle.rotation.y = hash2(ix + 9, iz) * Math.PI * 2;
+g.add(obstacle);
+} else { return null; }
 // props never move — freeze matrices so the renderer skips recomposing
 // them every frame
 g.traverse((o) => {
@@ -768,33 +745,32 @@ if (g) scene.remove(g);
 worldMeshes.delete(k);
 }
 }
+landmarks.sync(cx,cz,realm,openedLoot,regionKey()+":");
+bushes.sync(cx,cz,realm);
+updateGroundDetails();
 }
 
 /* ---------- the cube ---------- */
 // geometry/material/face built by createCubeMesh() — shared with the skin
 // preview modal so it always matches the real gameplay cube exactly.
 const cubeMesh = createCubeMesh(TILE);
+cubeMesh.visible = false;
+const landingDust = createLandingDust(scene);
+const debris=createDebris(scene);
+const coinField = createCoinField(scene, (x,z)=>isObstacle(x,z)||!!pitAt(x,z)||["water","lava"].includes(worldTile(x,z,realm).surface),()=>realm==="cabin"?0:S.parasites.length);
+let entranceTime = 1, entranceImpact = true;
+const ENTRANCE_FALL = .56, ENTRANCE_END = .96;
 scene.add(cubeMesh);
 
-// trail: motion-triggered afterimage, spawns in world space as the cube
-// rolls. aura: always-on pulsing halo, parented to the cube (tracks it for
-// free). Both cosmetic and independent of the equipped skin.
-const trailFx = createTrail(scene, trailById(getEquippedTrail()).color);
+// Trails follow the cube in world space.
+const trailFx = createTrail(scene, trailById(getEquippedTrail()));
 trailFx.setActive(getEquippedTrail() !== "none");
-const auraFx = createAura(cubeMesh, auraById(getEquippedAura()).color);
-auraFx.setActive(getEquippedAura() !== "none");
 const onTrailChange = () => {
   const t = trailById(getEquippedTrail());
-  trailFx.setColor(t.color);
+  trailFx.setStyle(t);
   trailFx.setActive(t.id !== "none");
 };
-const onAuraChange = () => {
-  const a = auraById(getEquippedAura());
-  auraFx.setColor(a.color);
-  auraFx.setActive(a.id !== "none");
-};
 window.addEventListener("crush:trail", onTrailChange);
-window.addEventListener("crush:aura", onAuraChange);
 
 function placeCube() {
 const p = tileToWorld(S.cube.ix, S.cube.iz);
@@ -822,20 +798,23 @@ eggsac: [],
 spitter: [],
 };
 function acquireParasiteMesh(type: ParasiteType): THREE.Group {
-const m = parasitePools[type].pop() ?? makeParasiteMesh(type);
+const demon=realm==="cinder",pool=parasitePools[type],index=pool.findIndex(mesh=>!!mesh.userData.demonic===demon);
+const m = index>=0 ? pool.splice(index,1)[0] : makeParasiteMesh(type,demon);
 m.visible = true;
+m.userData.lastPose=-1;
 m.rotation.set(0, 0, 0);
 m.scale.setScalar(1);
 return m;
 }
 function releaseParasiteMesh(type: ParasiteType, mesh: THREE.Group) {
 scene.remove(mesh);
-parasitePools[type].push(mesh);
+const pool=parasitePools[type];
+if(pool.filter(m=>m.userData.demonic===mesh.userData.demonic).length>=2)disposeModel(mesh);else pool.push(mesh);
 }
 
 // weighted pick from the current level's spawn mix
 function pickType(): ParasiteType {
-const w = LEVELS[S.level].weights;
+const w = enemyWeights(S.time);
 let total = 0;
 for (const k in w) total += w[k as ParasiteType]!;
 let r = Math.random() * total;
@@ -847,7 +826,7 @@ return "worm";
 }
 
 function spawnParasite() {
-const swarm = LEVELS[S.level].swarm ?? 1;
+const swarm = explorationPressure(S.time).swarm ?? 1;
 if (S.parasites.length >= Math.round(MAX_PARASITES * swarm)) return;
 const type = pickType();
 
@@ -861,14 +840,15 @@ const r = SPAWN_R_MIN + Math.random() * (SPAWN_R_MAX - SPAWN_R_MIN);
 ix = S.cube.ix + Math.round(Math.cos(a) * r);
 iz = S.cube.iz + Math.round(Math.sin(a) * r);
 tries++;
-} while (isObstacle(ix, iz) && tries < 8);
-if (isObstacle(ix, iz)) return;
+} while ((!freeTile(ix, iz)||bushAt(ix,iz,realm)) && tries < 24);
+if (!freeTile(ix, iz)||bushAt(ix,iz,realm)) return;
 
 addParasite(type, ix, iz);
 }
 
 // build a parasite on a specific tile (used by spawnParasite and egg-sac hatch)
 function addParasite(type: ParasiteType, ix: number, iz: number) {
+if(S.parasites.length>=HARD_PARASITE_CAP||!freeTile(ix,iz))return;
 const def = TYPES[type];
 const mesh = acquireParasiteMesh(type);
 const p = tileToWorld(ix, iz);
@@ -891,7 +871,7 @@ state: "crawl", // crawl | attached
 biteTimer: 0,
 localN: new THREE.Vector3(), // cube-local normal of the face it clings to
 animT: Math.random() * 10,
-hp: type === "beetle" ? 1 + (LEVELS[S.level].armor ?? 0) : 1,
+hp: type === "beetle" ? 1 + (explorationPressure(S.time).armor ?? 0) : 1,
 stunT: 0,
 hatchT: type === "eggsac" ? EGGSAC_HATCH : 0,
 dashT:
@@ -906,21 +886,30 @@ spitT: type === "spitter" ? 1.2 + Math.random() * 1.4 : 0,
 
 // bugs treat rocks AND active termite pits as impassable
 function freeTile(ix: number, iz: number) {
-return !isObstacle(ix, iz) && !pitAt(ix, iz);
+return !isObstacle(ix, iz) && worldTile(ix,iz,realm).surface!=="water" && !pitAt(ix, iz);
 }
 
   // seconds until a freshly-latched parasite bites; a level's `bite` rating
   // makes bites land sooner as well as harder (rate grows with the multiplier)
   function biteDelay() {
-    const bite = LEVELS[S.level].bite;
+    const bite = explorationPressure(S.time).bite;
     const rate = 1 + (bite - 1) * 0.5;
     return (1 + Math.random()) / rate;
   }
 
+function animateInsect(pz: Parasite, speed=1){
+const near=Math.max(Math.abs(pz.ix-S.cube.ix),Math.abs(pz.iz-S.cube.iz))<7;
+const interval=pz.state==="attached"?1/45:near?1/30:1/12;
+if(pz.animT-(pz.mesh.userData.lastPose??-1)>=interval){pz.mesh.userData.animate(pz.animT*speed);pz.mesh.userData.lastPose=pz.animT;}
+(pz.mesh.children[0] as THREE.Mesh).castShadow=near&&insectShadowBudget++<8;
+}
+
 function stepParasite(pz: Parasite) {
-const dx = S.cube.ix - pz.ix;
-const dz = S.cube.iz - pz.iz;
-    const stick = LEVELS[S.level].stick;
+const target=cover.hidden?cover.target:S.cube;
+const tx="x" in target?target.x:target.ix,tz="z" in target?target.z:target.iz;
+const dx = tx + (cover.hidden?Math.round(Math.sin(pz.animT*.6)*2):0) - pz.ix;
+const dz = tz + (cover.hidden?Math.round(Math.cos(pz.animT*.6)*2):0) - pz.iz;
+    const stick = explorationPressure(S.time).stick;
 
     // spitter: ranged — never latches. Keeps a firing ring around the cube:
     // backs off when crowded, closes in when out of range, holds otherwise
@@ -961,6 +950,7 @@ const dz = S.cube.iz - pz.iz;
           return; // cornered: hold — chasing it down is the counterplay
         }
       }
+      if(!canTraverse(pz.ix,pz.iz,nx,nz,realm,true,brokenAt(nx,nz)))return;
       pz.prevIx = pz.ix;
       pz.prevIz = pz.iz;
       pz.ix = nx;
@@ -991,6 +981,8 @@ const dz = S.cube.iz - pz.iz;
         farz = pz.iz + ssz * 2;
       const onCube = (x: number, z: number) => x === S.cube.ix && z === S.cube.iz;
       if (
+        canTraverse(pz.ix,pz.iz,midx,midz,realm,true,brokenAt(midx,midz)) &&
+        canTraverse(midx,midz,farx,farz,realm,true,brokenAt(farx,farz)) &&
         freeTile(midx, midz) &&
         !onCube(midx, midz) &&
         freeTile(farx, farz) &&
@@ -1020,7 +1012,7 @@ const dz = S.cube.iz - pz.iz;
     // would let the insect evade being squashed and corrupt its cube-local
     // normal (the original "crushed bug survives" bug).
     if (
-      !S.rolling &&
+      !S.rolling && !cover.hidden && worldTile(S.cube.ix,S.cube.iz,realm).surface!=="water" &&
       Math.abs(dx) + Math.abs(dz) === 1 &&
       Math.random() < stick * 0.5
     ) {
@@ -1061,7 +1053,7 @@ let nx = pz.ix + sx,
 nz = pz.iz + sz;
 
 // blocked by a rock? try the other axis, else wait
-if (isObstacle(nx, nz) && !(nx === S.cube.ix && nz === S.cube.iz)) {
+if (!freeTile(nx,nz) && !(nx === S.cube.ix && nz === S.cube.iz)) {
 if (
 sx !== 0 &&
 Math.sign(dz) !== 0 &&
@@ -1092,9 +1084,10 @@ nx = pz.ix + sx;
 nz = pz.iz + sz;
 }
 
+if(!canTraverse(pz.ix,pz.iz,nx,nz,realm,true,brokenAt(nx,nz)))return;
 // stepping into the cube's tile => latch onto that face and start climbing
 if (nx === S.cube.ix && nz === S.cube.iz) {
-      if (S.rolling) return; // cube is mid-roll: don't latch, stay put and get crushed
+      if (S.rolling || cover.hidden) return; // cube is mid-roll or concealed: don't latch, stay put and get crushed
 pz.state = "attached";
       pz.biteTimer = biteDelay(); // bites 1–2s after latching (sooner at high bite)
 // world-side normal it grabbed, stored in cube-local space so it rides the face
@@ -1130,7 +1123,7 @@ const ix = pz.ix,
 iz = pz.iz;
 popup(pz.mesh.position.clone(), "HATCHED!", "rampage");
 splat(pz.mesh.position.clone().setY(0), pz.def.goo, false);
-playRampage();
+playCue("hazards.egg_hatch");
 const dirs = [
 [1, 0],
 [-1, 0],
@@ -1181,7 +1174,7 @@ particlePool.push(m);
 }
 
 function splat(worldPos: THREE.Vector3, color: number, big = false) {
-const n = big ? 20 : 13;
+const n = Math.min(big ? 20 : 13,Math.max(0,96-S.particles.length));
 for (let i = 0; i < n; i++) {
 const m = acquireParticle();
 const mat = m.material as THREE.MeshBasicMaterial;
@@ -1363,15 +1356,16 @@ function removeGlob(i: number) {
 // acid connects: softer than a bite, but it still breaks combo/streak —
 // that loss is the real anti-camping tax
 function applySpitHit() {
+  if(cover.hidden)return;
   const soften = casual ? 0.75 : 1;
   S.lives = Math.max(
     0,
-    S.lives - BITE_DAMAGE * SPIT_DAMAGE * LEVELS[S.level].bite * soften,
+    S.lives - BITE_DAMAGE * SPIT_DAMAGE * explorationPressure(S.time).bite * soften,
   );
   S.lastHitBy = "spitter";
   S.streak = 0;
   endCombo();
-  playBite();
+  playCue("hazards.acid_hit");
   buzz(35);
   popup(cubeMesh.position.clone(), "ACID!", "rampage");
   S.shake = Math.max(S.shake, 0.22);
@@ -1394,44 +1388,19 @@ livesEl = $("lives"),
 flash = $("damage-flash"),
 popups = $("popups"),
 warning = $("warning"),
-levelEl = $("level"),
-levelupEl = $("levelup"),
+regionEl = $("region"),
 biteGlow = $("bite-glow"),
 poisonGlow = $("poison-glow"),
 buffsEl = $("buffs");
 void flash; // kept for markup compatibility; bites use the glow overlay now
 
-// Cube look = equipped skin texture × current level colour. Textures are
-// grayscale, so the level tint multiplies through and the pattern (cracks /
-// scales / sticker grid) stays contrasty at every level.
+// Equipped materials remain unchanged throughout the expedition.
 function applyCubeStyle() {
-  const mat = cubeMesh.material as THREE.MeshStandardMaterial;
-  const sk = skinById(getEquippedSkin());
-  const L = LEVELS[S.level];
-  mat.color.set(L.skin);
-  mat.emissive.set(L.emissive ?? 0x000000);
-  mat.emissiveIntensity = 1;
-  mat.roughness = sk.roughness;
-  mat.map = getSkinTexture(sk.id);
-  mat.needsUpdate = true;
+  applySkin(cubeMesh, skinById(getEquippedSkin()));
 }
 // shop equips a skin → restyle the live cube immediately
 const onSkinChange = () => applyCubeStyle();
 window.addEventListener("crush:skin", onSkinChange);
-
-function applyLevel(idx: number) {
-S.level = idx;
-applyCubeStyle();
-levelEl.textContent = `LVL ${idx + 1} · ${LEVELS[idx].name}`;
-}
-
-function announceLevel(L: Level) {
-levelupEl.textContent = `LEVEL ${S.level + 1} — ${L.name}`;
-levelupEl.classList.remove("show");
-void levelupEl.offsetWidth;
-levelupEl.classList.add("show");
-playRampage();
-}
 
 function updateHUD() {
 scoreEl.textContent = String(S.score);
@@ -1457,8 +1426,19 @@ popups.appendChild(el);
 setTimeout(() => el.remove(), 850);
 }
 
+function rewardCoins(base: number, at: THREE.Vector3) {
+if (base <= 0) return;
+const earned = base * (S.coinBoostT > 0 ? COIN_MULTIPLIER : 1);
+S.runCoins += earned;
+addCoins(earned);
+$("run-coins").textContent = `◈ ${S.runCoins}`;
+playCue("rewards.coin_pickup", .65);
+popup(at, `+${earned} ◈`, "coin-popup");
+}
+
 function addKill(pz: Parasite, atPos: THREE.Vector3) {
 S.totalKills++;
+rewardCoins(coinsForKills(S.totalKills) - coinsForKills(S.totalKills - 1), atPos);
 S.streak++;
 S.combo++;
 if (S.combo > S.maxCombo) S.maxCombo = S.combo;
@@ -1473,20 +1453,15 @@ const mult = Math.min(S.combo, 8) * (S.rampage ? 2 : 1);
 const pts = killPoints(pz.type, S.combo);
 recordEvent(S.time, pz.type);
 S.score += pts;
+playScore(S.combo);
 scoreEl.classList.add("pop");
 setTimeout(() => scoreEl.classList.remove("pop"), 90);
 popup(atPos, `+${pts}`, S.rampage ? "rampage big" : mult > 2 ? "big" : "");
-// level up (a big combo can cross several thresholds at once)
-let leveled = false;
-while (LEVELS[S.level + 1] && S.score >= LEVELS[S.level + 1].at) {
-applyLevel(S.level + 1);
-leveled = true;
-}
-if (leveled) announceLevel(LEVELS[S.level]);
 updateHUD();
 }
 
 function endCombo() {
+if (S.running && S.combo >= 2) playCue(S.rampage ? "powerups.rampage_end" : "rewards.combo_break", .55);
 if (S.combo > 0) recordEvent(S.time, "break");
 S.combo = 0;
 S.rampage = false;
@@ -1504,16 +1479,18 @@ function applyBite(pz: Parasite) {
     const soften = casual ? 0.75 : 1;
     S.lives = Math.max(
       0,
-      S.lives - BITE_DAMAGE * LEVELS[S.level].bite * drain * soften,
+      S.lives - BITE_DAMAGE * explorationPressure(S.time).bite * drain * soften,
     );
     S.lastHitBy = pz.type;
     buzz(45);
 if (pz.type === "scorpion") {
 S.poisonT = POISON_TIME;
+playCue("hazards.poison_start");
 popup(cubeMesh.position.clone(), "POISONED!", "rampage");
 }
 if (pz.type === "hornet") {
-S.dazeT = DAZE_TIME; // controls invert for a moment
+S.dazeT = DAZE_TIME;
+playCue("hazards.daze_start"); // controls invert for a moment
 popup(cubeMesh.position.clone(), "DAZED!", "rampage");
 }
 if (pz.type === "mosquito") {
@@ -1592,21 +1569,23 @@ if (!ok) {
 S.powerupCooldown = 3; // no spot, retry soon
 return;
 }
-const kind: Pickup["kind"] = Math.random() < 0.5 ? "bolt" : "star";
-const icon = kind === "bolt" ? makeBoltMesh() : makeStarMesh();
+const roll = Math.random();
+const kind: Pickup["kind"] = S.score < POWERUP_MIN_SCORE ? "coin" : roll < .34 ? "coin" : roll < .67 ? "bolt" : "star";
+const icon = kind === "bolt" ? makeBoltMesh() : kind === "star" ? makeStarMesh() : makeCoinMesh();
 icon.scale.setScalar(1.35); // bigger than before — players kept missing them
 const mesh = new THREE.Group();
 mesh.add(icon);
-addBeacon(mesh, kind === "bolt" ? 0xffe14e : 0xe05ae0, true);
+addBeacon(mesh, kind === "coin" ? 0xffc851 : kind === "bolt" ? 0xffe14e : 0xe05ae0, true);
 mesh.userData.icon = icon;
 const p = tileToWorld(ix, iz);
 mesh.position.set(p.x, 0.5, p.z);
 scene.add(mesh);
 S.powerup = { kind, mesh, ix, iz, t: 0 };
+playCue("powerups.spawn", .5);
 // on-spawn callout so the player knows something worth grabbing appeared
 popup(
   p.clone().setY(1),
-  kind === "bolt" ? "⚡ SPEED SPAWNED!" : "★ GIANT SPAWNED!",
+  kind === "coin" ? "◈ 2× COINS" : kind === "bolt" ? "⚡ SPEED SPAWNED!" : "★ GIANT SPAWNED!",
   "big",
 );
 }
@@ -1621,16 +1600,21 @@ S.powerupCooldown = 14 + Math.random() * 12; // ~14–26s until next (was 20–3
 
 function collectPowerup() {
 const kind = S.powerup!.kind;
+if(realm==="cabin")collectedRoomPowerups.add(roomKey);
 buzz(35);
-if (kind === "bolt") {
+if (kind === "coin") {
+S.coinBoostT = COIN_BOOST_SECONDS;
+popup(cubeMesh.position.clone(), "◈ 2× COINS", "big coin-popup");
+playCue("exploration.coin_boost");
+} else if (kind === "bolt") {
 S.speedT = SPEED_TIME;
 popup(cubeMesh.position.clone(), "⚡ SPEED!", "big");
-playHeal();
+playCue("powerups.speed");
 } else {
 S.giantT = GIANT_TIME;
 cubeMesh.scale.setScalar(GIANT_SCALE);
 popup(cubeMesh.position.clone(), "★ GIANT!", "big");
-playRampage();
+playCue("powerups.giant");
 }
 removePowerup();
 }
@@ -1647,7 +1631,7 @@ pz.hp--;
 pz.stunT = 0.7;
 pz.mesh.scale.set(1.15, 0.45, 1.15);
 popup(pz.mesh.position.clone(), "CRACK!", "");
-playKnock();
+playCue("gameplay.armor_crack");
 continue;
 }
 splat(pz.mesh.position.clone().setY(0), pz.def.goo, pz.type === "spider");
@@ -1656,8 +1640,8 @@ removeParasite(pz);
 killed++;
 }
 if (killed) {
-playThud(strongThud || killed > 1);
-playSplat();
+playCue(strongThud || killed > 1 ? "gameplay.heavy_crush" : "gameplay.crush_impact", .65);
+playSplat(victims[victims.length - 1]?.type);
 }
 S.shake = Math.min(0.35, 0.12 + victims.length * 0.08);
 }
@@ -1692,11 +1676,12 @@ p.moveT < 1 &&
 (p.prevIx === ix && p.prevIz === iz)),
 );
 if (curled) {
-playKnock();
+playCue("gameplay.armor_deflect");
 popup(tileToWorld(ix, iz), "CURLED!", "");
 }
 }
 crushList(victims, victims.some((v) => v.type === "spider"));
+return victims.length;
 }
 
 // Roll toward the side a bug latched on → that face rotates to the ground and
@@ -1708,11 +1693,12 @@ const worldN = _v1.copy(p.localN).applyQuaternion(cubeMesh.quaternion);
 return worldN.y < -0.5; // its face is now against the ground
 });
 crushList(crushed, true, true);
+return crushed.length;
 }
 
 /* ---------- rolling ---------- */
 function tryRoll(dx: number, dz: number) {
-if (!S.running || S.paused) return;
+if (!S.running || S.paused || transition || entranceTime < ENTRANCE_END) return;
 if (S.stallT > 0) return; // stuck in slime — can't roll yet
 if (S.rolling) {
 S.queuedDir = [dx, dz];
@@ -1721,7 +1707,8 @@ return;
 const nx = S.cube.ix + dx,
 nz = S.cube.iz + dz;
 // rocks and termite pits both block the roll
-if (isObstacle(nx, nz) || pitAt(nx, nz)) {
+const canBreak=S.giantT>0&&isDestructible(nx,nz,realm);
+if (!canTraverse(S.cube.ix,S.cube.iz,nx,nz,realm,false,brokenAt(nx,nz)||canBreak) || S.giantT<=0&&pitAt(nx, nz)) {
 playKnock();
 S.shake = Math.max(S.shake, 0.08);
 return;
@@ -1729,13 +1716,18 @@ return;
 const anchor = cubeMesh.position
 .clone()
 .add(new THREE.Vector3(dx * 0.5, -0.5, dz * 0.5));
+if(dx!==momentumDir[0]||dz!==momentumDir[1])momentum*=.35;
+momentumDir=[dx,dz];
 S.rolling = {
+smash:S.giantT>0,
+surface: worldTile(S.cube.ix,S.cube.iz,realm).surface,
 t: 0,
 // ⚡ rolls fast, webbed rolls slow (both can overlap and mostly cancel)
 dur:
 ROLL_TIME *
 (S.speedT > 0 ? SPEED_FACTOR : 1) *
-(S.slowT > 0 ? WEB_SLOW_FACTOR : 1),
+(S.slowT > 0 ? WEB_SLOW_FACTOR : 1) *
+(["mud","water"].includes(worldTile(nx,nz,realm).surface) ? 1.45 : 1),
 anchor,
 axis: new THREE.Vector3(dz, 0, -dx),
 startOffset: cubeMesh.position.clone().sub(anchor),
@@ -1745,14 +1737,35 @@ nz,
 };
 }
 
+function requestJump(){
+  if(!S.running||S.paused||transition||entranceTime<ENTRANCE_END||jumpCooldown>0)return;
+  if(S.rolling){if(!S.rolling.jump)jumpPending=true;return;}
+  const profile=jumpProfile(momentum),[dx,dz]=momentumDir;
+  const nx=S.cube.ix+dx*profile.tiles,nz=S.cube.iz+dz*profile.tiles;
+  if(!canJump(S.cube.ix,S.cube.iz,dx,dz,profile.tiles,realm,brokenAt,S.giantT>0)||S.giantT<=0&&pitAt(nx,nz)){playKnock();return;}
+  S.rolling={smash:S.giantT>0,t:0,dur:profile.duration,anchor:cubeMesh.position.clone(),axis:new THREE.Vector3(dz,0,-dx),startOffset:new THREE.Vector3(),startQuat:cubeMesh.quaternion.clone(),nx,nz,surface:worldTile(S.cube.ix,S.cube.iz,realm).surface,jump:{start:cubeMesh.position.clone(),height:profile.height,tiles:profile.tiles}};
+  jumpPending=false;jumpCooldown=profile.duration+.25;playCue("exploration.jump",.55);buzz(12);
+}
+function breakObstacle(x:number,z:number){
+  if(!isDestructible(x,z,realm)||brokenAt(x,z))return;
+  brokenObstacles.add(`${regionKey()}:${x}:${z}`);
+  const key=key2(x,z),prop=worldMeshes.get(key);if(prop)scene.remove(prop);worldMeshes.delete(key);
+  const variant=Math.floor(hash2(x+7,z+3)*5);
+  debris.burst(x,z,variant);landingDust.burst(new THREE.Vector3(x,0,z));
+  playCue(variant===0?"exploration.break_wood":variant===2?"exploration.break_metal":"exploration.break_stone",.8);
+  S.shake=Math.max(S.shake,.18);buzz(35);
+}
 function updateRoll(dt: number) {
 const r = S.rolling;
 if (!r) return;
 r.t += dt / r.dur;
 const t = Math.min(r.t, 1);
-const angle = t * (Math.PI / 2);
+const angle = t * (Math.PI / 2) * (r.jump?Math.max(0,r.jump.tiles):1);
 const q = new THREE.Quaternion().setFromAxisAngle(r.axis, angle);
-cubeMesh.position.copy(r.startOffset).applyQuaternion(q).add(r.anchor);
+if(r.jump){
+  cubeMesh.position.copy(r.jump.start).lerp(new THREE.Vector3(r.nx,.5,r.nz),t);
+  cubeMesh.position.y+=4*t*(1-t)*r.jump.height;
+}else cubeMesh.position.copy(r.startOffset).applyQuaternion(q).add(r.anchor);
 cubeMesh.quaternion.copy(q).multiply(r.startQuat);
 
 if (t >= 1) {
@@ -1761,16 +1774,25 @@ S.cube.iz = r.nz;
 const p = tileToWorld(r.nx, r.nz);
 cubeMesh.position.set(p.x, TILE / 2, p.z);
 S.rolling = null;
-playThud(false);
+if(r.jump){landingSquash=.24;S.shake=Math.max(S.shake,.1);if(r.surface!=="water")landingDust.burst(cubeMesh.position);}
+
 S.shake = Math.max(S.shake, 0.06);
-if (S.giantT > 0) {
+if (S.giantT > 0 || r.smash) {
 // giant mode: the landing flattens the whole 3×3 around the cube
 for (let dx = -1; dx <= 1; dx++)
-for (let dz = -1; dz <= 1; dz++) squashAt(r.nx + dx, r.nz + dz);
+for (let dz = -1; dz <= 1; dz++) {
+  const x=r.nx+dx,z=r.nz+dz;breakObstacle(x,z);const pit=hazardAt(x,z);if(pit?.kind==="pit")removeHazard(pit);squashAt(x,z);
+}
 } else {
 squashAt(r.nx, r.nz);
 }
 grindLatchedAfterRoll();
+const surface=worldTile(r.nx,r.nz,realm).surface;
+playSurfaceRoll(surface,r.surface);
+terrain.contact(r.nx,r.nz,surface);
+if(worldTile(r.nx,r.nz,realm).bridge)playCue("exploration.bridge_creak",.2);
+if(surface==="water"){for(const bug of [...S.parasites])if(bug.state==="attached")removeParasite(bug);}
+if(bushAt(r.nx,r.nz,realm))playCue("exploration.bush_rustle",.65);
 const hz = hazardAt(r.nx, r.nz);
 if (hz && hz.kind !== "pit") {
 removeHazard(hz); // consumed on contact; giant tears through unharmed
@@ -1778,23 +1800,83 @@ if (S.giantT <= 0) {
 if (hz.kind === "web") {
 S.slowT = WEB_SLOW_TIME;
 popup(cubeMesh.position.clone(), "WEBBED!", "");
-playLatch();
+playCue("hazards.web_snare");
 } else {
 S.stallT = SLIME_STALL;
 popup(cubeMesh.position.clone(), "STUCK!", "");
-playLatch();
+playCue("hazards.slime_stick");
 }
 }
 }
 if (S.heart && S.heart.ix === r.nx && S.heart.iz === r.nz) collectHeart();
 if (S.powerup && S.powerup.ix === r.nx && S.powerup.iz === r.nz)
 collectPowerup();
+rewardCoins(coinField.collect(r.nx, r.nz, S.giantT > 0 ? 1 : 0), cubeMesh.position.clone());
+coinField.sync(r.nx, r.nz);
 updateWorld();
+visitLandmark(r.nx,r.nz);
+if(jumpPending&&!transition){requestJump();if(S.rolling)return;}
 if (S.queuedDir) {
 const [dx, dz] = S.queuedDir;
 S.queuedDir = null;
 tryRoll(dx, dz);
 }
+}
+}
+
+function travelTo(next: Realm, x:number, z:number, heal=false) {
+if(transition)return;
+transition={time:0,swapped:false,realm:next,x,z,heal};
+heldMoveCodes.length=0;touchDir=null;S.queuedDir=null;S.rolling=null;momentum=0;jumpPending=false;
+playCue(next==="cabin"?"exploration.door_open":realm==="cabin"?"exploration.door_close":"exploration.portal_enter",.65);
+}
+function updateTransition(dt:number) {
+const t=transition;if(!t)return;t.time+=dt;
+$("world-fade").style.opacity=String(t.time<.45?Math.min(1,t.time/.45):Math.max(0,1-(t.time-.6)/.4));
+if(t.time>=.5&&!t.swapped){
+  t.swapped=true;
+  for(const bug of [...S.parasites])removeParasite(bug);
+  for(const hazard of [...S.hazards])removeHazard(hazard);
+  while(S.globs.length)removeGlob(S.globs.length-1);
+  removeHeart();removePowerup();trailFx.clear();landingDust.clear();debris.clear();
+  for(const particle of S.particles)releaseParticle(particle.mesh);S.particles=[];
+  for(const decal of S.decals){scene.remove(decal.mesh);(decal.mesh.material as THREE.Material).dispose();}S.decals=[];
+  for(const prop of worldMeshes.values())if(prop)scene.remove(prop);worldMeshes.clear();landmarks.clear();
+  cover.reset();cubeMesh.visible=true;realm=t.realm;S.cube.ix=t.x;S.cube.iz=t.z;S.spawnTimer=2;S.slowT=S.stallT=S.poisonT=S.dazeT=0;
+  if(t.heal){S.lives=3;S.speedT=S.giantT=S.coinBoostT=0;cubeMesh.scale.setScalar(1);endCombo();}
+  terrain.setRealm(realm);scene.background=new THREE.Color(realm==="cinder"?0x210b08:realm==="cabin"?0x000000:0x0c190f);scene.fog=new THREE.FogExp2(scene.background,.035);
+  sun.color.setHex(realm==="cinder"?0xff8855:realm==="cabin"?0xffd495:0xffe6c0);
+  coinField.setRegion(regionKey());coinField.sync(t.x,t.z);placeCube();updateWorld();updateHUD();
+  camera.position.copy(cubeMesh.position).add(camOffsetScaled);camera.lookAt(cubeMesh.position);ambienceT=0;
+  if(realm==="cabin"&&!collectedRoomPowerups.has(roomKey)){
+    const loot=houseLoot(roomKey,lootSeed),kind=loot.pickup;
+    if(kind){
+      const icon=kind==="coin"?makeCoinMesh():kind==="bolt"?makeBoltMesh():makeStarMesh(),mesh=new THREE.Group();
+      mesh.add(icon);addBeacon(mesh,kind==="coin"?0xffc851:kind==="bolt"?0xffe14e:0xe05ae0,true);mesh.userData.icon=icon;
+      mesh.position.set(loot.x,.5,loot.z);scene.add(mesh);S.powerup={kind,mesh,ix:loot.x,iz:loot.z,t:0};
+    }
+  }
+  playCue(realm==="cabin"?"exploration.door_close":"exploration.portal_exit",.45);
+  toast(t.heal?"Returned to Greenwild. Hell gate rests for 4 hours.":REALM_NAMES[realm]);
+}
+if(t.time>=1){$("world-fade").style.opacity="0";transition=null;}
+}
+function visitLandmark(x:number,z:number) {
+if(realm==="cabin"&&x===0&&z===3){travelTo(houseReturn.realm,houseReturn.x,houseReturn.z);return;}
+const found=landmarks.at(x,z);if(!found)return;const [key,item]=found;
+if(item.data.kind==="treasure"){
+  if(openedLoot.has(key))return;openedLoot.add(key);landmarks.open(key);playCue("exploration.chest_open",.7);
+  const loot=realm==="cabin"?houseLoot(roomKey,lootSeed):houseLoot(key,lootSeed);
+  rewardCoins(loot.coins,cubeMesh.position.clone());
+  if(loot.heal&&S.lives<3){S.lives=Math.min(3,S.lives+1);playHeal();updateHUD();}playCue("exploration.loot",.5);
+
+}else if(item.data.kind==="house"){
+  houseReturn={realm,x,z:z+1};roomKey=key;landmarks.open(key);travelTo("cabin",0,2);
+}else{
+  const next=item.data.destination!;
+  if(next==="cinder"&&hellLockRemaining(hellUntil)>0){playCue("exploration.portal_locked",.55);toast(`Hell gate rests: ${Math.ceil(hellLockRemaining(hellUntil)/3600000)}h`);return;}
+  if(next==="cinder")hellReturn={x:x+2,z};
+  travelTo(next,x+2,z);
 }
 }
 
@@ -1821,6 +1903,11 @@ removePowerup();
 for (const h of [...S.hazards]) removeHazard(h);
 while (S.globs.length) removeGlob(S.globs.length - 1);
 cubeMesh.scale.setScalar(1);
+cubeMesh.visible=true;entranceTime=0;entranceImpact=false;landingDust.clear();
+realm="meadow";roomKey="";lootSeed=Math.floor(Math.random()*2147483647);transition=null;$("world-fade").style.opacity="0";
+cover.reset();momentum=0;jumpCooldown=0;jumpPending=false;landingSquash=0;brokenObstacles.clear();debris.clear();openedLoot.clear();collectedRoomPowerups.clear();terrain.setRealm(realm);scene.background=new THREE.Color(0x0c190f);scene.fog=new THREE.FogExp2(0x0c190f,.035);sun.color.setHex(0xffe6c0);landmarks.clear();
+for(const prop of worldMeshes.values())if(prop)scene.remove(prop);worldMeshes.clear();
+coinField.reset();coinField.setRegion("meadow");ambienceT=0;
 trailFx.clear(); // no stale streak lingering from the previous run
 S.particles = [];
 S.decals = [];
@@ -1832,7 +1919,6 @@ paused: false,
 time: 0,
 score: 0,
 lastHitBy: "",
-level: 0,
 lives: 3,
 combo: 0,
 maxCombo: 0,
@@ -1852,6 +1938,8 @@ heartCooldown: 25,
 powerup: null,
 powerupCooldown: 10,
 hazards: [],
+coinBoostT: 0,
+runCoins: 0,
 speedT: 0,
 giantT: 0,
 slowT: 0,
@@ -1863,32 +1951,43 @@ biteGlow.style.opacity = "0";
 poisonGlow.style.opacity = "0";
 buffsEl.textContent = "";
 endCombo();
-applyLevel(0);
+applyCubeStyle();
 placeCube();
+camera.position.copy(cubeMesh.position).add(camOffsetScaled);
+camera.lookAt(cubeMesh.position);
+cubeMesh.position.y=7.5;
+for(let i=0;i<INITIAL_SWARM;i++)spawnParasite();
+coinField.sync(0,0);
+$("run-coins").textContent="◈ 0";
 updateWorld();
 updateHUD();
+playCue("session.start");
 }
 
 function gameOver() {
-if (!S.running) return;
+if (!S.running || transition) return;
+if(realm==="cinder") {
+  hellUntil=Date.now()+HELL_LOCK_MS;localStorage.setItem("crush-hell-until",String(hellUntil));
+  travelTo("meadow",hellReturn.x,hellReturn.z,true);return;
+}
 S.running = false;
 const finished = finishRun(S.time);
 const prevBest = S.best;
+stopAudio();
+playCue(S.score > prevBest ? "rewards.personal_best" : "session.game_over");
 S.best = Math.max(S.best, S.score);
 localStorage.setItem("crush-best", String(S.best));
-// coin payout: awarded per bug killed with a soft taper — see coinsForKills().
-// addCoins() adds to the persisted balance, it does not overwrite it.
-const earned = coinsForKills(S.totalKills);
-addCoins(earned);
+// Currency is persisted at collection time; game over only displays the run total.
+const earned = S.runCoins;
 $("newbest-chip").classList.toggle("hidden", S.score <= prevBest);
 $("final-score").textContent = S.score.toLocaleString();
 $("final-best").textContent = S.best.toLocaleString();
-$("go-level").textContent = `${S.level + 1} · ${LEVELS[S.level].name}`;
+$("go-region").textContent = REALM_NAMES[realm];
 $("go-bugs").textContent = String(S.totalKills);
 $("final-coins").textContent = `+${earned}`;
 $("final-stats").textContent = S.lastHitBy
-  ? `Overrun by ${S.lastHitBy}s at LVL ${S.level + 1}.`
-  : `The horde got you at LVL ${S.level + 1}.`;
+  ? `Overrun by ${S.lastHitBy} in ${REALM_NAMES[realm]}.`
+  : `The horde caught you in ${REALM_NAMES[realm]}.`;
 if (earned > 0) playCoin();
 buzz(120);
 // Username is set once. After that every run auto-saves (server keeps the
@@ -1924,7 +2023,8 @@ const pauseBtn = $("pause-btn");
 const pauseScreen = $("pause-screen");
 
 function setPause(p: boolean) {
-if (!S.running) return;
+if (!S.running || transition) return;
+if (S.paused !== p) { stopAudio(); playCue(p ? "session.pause" : "session.resume"); }
 S.paused = p;
 if (p) {
   // live run snapshot on the pause card
@@ -2103,6 +2203,7 @@ return;
 const typingInField =
 document.activeElement instanceof HTMLInputElement ||
 document.activeElement instanceof HTMLTextAreaElement;
+if(e.code==="Space"&&!typingInField&&S.running){e.preventDefault();if(!e.repeat){audio();requestJump();}return;}
 if (KEYMAP[e.code] && !typingInField) {
 e.preventDefault();
 audio();
@@ -2124,10 +2225,14 @@ if (i !== -1) heldMoveCodes.splice(i, 1);
 };
 // lost focus mid-hold: drop keys so the cube doesn't roll on forever
 const onBlur = () => {
+stopAudio();
 if (S.running) setPause(true);
 heldMoveCodes.length = 0;
 touchDir = null;
 };
+const jumpBtn=$("jump-btn");
+const onJump=(e:Event)=>{e.preventDefault();audio();requestJump();};
+jumpBtn.addEventListener("pointerdown",onJump);
 window.addEventListener("keydown", onKeyDown);
 window.addEventListener("keyup", onKeyUp);
 window.addEventListener("blur", onBlur);
@@ -2274,6 +2379,23 @@ const clock = new THREE.Clock();
 let rafId = 0;
 let hudAcc = 0; // throttles heart re-renders during poison drain
 
+function updateEntrance(dt: number) {
+  entranceTime+=dt;
+  if(entranceTime<ENTRANCE_FALL) {
+    const t=entranceTime/ENTRANCE_FALL;
+    cubeMesh.position.y=.5+7*(1-t*t);
+    cubeMesh.rotation.set(-.18*(1-t),0,.12*(1-t));
+  } else {
+    const t=entranceTime-ENTRANCE_FALL;
+    if(!entranceImpact) {entranceImpact=true;playCue("gameplay.heavy_land",.9);landingDust.burst(cubeMesh.position);S.shake=.3;buzz(35);}
+    const bounce=Math.max(0,Math.sin(Math.min(1,t/.26)*Math.PI))*.16*Math.exp(-t*5);
+    cubeMesh.position.y=.5+bounce;
+    const squash=.16*Math.exp(-t*11)*Math.cos(t*29);
+    cubeMesh.scale.set(1+squash*.5,1-squash,1+squash*.5);cubeMesh.quaternion.identity();
+    if(entranceTime>=ENTRANCE_END){cubeMesh.position.y=.5;cubeMesh.scale.setScalar(1);}
+  }
+}
+
 function tick() {
 rafId = requestAnimationFrame(tick);
 const dt = Math.min(clock.getDelta(), 0.05);
@@ -2281,26 +2403,51 @@ const dt = Math.min(clock.getDelta(), 0.05);
 let anyAttached = false;
 
 if (S.running && !S.paused) {
+  if(transition)updateTransition(dt);
+  terrain.update(dt,S.cube.ix,S.cube.iz);
+  landmarks.update(dt,hellLockRemaining(hellUntil)>0);
+  bushes.update(dt,cubeMesh.position);
+  landingDust.update(dt,camera);debris.update(dt);
+  if(entranceTime < ENTRANCE_END) updateEntrance(dt);
+}
+if (S.running && !S.paused && !transition && entranceTime >= ENTRANCE_END) {
 S.time += dt;
+jumpCooldown=Math.max(0,jumpCooldown-dt);
+if(!S.rolling?.jump){const target=S.rolling?1/S.rolling.dur:0;momentum+=(target-momentum)*(1-Math.exp(-dt*(target?9:6)));}
+jumpBtn.style.opacity=jumpCooldown>0?".5":"1";
+if(landingSquash>0){landingSquash=Math.max(0,landingSquash-dt);const squash=Math.sin(landingSquash/.24*Math.PI)*.13,base=S.giantT>0?GIANT_SCALE:1;cubeMesh.scale.set(base*(1+squash*.5),base*(1-squash),base*(1+squash*.5));}
+
+if(cover.update(dt,cubeMesh.position.y<1.3&&bushAt(Math.round(cubeMesh.position.x),Math.round(cubeMesh.position.z),realm),S.cube.ix,S.cube.iz)){
+  playCue("exploration.bush_rustle",.65);trailFx.clear();
+  for(const bug of [...S.parasites])if(bug.state==="attached")removeParasite(bug);
+}
+cubeMesh.visible=!cover.hidden;trailFx.setActive(!cover.hidden&&getEquippedTrail()!=="none");
+regionEl.textContent = `${REALM_NAMES[realm]}  ${Math.floor(S.time/60)}:${String(Math.floor(S.time%60)).padStart(2,"0")}`;
+ambienceT-=dt;if(ambienceT<=0){playCue(`exploration.ambient_${realm}`,.35);ambienceT=7.5;}
+if(realm==="cinder"&&!S.rolling?.jump&&worldTile(S.cube.ix,S.cube.iz,realm).surface==="lava") {
+  lavaT-=dt;if(lavaT<=0){S.lives=Math.max(0,S.lives-.35);S.lastHitBy="lava";S.glow=.5;S.glowHold=.3;playCue("exploration.lava_burn",.65);updateHUD();lavaT=.65;if(S.lives<=0)gameOver();}
+} else lavaT=0;
+
 
 S.spawnTimer -= dt;
-if (S.spawnTimer <= 0) {
+if (S.spawnTimer <= 0 && realm!=="cabin") {
 spawnParasite();
-// swarm (late levels) packs spawns tighter on top of the time ramp
-const swarm = LEVELS[S.level].swarm ?? 1;
+// Elapsed-time pressure tightens spawning over the run.
+const swarm = explorationPressure(S.time).swarm ?? 1;
 const interval =
-  Math.max(0.45, (2.2 - S.time * 0.022) / swarm) * (casual ? 1.18 : 1);
+  Math.max(0.45, (1.1 - S.time * 0.008) / swarm) * (casual ? 1.18 : 1);
 S.spawnTimer = interval * (0.7 + Math.random() * 0.6);
 }
 
 // effect timers
-if (S.speedT > 0) S.speedT -= dt;
+if (S.coinBoostT > 0) { S.coinBoostT = Math.max(0,S.coinBoostT - dt); if (S.coinBoostT === 0) playCue("powerups.expire"); }
+if (S.speedT > 0) { S.speedT -= dt; if (S.speedT <= 0) playCue("powerups.expire"); }
 if (S.slowT > 0) S.slowT -= dt;
 if (S.stallT > 0) S.stallT -= dt;
 if (S.dazeT > 0) S.dazeT -= dt;
 if (S.giantT > 0) {
 S.giantT -= dt;
-if (S.giantT <= 0) cubeMesh.scale.setScalar(1); // shrink back
+if (S.giantT <= 0) { cubeMesh.scale.setScalar(1); playCue("powerups.expire"); } // shrink back
 }
 if (S.poisonT > 0) {
 S.poisonT -= dt;
@@ -2316,9 +2463,10 @@ gameOver();
 }
 }
 
-// active-effect readout under the level label
+// Active effects below the realm timer.
 {
-let b = "";
+let b = cover.hidden ? `HIDDEN  ` : "";
+if (S.coinBoostT > 0) b += `◈ 2× ${Math.ceil(S.coinBoostT)}s  `;
 if (S.speedT > 0) b += `⚡ ${Math.ceil(S.speedT)}s  `;
 if (S.giantT > 0) b += `★ ${Math.ceil(S.giantT)}s  `;
 if (S.slowT > 0) b += "🕸 SLOWED  ";
@@ -2346,10 +2494,11 @@ tryRoll(heldDir[0] * inv, heldDir[1] * inv);
 }
 
 updateRoll(dt);
-trailFx.update(dt, cubeMesh.position, !!S.rolling);
-auraFx.update(dt);
+trailFx.update(dt, cubeMesh.position, !!S.rolling&&!S.rolling.jump, camera);
+coinField.update(dt,cubeMesh.position);
 
-const spd = LEVELS[S.level].speed; // parasite speed ramps with level
+insectShadowBudget=0;
+const spd = explorationPressure(S.time).speed; // parasite speed ramps with level
 for (let i = S.parasites.length - 1; i >= 0; i--) {
 const pz = S.parasites[i];
 pz.animT += dt;
@@ -2363,7 +2512,7 @@ continue;
 // egg sac never moves; it hatches a brood if not crushed in time
 if (pz.type === "eggsac") {
 pz.hatchT -= dt;
-pz.mesh.userData.animate(pz.animT);
+animateInsect(pz);
 if (pz.hatchT <= 0) {
 hatchEggSac(pz);
 } else if (
@@ -2383,7 +2532,7 @@ if (pz.type === "spitter" && pz.moveT >= 1) {
     const cdx = S.cube.ix - pz.ix,
       cdz = S.cube.iz - pz.iz;
     const cheb = Math.max(Math.abs(cdx), Math.abs(cdz));
-    if (cheb >= 2 && cheb <= SPIT_RANGE_MAX) {
+    if (!cover.hidden && worldTile(S.cube.ix,S.cube.iz,realm).surface!=="water" && cheb >= 2 && cheb <= SPIT_RANGE_MAX) {
       pz.mesh.rotation.set(0, Math.atan2(cdx, cdz) - Math.PI / 2, 0);
       launchSpit(pz);
       pz.spitT = SPIT_CD_MIN + Math.random() * (SPIT_CD_MAX - SPIT_CD_MIN);
@@ -2405,7 +2554,7 @@ if (pz.moveTimer >= pz.def.interval / spd) {
 pz.moveTimer = 0;
 stepParasite(pz);
 }
-pz.mesh.userData.animate(pz.animT);
+animateInsect(pz);
 // wandered too far behind? recycle it
 if (
 Math.max(
@@ -2421,7 +2570,7 @@ pz.biteTimer -= dt;
 const worldN = _v1.copy(pz.localN).applyQuaternion(cubeMesh.quaternion);
 pz.mesh.position.copy(cubeMesh.position).addScaledVector(worldN, 0.56);
 pz.mesh.quaternion.setFromUnitVectors(UP, worldN);
-pz.mesh.userData.animate(pz.animT * 1.6);
+animateInsect(pz,1.6);
 // gnashing pulse in the final moment before the bite lands
 if (pz.biteTimer < 0.4) {
 const p = 1 + Math.sin(pz.animT * 18) * 0.14;
@@ -2462,7 +2611,7 @@ removeHeart();
 }
 } else {
 S.heartCooldown -= dt;
-if (S.heartCooldown <= 0) spawnHeart();
+if (S.heartCooldown <= 0 && realm!=="cabin") spawnHeart();
 }
 
 // power-up lifecycle (same rhythm as hearts, rarer)
@@ -2486,9 +2635,9 @@ pu.mesh.visible = Math.floor(pu.t * 6) % 2 === 0;
 if (pu.t > POWERUP_LIFE + POWERUP_BLINK || dist > HEART_DESPAWN_R) {
 removePowerup();
 }
-} else if (S.score >= POWERUP_MIN_SCORE) {
+} else {
 S.powerupCooldown -= dt;
-if (S.powerupCooldown <= 0) spawnPowerup();
+if (S.powerupCooldown <= 0 && realm!=="cabin") spawnPowerup();
 }
 
 // acid globs in flight: arc to their target tile, then hit or splat
@@ -2570,7 +2719,9 @@ sun.position.copy(cubeMesh.position).add(SUN_OFFSET);
 sun.target.position.copy(cubeMesh.position);
 
 // camera follow + shake
-_v2.copy(cubeMesh.position).add(camOffsetScaled);
+_v2.copy(cubeMesh.position);
+if(entranceTime<ENTRANCE_END)_v2.y=.5;
+_v2.add(camOffsetScaled);
 camera.position.lerp(_v2, 0.08);
 if (S.shake > 0) {
 S.shake = Math.max(0, S.shake - dt * 1.8);
@@ -2600,6 +2751,7 @@ window.removeEventListener("crush:save-error", onSaveError);
 $("board-mode").removeEventListener("change", onBoardMode);
 initialsInput.removeEventListener("input", onNameInput);
 cancelAnimationFrame(rafId);
+jumpBtn.removeEventListener("pointerdown",onJump);
 window.removeEventListener("keydown", onKeyDown);
 window.removeEventListener("keyup", onKeyUp);
 window.removeEventListener("blur", onBlur);
@@ -2621,11 +2773,18 @@ pauseMenuBtn.removeEventListener("click", onQuitToMenu);
 gameoverMenuBtn.removeEventListener("click", onGameoverMenu);
 window.removeEventListener("crush:skin", onSkinChange);
 window.removeEventListener("crush:trail", onTrailChange);
-window.removeEventListener("crush:aura", onAuraChange);
 trailFx.dispose();
-auraFx.dispose();
+landingDust.dispose();debris.dispose();
+terrain.dispose();landmarks.dispose();bushes.dispose();
+coinField.dispose();
+stopAudio();
+obstacles.dispose();bridges.dispose();grassBatch.dispose();pebbleBatch.dispose();
+disposeModel(scene);
+Object.values(parasitePools).forEach(pool => pool.forEach(disposeModel));
+groundTex.dispose();
 disposeMenus();
 renderer.domElement.remove();
 renderer.dispose();
+renderer.forceContextLoss();
 };
 }

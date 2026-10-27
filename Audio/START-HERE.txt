@@ -1,0 +1,34 @@
+CUBECRUSH — TACTILE ARCADE SOUND PACK
+
+Open preview.html to audition all cues and their variations.
+The two preview mixes demonstrate gameplay layering and all 14 creature kills.
+Use headphones or speakers; the preview begins at 65% volume.
+
+wav/       48 kHz, 24-bit PCM WAV masters, mono for positional/repeated effects.
+ogg/       Compact Ogg Vorbis alternatives. WAV is the compatibility fallback.
+previews/  Mixed examples, not individual game assets.
+manifest.json       Every cue, variant, intended trigger, priority and cooldown.
+integration-map.json Existing sound functions mapped to the replacement cues.
+mixing-guide.json    Voice limits, suppression rules and implementation notes.
+validation.json     Signal checks and decoding results for every exported asset.
+tools/              Deterministic synthesis source and pinned Python dependencies.
+
+Sound direction: tactile stone movement, playful liquid splats, brittle shell
+breaks, restrained UI feedback and soft mallet rewards. Creature kills have
+three variations each. Score, coin and XP use different timbres.
+
+These are original procedurally synthesized sounds, with no third-party samples
+or recordings. They are not field recordings or voice performances.
+
+The pack is ready for audition and integration. Creating it does not change
+game/audio.ts or the live game's playback behavior. Most UI cues and XP cues
+are new hooks for the redesign. Optional hover, ambient creature movement and
+status ticks should start disabled to keep repeated play comfortable.
+
+Rebuild:
+  python -m venv .venv
+  .venv/Scripts/python -m pip install -r tools/requirements.txt
+  .venv/Scripts/python tools/build_audio.py
+
+The build overwrites this pack's generated files with the same deterministic
+recipes. Keep custom revisions outside the generated wav/ and ogg/ filenames.

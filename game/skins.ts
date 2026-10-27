@@ -1,264 +1,80 @@
-/* ================= cube skins =================
- * Cosmetic textures for the cube, bought with coins in the Shop. Every skin
- * is a GRAYSCALE canvas texture: the material's color still swaps per level
- * (levels.ts), and since a grayscale map multiplies that color, the pattern
- * stays visible and contrasts against whatever the current level tint is.
- *
- * ids are legacy ("classic"/"venom"/"magma") so saved wallets/equips keep
- * working; display names are the texture themes.
- */
-
 import * as THREE from "three";
 import { createCubeMesh, disposeCubeMesh } from "./cubeMesh";
-import { NET_COLS, NET_ROWS } from "./cubeNet";
-import { drawDragonNet } from "./dragonSkin";
 import { mountItemPreview } from "./itemPreview";
+import { acquireSkinMaps } from "./skin-materials";
+import { bakeModel, ball, link, disposeModel } from "./model";
 
-export interface SkinDef {
-  id: "classic" | "venom" | "magma";
-  name: string;
-  desc: string;
-  price: number; // coins; 0 = owned from the start
-  roughness: number;
-}
-
+export interface SkinDef { id: string; name: string; desc: string; price: number; roughness: number }
 export const SKINS: SkinDef[] = [
-  {
-    id: "classic",
-    name: "ROCKY",
-    desc: "Cracked stone shell. Every level recolours it — the cracks stay.",
-    price: 0,
-    roughness: 0.6,
-  },
-  {
-    id: "venom",
-    name: "DRAGON",
-    desc: "An imperial serpent wound right around the cube. Sheds nothing, fears nothing.",
-    price: 320,
-    roughness: 0.45,
-  },
-  {
-    id: "magma",
-    name: "RUBIX",
-    desc: "3×3 sticker grid. Never solved — always crushing.",
-    price: 500,
-    roughness: 0.35,
-  },
+  { id: "classic", name: "CLASSIC", desc: "The original cube.", price: 0, roughness: .55 },
+  { id: "magma", name: "MAGMA", desc: "Molten seams. Obsidian armour.", price: 1600, roughness: .6 },
+  { id: "boba", name: "BOBA BUDDY", desc: "Caramel swirls and tapioca pearls.", price: 600, roughness: .32 },
+  { id: "gummy", name: "GUMMY POP", desc: "A glossy strawberry chew.", price: 600, roughness: .2 },
+  { id: "glacier", name: "GLACIER", desc: "Carved from blue ice.", price: 1000, roughness: .25 },
+  { id: "mossling", name: "MOSSLING", desc: "A little forest spirit.", price: 600, roughness: .65 },
+  { id: "arcade", name: "ARCADE", desc: "Pocket-sized high scores.", price: 1000, roughness: .4 },
+  { id: "nebula", name: "NEBULA", desc: "A pocket of starlight.", price: 1600, roughness: .3 },
+  { id: "honey", name: "HONEYDROP", desc: "Golden honeycomb.", price: 600, roughness: .25 },
+  { id: "koi", name: "TIDEPOOL", desc: "A quiet koi pond.", price: 1000, roughness: .25 },
+  { id: "prism", name: "PRISM", desc: "Soft iridescent bands.", price: 1600, roughness: .22 },
 ];
-
-export const skinById = (id: string): SkinDef =>
-  SKINS.find((s) => s.id === id) ?? SKINS[0];
-
-/* ---------- procedural skin textures (grayscale, level-tintable) ---------- */
-
-function h2(x: number, z: number) {
-  const h = Math.sin(x * 127.1 + z * 311.7) * 43758.5453;
-  return h - Math.floor(h);
-}
-
-function makeRockyTexture(ctx: CanvasRenderingContext2D, T: number) {
-  // mottled stone base
-  ctx.fillStyle = "#d4d4d4";
-  ctx.fillRect(0, 0, T, T);
-  for (let i = 0; i < 260; i++) {
-    const v = 190 + h2(i, 7) * 50;
-    ctx.fillStyle = `rgb(${v},${v},${v})`;
-    const s = 6 + h2(i, 3) * 22;
-    ctx.beginPath();
-    ctx.arc(h2(i, 1) * T, h2(i, 2) * T, s, 0, Math.PI * 2);
-    ctx.fill();
-  }
-  // jagged cracks: random walks with branches
-  ctx.strokeStyle = "rgba(30,30,30,0.85)";
-  ctx.lineCap = "round";
-  for (let c = 0; c < 7; c++) {
-    let x = h2(c, 11) * T,
-      y = h2(c, 13) * T;
-    let a = h2(c, 17) * Math.PI * 2;
-    ctx.lineWidth = 2.5 + h2(c, 19) * 2;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    const steps = 8 + ((h2(c, 23) * 6) | 0);
-    for (let s = 0; s < steps; s++) {
-      a += (h2(c * 31, s) - 0.5) * 1.4;
-      x += Math.cos(a) * (10 + h2(s, c) * 16);
-      y += Math.sin(a) * (10 + h2(s, c) * 16);
-      ctx.lineTo(x, y);
+export const skinById = (id: string) => SKINS.find(s => s.id === id) ?? SKINS[0];
+function accessories(id: string) {
+  const g = new THREE.Group();
+  if (id === "boba") {
+    link(g,0xf5edce,[.18,.45,-.16],[.25,.78,-.16],.055);
+    for(let i=0;i<4;i++) {
+      const t=.2+i*.2;
+      link(g,0xb96955,[.18+.07*t,.45+.33*t,-.16],[.18+.07*(t+.085),.45+.33*(t+.085),-.16],.056);
     }
-    ctx.stroke();
-    // thin branch off the midpoint
-    ctx.lineWidth = 1.2;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x + (h2(c, 29) - 0.5) * 50, y + (h2(c, 37) - 0.5) * 50);
-    ctx.stroke();
+    ball(g,0x573a32,.25,.78,-.16,.046,.015,.046);
   }
-  // dark speckle
-  ctx.fillStyle = "rgba(40,40,40,0.5)";
-  for (let i = 0; i < 90; i++) {
-    ctx.fillRect(h2(i, 41) * T, h2(i, 43) * T, 2 + h2(i, 47) * 3, 2 + h2(i, 53) * 3);
+  if (id === "mossling") {
+    link(g,0x607f32,[.05,.49,0],[.06,.75,0],.025);
+    const leaf=ball(g,0x88b84c,-.03,.7,0,.13,.045,.06); leaf.rotation.z=-.45;
+    const leaf2=ball(g,0xa4c75b,.15,.76,0,.14,.045,.065); leaf2.rotation.z=.45;
+    link(g,0xf1d7ab,[-.25,.48,.08],[-.25,.62,.08],.025);
+    ball(g,0xc97444,-.25,.64,.08,.1,.045,.08);
+    for(const [x,z] of [[-.28,.06],[-.22,.1],[-.25,.04]]) ball(g,0xffe8bd,x,.68,z,.013,.005,.012);
   }
+  if(id==="honey") for(const x of [-.27,.23]) ball(g,0xf4b833,x,.31,.492,.045,.17,.025);
+  if(!g.children.length) return null;
+  const mesh=bakeModel(g); mesh.name="skin-accessories"; return mesh;
 }
-
-function makeRubixTexture(ctx: CanvasRenderingContext2D, T: number) {
-  // black frame + 3×3 stickers in distinct GRAY values: the level colour
-  // tints the whole face, gray steps keep the sticker mosaic readable
-  ctx.fillStyle = "#101010";
-  ctx.fillRect(0, 0, T, T);
-  const gap = T * 0.035;
-  const cell = (T - gap * 4) / 3;
-  const shades = [235, 150, 205, 110, 250, 170, 130, 220, 90];
-  let i = 0;
-  for (let r = 0; r < 3; r++) {
-    for (let c = 0; c < 3; c++, i++) {
-      const x = gap + c * (cell + gap);
-      const y = gap + r * (cell + gap);
-      const v = shades[i];
-      // sticker with a soft top-light bevel
-      const g = ctx.createLinearGradient(x, y, x, y + cell);
-      g.addColorStop(0, `rgb(${Math.min(255, v + 18)},${Math.min(255, v + 18)},${Math.min(255, v + 18)})`);
-      g.addColorStop(1, `rgb(${v - 25},${v - 25},${v - 25})`);
-      ctx.fillStyle = g;
-      const rad = cell * 0.16;
-      ctx.beginPath();
-      ctx.roundRect(x, y, cell, cell, rad);
-      ctx.fill();
-    }
-  }
+export function applySkin(mesh: THREE.Mesh, skin: SkinDef) {
+  if(mesh.userData.skinId === skin.id) return;
+  mesh.userData.skinId=skin.id;
+  mesh.userData.releaseSkin?.();
+  const acquired=acquireSkinMaps(skin.id);
+  mesh.userData.releaseSkin=acquired?.release;
+  const mat=mesh.material as THREE.MeshPhysicalMaterial;
+  mat.color.setHex(skin.id==="classic"?0xf0e8d8:skin.id==="gummy"?0xfc2550:0xffffff);
+  mat.map=acquired?.maps.color ?? null;
+  mat.bumpMap=acquired?.maps.bump ?? null;
+  mat.roughnessMap=acquired?.maps.roughness ?? null;
+  mat.bumpScale=skin.id==="magma"?.055:skin.id==="mossling"?.045:.012;
+  mat.roughness=skin.id==="gummy"?.14:skin.roughness;
+  mat.metalness=skin.id==="prism"?.42:.015;
+  mat.clearcoat=skin.id==="magma"||skin.id==="mossling"?.08:.75;
+  mat.clearcoatRoughness=.2;
+  mat.iridescence=skin.id==="prism"?.6:0;
+  mat.iridescenceIOR=1.3;
+  mat.emissive.setHex(acquired?0xffffff:0);
+  mat.emissiveMap=acquired?.maps.emission ?? null;
+  mat.emissiveIntensity=skin.id==="magma"?.65:.25;
+  mat.needsUpdate=true;
+  const old=mesh.getObjectByName("skin-accessories");
+  if(old) { mesh.remove(old); disposeModel(old); }
+  const extra=accessories(skin.id); if(extra) mesh.add(extra);
+  const eyes=mesh.getObjectByName("cube-eyes"); if(eyes) eyes.visible=skin.id!=="arcade";
 }
-
-const texCache = new Map<string, THREE.CanvasTexture>();
-
-// Per-face cell size. The net skin keeps the same 256 per face as the tiled
-// ones, it just needs six cells' worth of canvas to lay them out in.
-const FACE_PX = 256;
-
-/** Grayscale skin texture, cached per skin id.
- *
- *  Two shapes come out of here, both plain CanvasTextures on `material.map`:
- *  tiled skins paint one 256px square repeated on every face, while DRAGON
- *  paints the cube's whole unwrapped net so its subject runs across faces. The
- *  net one reads the second UV set, selected by `channel` — see cubeNet.ts. */
-export function getSkinTexture(id: SkinDef["id"]): THREE.CanvasTexture {
-  const hit = texCache.get(id);
-  if (hit) return hit;
-
-  const net = id === "venom";
-  const cv = document.createElement("canvas");
-  cv.width = net ? NET_COLS * FACE_PX : FACE_PX;
-  cv.height = net ? NET_ROWS * FACE_PX : FACE_PX;
-  const ctx = cv.getContext("2d")!;
-  if (net) drawDragonNet(ctx, FACE_PX);
-  else if (id === "classic") makeRockyTexture(ctx, FACE_PX);
-  else makeRubixTexture(ctx, FACE_PX);
-
-  const tex = new THREE.CanvasTexture(cv);
-  tex.colorSpace = THREE.SRGBColorSpace;
-  tex.anisotropy = 4;
-  if (net) tex.channel = 1;
-  texCache.set(id, tex);
-  return tex;
+/** These portraits are exported from this exact model/material factory. */
+export function getSkinThumbnail(skin: SkinDef): string {
+  return `/game-art/runtime-skins/${skin.id}.webp`;
 }
-
-/* ---------- flat thumbnail (shop card + home-screen indicator) ----------
- * Both spots used to show a hand-authored CSS gradient standing in for the
- * skin, tuned once and never touched again — which is exactly how DRAGON's
- * thumbnail ended up showing scattered dots long after the real texture
- * became a serpent, and ROCKY/RUBIX's ended up close but not quite the real
- * palette either. A rendered snapshot of the actual cube mesh + material
- * can't drift like that: whatever the skin looks like in the interactive
- * preview and in gameplay is what gets captured here, because it's the same
- * geometry, texture and tint. */
-const thumbCache = new Map<string, string>();
-const THUMB_PX = 320;
-// Isometric (camera along (1,1,1)) so the cube's rendered silhouette lines
-// up with the hexagon clip-path .hero-cube/.skin-cube already use for every
-// other cube icon in the UI. HALF is the ortho frustum half-extent: an exact
-// corner-to-corner fit is 1/sqrt(2) horizontally and sqrt(2/3) vertically
-// (derived from the cube's corners projected onto the isometric screen
-// basis); using the larger of the two for a square frustum keeps the cube
-// undistorted, with ~5% headroom so the (slightly rounded) mesh never
-// touches the edge.
-const THUMB_HALF = Math.sqrt(2 / 3) * 1.05;
-
-/** Renders `id`'s cube — real mesh, real texture, same tint as the item-modal
- *  preview — from a fixed isometric angle, and returns it as a PNG data URL.
- *  Cached per skin id: the shot is fully deterministic, so it's computed once
- *  and reused for the rest of the session. */
-export function getSkinThumbnail(id: SkinDef["id"]): string {
-  const hit = thumbCache.get(id);
-  if (hit) return hit;
-
-  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-  renderer.setSize(THUMB_PX, THUMB_PX, false);
-
-  const scene = new THREE.Scene();
-  scene.add(new THREE.HemisphereLight(0xfff2dc, 0x2c2418, 1.2));
-  const sun = new THREE.DirectionalLight(0xffe6c0, 1.8);
-  sun.position.set(2, 3, 2);
-  scene.add(sun);
-
-  const camera = new THREE.OrthographicCamera(-THUMB_HALF, THUMB_HALF, THUMB_HALF, -THUMB_HALF, 0.1, 10);
-  camera.position.set(1, 1, 1).normalize().multiplyScalar(4);
-  camera.up.set(0, 1, 0);
-  camera.lookAt(0, 0, 0);
-
-  const skin = skinById(id);
-  const mesh = createCubeMesh();
-  const mat = mesh.material as THREE.MeshStandardMaterial;
-  mat.color.set(PREVIEW_TINT);
-  mat.roughness = skin.roughness;
-  mat.map = getSkinTexture(skin.id);
-  mat.needsUpdate = true;
-  scene.add(mesh);
-
-  renderer.render(scene, camera);
-  const url = renderer.domElement.toDataURL("image/png");
-
-  disposeCubeMesh(mesh);
-  renderer.dispose();
-
-  thumbCache.set(id, url);
-  return url;
-}
-
-/* ---------- live skin preview (item modal) ---------- */
-// Same tint on every skin so the preview reads the pattern on its own
-// merits, independent of whatever level colour the live game happens to
-// be on — matches the cube's default (unlevelled) look.
-const PREVIEW_TINT = 0xf0e8d8;
-
-// A cube's corner is always 0.5*sqrt(3) from its center, no matter how it's
-// rotated — that's the sphere mountItemPreview needs to fit on screen.
-const PREVIEW_RADIUS = (0.5 * Math.sqrt(3));
-
-/** Mounts a small idle-rotating render of `skin` on the real cube mesh into
- *  `container` (its own WebGL canvas, filling the container). Returns a
- *  dispose function — call it when the preview is no longer shown to stop
- *  the render loop and free GPU resources. */
-export function mountSkinPreview(
-  container: HTMLElement,
-  skin: SkinDef,
-): () => void {
-  return mountItemPreview(container, { radius: PREVIEW_RADIUS }, (scene) => {
-    const mesh = createCubeMesh();
-    const mat = mesh.material as THREE.MeshStandardMaterial;
-    mat.color.set(PREVIEW_TINT);
-    mat.roughness = skin.roughness;
-    mat.map = getSkinTexture(skin.id);
-    mat.needsUpdate = true;
-    scene.add(mesh);
-
-    let t = 0;
-    return {
-      tick(dt) {
-        t += dt * 0.66; // matches the previous fixed +0.011/frame @60fps pace
-        mesh.rotation.y = t;
-        mesh.rotation.x = Math.sin(t * 0.6) * 0.12;
-      },
-      dispose() {
-        disposeCubeMesh(mesh);
-      },
-    };
+export function mountSkinPreview(container: HTMLElement, skin: SkinDef): () => void {
+  return mountItemPreview(container,{radius:1.02},scene=>{
+    const mesh=createCubeMesh(); applySkin(mesh,skin); scene.add(mesh);
+    return {tick(dt){mesh.rotation.y+=dt*.45;},dispose(){disposeCubeMesh(mesh);}};
   });
 }

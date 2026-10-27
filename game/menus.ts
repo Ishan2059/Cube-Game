@@ -6,7 +6,7 @@ import { validateNameInput } from "./name-input";
  * at boot; navigation between these screens self-wires. Markup/styling
  * follows the UI kit in docs/CubeCrush UI.html.
  *
- * Skins/Trails/Auras all share one shop grid (#skin-list) and buy/equip
+ * Skins/Trails all share one shop grid (#skin-list) and buy/equip
  * flow — renderShop() swaps its contents based on the active tab.
  */
 
@@ -22,10 +22,6 @@ import {
   ownTrail,
   getEquippedTrail,
   setEquippedTrail,
-  getOwnedAuras,
-  ownAura,
-  getEquippedAura,
-  setEquippedAura,
   getSettings,
   patchSettings,
   type Settings,
@@ -34,9 +30,8 @@ import { isTouchDevice } from "./device";
 import { getInitials, renameInitials } from "./leaderboard";
 import { SKINS, skinById, mountSkinPreview, getSkinThumbnail, type SkinDef } from "./skins";
 import { TRAILS, mountTrailPreview, type TrailDef } from "./trails";
-import { AURAS, mountAuraPreview, type AuraDef } from "./auras";
 import { BEASTS, getBugThumbs } from "./bestiary";
-import { setMuted, playCoin, audio } from "./audio";
+import { setMuted, playCue, audio } from "./audio";
 import { openItemModal, closeItemModal, initItemModal, type ItemModalItem } from "./itemModal";
 
 const $ = (id: string) => document.getElementById(id) as HTMLElement;
@@ -60,7 +55,7 @@ export function updateMenuStats() {
   // the hero cube on the Start screen previews the equipped skin, as a
   // snapshot of the real cube mesh — see getSkinThumbnail
   const sk = skinById(getEquippedSkin());
-  $("hero-cube").style.background = `url(${getSkinThumbnail(sk.id)}) center / contain no-repeat`;
+  $("hero-cube").style.background = `url(${getSkinThumbnail(sk)}) center / contain no-repeat`;
   $("hero-skin-label").textContent = sk.name;
 }
 
@@ -102,13 +97,15 @@ function syncProfileUI() {
 }
 
 function toggleSetting(patch: (s: Settings) => Partial<Settings>) {
+  audio();
   const next = patchSettings(patch(getSettings()));
   applySettingsEffects(next);
+  playCue(next.sound ? "ui.toggle_on" : "ui.toggle_off");
   syncSettingsUI();
 }
 
 /* ---------- shop ---------- */
-type ShopTab = "skins" | "trails" | "auras";
+type ShopTab = "skins" | "trails";
 let shopTab: ShopTab = "skins";
 
 function shopCardHTML(
@@ -136,13 +133,11 @@ function shopCardHTML(
 const SHOP_HINTS: Record<ShopTab, string> = {
   skins: "Earn coins by crushing parasites. Skins are cosmetic — pure drip.",
   trails: "A fading streak that follows the cube while it's rolling.",
-  auras: "A soft glow that pulses around the cube at all times.",
 };
 
 function renderShop() {
   $("tab-skins").classList.toggle("active", shopTab === "skins");
   $("tab-trails").classList.toggle("active", shopTab === "trails");
-  $("tab-auras").classList.toggle("active", shopTab === "auras");
   $("shop-hint").textContent = SHOP_HINTS[shopTab];
 
   const list = $("skin-list");
@@ -158,7 +153,7 @@ function renderShop() {
         owned.includes(sk.id),
         equipped === sk.id,
         coins,
-        `url(${getSkinThumbnail(sk.id)}) center / contain no-repeat`,
+        `url(${getSkinThumbnail(sk)}) center / contain no-repeat`,
       ),
     ).join("");
   } else if (shopTab === "trails") {
@@ -167,17 +162,12 @@ function renderShop() {
     list.innerHTML = TRAILS.map((t) =>
       shopCardHTML(t.id, t.name, t.price, owned.includes(t.id), equipped === t.id, coins, t.previewSwatch),
     ).join("");
-  } else {
-    const owned = getOwnedAuras();
-    const equipped = getEquippedAura();
-    list.innerHTML = AURAS.map((a) =>
-      shopCardHTML(a.id, a.name, a.price, owned.includes(a.id), equipped === a.id, coins, a.previewSwatch),
-    ).join("");
   }
 }
 
 function switchShopTab(tab: ShopTab) {
   if (shopTab === tab) return;
+  playCue("ui.tab_switch");
   shopTab = tab;
   renderShop();
 }
@@ -205,13 +195,14 @@ function buildSkinItem(sk: SkinDef): ItemModalItem {
       }
       ownSkin(sk.id);
       setEquippedSkin(sk.id);
-      playCoin();
+      playCue("shop.purchase");
       toast(`${sk.name} unlocked & equipped!`);
       afterChange();
       closeItemModal();
     },
     onEquip: () => {
       setEquippedSkin(sk.id);
+      playCue("shop.equip_skin");
       toast(`${sk.name} equipped`);
       afterChange();
       closeItemModal();
@@ -240,47 +231,15 @@ function buildTrailItem(t: TrailDef): ItemModalItem {
       }
       ownTrail(t.id);
       setEquippedTrail(t.id);
-      playCoin();
+      playCue("shop.purchase");
       toast(`${t.name} trail unlocked & equipped!`);
       afterChange();
       closeItemModal();
     },
     onEquip: () => {
       setEquippedTrail(t.id);
+      playCue("shop.equip_trail");
       toast(t.id === "none" ? "Trail off" : `${t.name} trail equipped`);
-      afterChange();
-      closeItemModal();
-    },
-  };
-}
-
-function buildAuraItem(a: AuraDef): ItemModalItem {
-  const afterChange = () => {
-    renderShop();
-    updateMenuStats();
-    window.dispatchEvent(new CustomEvent("crush:aura"));
-  };
-  return {
-    name: a.name,
-    price: a.price,
-    owned: getOwnedAuras().includes(a.id),
-    equipped: getEquippedAura() === a.id,
-    mountPreview: (el) => mountAuraPreview(el, a),
-    onBuy: () => {
-      if (!spendCoins(a.price)) {
-        toast(`Not enough coins — need 🪙 ${a.price}`);
-        return;
-      }
-      ownAura(a.id);
-      setEquippedAura(a.id);
-      playCoin();
-      toast(`${a.name} aura unlocked & equipped!`);
-      afterChange();
-      closeItemModal();
-    },
-    onEquip: () => {
-      setEquippedAura(a.id);
-      toast(a.id === "none" ? "Aura off" : `${a.name} aura equipped`);
       afterChange();
       closeItemModal();
     },
@@ -298,15 +257,12 @@ function onShopClick(e: Event) {
   } else if (shopTab === "trails") {
     const t = TRAILS.find((x) => x.id === id);
     if (t) openItemModal(buildTrailItem(t), getCoins());
-  } else {
-    const a = AURAS.find((x) => x.id === id);
-    if (a) openItemModal(buildAuraItem(a), getCoins());
   }
 }
 
 /* ---------- bestiary (guide screen) ---------- */
-// thumbnails come from the real in-game meshes; rendered once, lazily,
-// the first time the Guide opens (offscreen WebGL, ~a frame of work)
+// Approved guide portraits avoid creating extra WebGL contexts; loaded lazily,
+// the first time the Guide opens.
 let bestiaryBuilt = false;
 function buildBestiary() {
   if (bestiaryBuilt) return;
@@ -326,6 +282,7 @@ function onBestiaryClick(e: Event) {
   if (!btn) return;
   const beast = BEASTS.find((b) => b.type === btn.dataset.beast);
   if (!beast) return;
+  playCue("ui.guide_select");
   ($("beast-img") as HTMLImageElement).src = getBugThumbs()[beast.type];
   $("beast-title").textContent = beast.name;
   $("beast-desc").textContent = beast.desc;
@@ -333,6 +290,7 @@ function onBestiaryClick(e: Event) {
 }
 
 function closeBeastModal() {
+  playCue("ui.modal_close");
   $("beast-modal").classList.add("hidden");
 }
 
@@ -345,6 +303,8 @@ const MENU_SCREENS = [
 ] as const;
 
 function show(id: (typeof MENU_SCREENS)[number]) {
+  audio();
+  playCue(id === "start-screen" ? "ui.back" : "ui.navigate");
   fromPause = false; // any full-menu navigation clears the pause overlay path
   for (const s of MENU_SCREENS) $(s).classList.toggle("hidden", s !== id);
   if (id === "start-screen") updateMenuStats();
@@ -361,6 +321,8 @@ function show(id: (typeof MENU_SCREENS)[number]) {
 // their back buttons must then return to pause, not the start screen.
 let fromPause = false;
 function openFromPause(id: "settings-screen" | "howto-screen") {
+  audio();
+  playCue("ui.navigate");
   fromPause = true;
   if (id === "howto-screen") buildBestiary();
   if (id === "settings-screen") syncProfileUI();
@@ -410,7 +372,6 @@ export function initMenus(): () => void {
 
   on("tab-skins", () => switchShopTab("skins"));
   on("tab-trails", () => switchShopTab("trails"));
-  on("tab-auras", () => switchShopTab("auras"));
   on("skin-list", onShopClick);
 
   on("set-sound", () => toggleSetting((s) => ({ sound: !s.sound })));
@@ -462,6 +423,7 @@ export function initMenus(): () => void {
   on("reset-progress", async () => {
     const btn = $("reset-progress");
     if (!resetArmed) {
+      playCue("ui.reset_arm");
       resetArmed = true;
       btn.textContent = "TAP AGAIN TO CONFIRM";
       btn.classList.add("armed");

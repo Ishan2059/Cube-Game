@@ -1,3 +1,4 @@
+import { ENEMY_ARRIVAL, INITIAL_SWARM } from "./exploration-rules";
 import { LEVELS } from "../game/levels";
 import { COMBO_WINDOW, killPoints, MAX_RUN_EVENTS, MAX_RUN_SECONDS, PARASITES } from "./game-rules";
 import type { Difficulty } from "./game-rules";
@@ -23,12 +24,12 @@ export function scoreRun(events: unknown, durationMs: unknown, wallMs: number, m
     if (!Object.hasOwn(PARASITES, type)) return null;
     const parasite = type as keyof typeof PARASITES;
     // Enemies spawned before a level transition can still be alive afterward.
-    if (!LEVELS.slice(0, level + 1).some(l => l.weights[parasite])) return null;
+    if (time / 1000 < ENEMY_ARRIVAL[parasite] && !LEVELS.slice(0, level + 1).some(l => l.weights[parasite])) return null;
     // Spawn interval bottoms at 0.45 * 0.7 sec; egg sacs can add three bugs.
     // Use a conservative ceiling so valid frame timing and multi-kills fit.
     const minimumSpawnMs = 0.45 * 0.7 * (mode === "casual" ? 1.18 : 1) * 1000;
-    const brood = level >= 8 ? 4 : 1;
-    if (++kills > (1 + Math.floor(time / minimumSpawnMs)) * brood) return null;
+    const brood = level >= 8 || time / 1000 >= ENEMY_ARRIVAL.eggsac ? 4 : 1;
+    if (++kills > ((time < 250 ? 1 : INITIAL_SWARM) + Math.floor(time / minimumSpawnMs)) * brood) return null;
     if (time - lastKill > COMBO_WINDOW * 1000) combo = 0;
     score += killPoints(parasite, ++combo);
     lastKill = time;

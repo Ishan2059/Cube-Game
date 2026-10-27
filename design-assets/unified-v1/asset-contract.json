@@ -1,0 +1,535 @@
+{
+  "version": 1,
+  "createdAt": "2026-10-27",
+  "status": "Design handoff; runtime models, atlases, animation and performance validation are not implemented.",
+  "figma": {
+    "fileKey": "NhPdfBjEKmYDBiWRLzweEA",
+    "sectionId": "66519:15544",
+    "url": "https://www.figma.com/design/NhPdfBjEKmYDBiWRLzweEA/CSCA--Copy-?node-id=66519-15544"
+  },
+  "artDirection": {
+    "name": "Tactile stylized 3D",
+    "anchor": "Existing creature family",
+    "forms": "Intentional rounded silhouettes, smooth normals and modest bevels; broad material features that survive 64–96 px.",
+    "lighting": "Shared soft upper-left key, neutral ambient fill, restrained specular response; no asset-specific point lights.",
+    "materials": "Opaque satin surfaces for skins and creatures; matte grounded world props. Bake fine relief and markings. Surface appearance must remain distinct without physical transmission.",
+    "colorHierarchy": "Muted warm earth and olive world props; readable creature colors; saturated player cosmetics and controlled trail accents.",
+    "ui": {
+      "fonts": [
+        "Barlow Condensed",
+        "Inter"
+      ],
+      "text": "Names, amounts and necessary controls only.",
+      "palette": {
+        "background": "#090D0E",
+        "panel": "#111819",
+        "surface": "#1A2323",
+        "line": "#3A4844",
+        "text": "#F1F2E9",
+        "muted": "#A8B5AF",
+        "accent": "#D9FF43"
+      }
+    }
+  },
+  "targets": {
+    "note": "Initial budgets, not benchmark results. Tune after profiling on target devices.",
+    "skin": {
+      "trianglesLod0Max": 1400,
+      "trianglesLod1Max": 500,
+      "materialsMax": 1,
+      "meshDrawCallsMax": 1,
+      "accessoryClustersMax": 2
+    },
+    "creature": {
+      "trianglesLod0Max": 1800,
+      "trianglesLod1Max": 650,
+      "materialsMax": 1,
+      "mainPassDrawCallsPerCreatureMax": 1,
+      "rig": "Merge rigid parts or skin to a small rig; preserve silhouettes and limb counts. Avoid a separate mesh/material per sphere, leg segment or eye."
+    },
+    "obstacle": {
+      "trianglesLod0Max": 1200,
+      "valveExceptionMax": 1800,
+      "trianglesLod1Max": 400,
+      "materialsMax": 1,
+      "rendering": "Merge each static prop to one mesh, batch repeated props with InstancedMesh and share one prop material/atlas.",
+      "collision": "One occupied tile as today; cosmetic shape does not alter occupancy or generate physics colliders."
+    },
+    "trail": {
+      "ribbonMeshes": 1,
+      "ribbonSegmentsMax": 20,
+      "signatureParticlesMax": 8,
+      "totalMainPassDrawCallsMax": 2,
+      "lifetimeSecondsMax": 0.65,
+      "widthTilesMax": 0.35,
+      "lengthTilesMax": 3,
+      "rendering": "One ribbon texture with color/detail baked into it, one pooled sprite atlas draw. Reuse buffers; no per-frame object allocation, shadow casting, dynamic lights, postprocess bloom or simulated fluids."
+    },
+    "sceneMobile": {
+      "mainPassDrawCallsMax": 100,
+      "visibleTrianglesMax": 150000,
+      "residentGameTextureMiBMax": 32,
+      "frameTargetMs": 16.7,
+      "fallbackFrameTargetMs": 33.3,
+      "note": "Includes world, creatures, player and effects; shadow pass is additional and must be measured. These budgets may require batching current world tiles as well as new props."
+    }
+  },
+  "textures": {
+    "runtime": "Separate runtime UV atlases from these concept portraits. Use shared 1024px atlases by family, packed roughness/occlusion where useful, mipmaps and compressed GPU textures when supported. Load only equipped skin/trail into gameplay.",
+    "portraits": "Transparent PNG masters for Figma/UI reference. Produce responsive WebP UI exports at 256/512px when integrating. Static collection thumbnails; a single active hero canvas at most.",
+    "avoid": "Do not ship these full-resolution portraits as per-object 3D textures. They include preview lighting and are not UV-ready maps."
+  },
+  "implementation": {
+    "geometry": "Build a common bevelled cube base. Use texture/material swaps for skins. Pool creatures and effects. Share geometry/materials; dispose only when a resource is no longer shared.",
+    "world": "Use deterministic tile hash for prop selection. Keep existing obstacle spawn probability, safe-start tiles and movement rules.",
+    "animation": "Animate a few rig bones or rigid transforms; wings via simple rotation, soft bodies via segment transforms. No cloth or fluid simulation.",
+    "quality": "Cap render pixel ratio, allow lower shadow resolution or blob shadows on low tier, reduce trail particles first, then LOD geometry.",
+    "regression": "Preserve gameplay stats, creature IDs, scoring, hit boxes, timers, obstacle occupancy and difficulty. Visual-only changes."
+  },
+  "profiling": {
+    "existingCodeFacts": {
+      "baseCreatureSpawnCap": 24,
+      "maxLevelSwarmMultiplier": 1.8,
+      "normalSpawnCapAtMaxSwarm": 43,
+      "worldViewRadiusTiles": 14,
+      "visibleTileSquare": 841,
+      "note": "43 is the normal spawn threshold, not a guaranteed global cap; hatch paths need separate accounting."
+    },
+    "cases": [
+      "Peak late-level swarm including egg-sac hatching",
+      "Giant mode plus mass kills and score particles",
+      "Equipped trail plus dense obstacles during world streaming",
+      "Repeated menu opening and cosmetic switching",
+      "Low-tier mobile at capped DPR and thermal sustained play"
+    ],
+    "measure": [
+      "CPU/GPU frame-time p50/p95/p99",
+      "renderer.info.render.calls and triangles including shadow pass",
+      "GPU/JS memory growth after repeated runs",
+      "Texture decode and upload stalls",
+      "Effect overdraw and peak pool occupancy"
+    ],
+    "acceptance": "Record device, browser, resolution, quality tier and sustained frame-time results before claiming smooth performance."
+  },
+  "assets": [
+    {
+      "id": "magma",
+      "group": "skins",
+      "name": "MAGMA",
+      "portrait": "design-assets/unified-v1/skins/magma.png",
+      "previousPortrait": "design-assets/cube-skins/magma.png",
+      "figmaLineup": "66519:13979",
+      "implementation": "Bake rock plate depth and fissure detail to normal/base-color maps; orange emissive mask, no per-crack lights."
+    },
+    {
+      "id": "boba",
+      "group": "skins",
+      "name": "BOBA BUDDY",
+      "portrait": "design-assets/unified-v1/skins/boba.png",
+      "previousPortrait": "design-assets/cube-skins/boba.png",
+      "figmaLineup": "66519:13983",
+      "implementation": "Paint pearl motifs and cream swirls; only straw and cream silhouette need extra vertices; opaque caramel."
+    },
+    {
+      "id": "gummy",
+      "group": "skins",
+      "name": "GUMMY POP",
+      "portrait": "design-assets/unified-v1/skins/gummy.png",
+      "previousPortrait": "design-assets/cube-skins/gummy.png",
+      "figmaLineup": "66519:13987",
+      "implementation": "Opaque berry material with broad edge color; paint expression; no transmission or subsurface pass."
+    },
+    {
+      "id": "glacier",
+      "group": "skins",
+      "name": "GLACIER",
+      "portrait": "design-assets/unified-v1/skins/glacier.png",
+      "previousPortrait": "design-assets/cube-skins/glacier.png",
+      "figmaLineup": "66519:13991",
+      "implementation": "Opaque cyan material; bake cracks and frost; no internal shards or refraction."
+    },
+    {
+      "id": "mossling",
+      "group": "skins",
+      "name": "MOSSLING",
+      "portrait": "design-assets/unified-v1/skins/mossling.png",
+      "previousPortrait": "design-assets/cube-skins/mossling.png",
+      "figmaLineup": "66519:13995",
+      "implementation": "Bake moss microtexture and vines; broad moss silhouette plus one sprout/mushroom cluster merged into shell. No leaf particles."
+    },
+    {
+      "id": "arcade",
+      "group": "skins",
+      "name": "ARCADE",
+      "portrait": "design-assets/unified-v1/skins/arcade.png",
+      "previousPortrait": "design-assets/cube-skins/arcade.png",
+      "figmaLineup": "66519:13999",
+      "implementation": "Bake vents, fasteners and controls into normal/base-color maps; cyan eye mask, no separate render-to-texture screen."
+    },
+    {
+      "id": "nebula",
+      "group": "skins",
+      "name": "NEBULA",
+      "portrait": "design-assets/unified-v1/skins/nebula.png",
+      "previousPortrait": "design-assets/cube-skins/nebula.png",
+      "figmaLineup": "66519:14003",
+      "implementation": "Paint violet bands and stars; optional slow emissive-mask pulse, no volume rendering."
+    },
+    {
+      "id": "honey",
+      "group": "skins",
+      "name": "HONEY DROP",
+      "portrait": "design-assets/unified-v1/skins/honey.png",
+      "previousPortrait": "design-assets/cube-skins/honey.png",
+      "figmaLineup": "66519:14007",
+      "implementation": "Bake honeycomb relief; merge short drips and cap into shell; opaque amber."
+    },
+    {
+      "id": "koi",
+      "group": "skins",
+      "name": "TIDEPOOL",
+      "portrait": "design-assets/unified-v1/skins/koi.png",
+      "previousPortrait": "design-assets/cube-skins/koi.png",
+      "figmaLineup": "66519:14011",
+      "implementation": "Paint fish, coral and water bands onto opaque cube; no fish simulation or aquarium interior."
+    },
+    {
+      "id": "prism",
+      "group": "skins",
+      "name": "PRISM",
+      "portrait": "design-assets/unified-v1/skins/prism.png",
+      "previousPortrait": "design-assets/cube-skins/prism.png",
+      "figmaLineup": "66519:14015",
+      "implementation": "Use baked pastel gradient with restrained specular highlight; no dispersion, transmission or screen-space reflections."
+    },
+    {
+      "id": "rooted-stump",
+      "group": "obstacles",
+      "name": "ROOTED STUMP",
+      "portrait": "design-assets/unified-v1/obstacles/rooted-stump.png",
+      "previousPortrait": "design-assets/obstacles/rooted-stump.png",
+      "figmaLineup": "66519:14565",
+      "implementation": "Bake fine material detail; geometry carries only outer silhouette and major cutouts."
+    },
+    {
+      "id": "broken-planter",
+      "group": "obstacles",
+      "name": "BROKEN PLANTER",
+      "portrait": "design-assets/unified-v1/obstacles/broken-planter.png",
+      "previousPortrait": "design-assets/obstacles/broken-planter.png",
+      "figmaLineup": "66519:14567",
+      "implementation": "Bake fine material detail; geometry carries only outer silhouette and major cutouts."
+    },
+    {
+      "id": "rusted-valve",
+      "group": "obstacles",
+      "name": "RUSTED VALVE",
+      "portrait": "design-assets/unified-v1/obstacles/rusted-valve.png",
+      "previousPortrait": "design-assets/obstacles/rusted-valve.png",
+      "figmaLineup": "66519:14569",
+      "implementation": "Bake fine material detail; geometry carries only outer silhouette and major cutouts."
+    },
+    {
+      "id": "sandbag-block",
+      "group": "obstacles",
+      "name": "SANDBAG BLOCK",
+      "portrait": "design-assets/unified-v1/obstacles/sandbag-block.png",
+      "previousPortrait": "design-assets/obstacles/sandbag-block.png",
+      "figmaLineup": "66519:14571",
+      "implementation": "Bake fine material detail; geometry carries only outer silhouette and major cutouts."
+    },
+    {
+      "id": "concrete-footing",
+      "group": "obstacles",
+      "name": "CONCRETE FOOTING",
+      "portrait": "design-assets/unified-v1/obstacles/concrete-footing.png",
+      "previousPortrait": "design-assets/obstacles/concrete-footing.png",
+      "figmaLineup": "66519:14573",
+      "implementation": "Bake fine material detail; geometry carries only outer silhouette and major cutouts."
+    },
+    {
+      "id": "afterburn",
+      "group": "trails",
+      "name": "AFTERBURN",
+      "portrait": "design-assets/unified-v1/trails/afterburn.png",
+      "previousPortrait": "design-assets/cube-trails/afterburn.png",
+      "figmaLineup": "66519:14227",
+      "implementation": "Use preview as palette/shape reference. Build the trail from a ribbon strip and 4–8 atlas sprites; preview cube is not part of the effect texture."
+    },
+    {
+      "id": "frostwake",
+      "group": "trails",
+      "name": "FROSTWAKE",
+      "portrait": "design-assets/unified-v1/trails/frostwake.png",
+      "previousPortrait": "design-assets/cube-trails/frostwake.png",
+      "figmaLineup": "66519:14229",
+      "implementation": "Use preview as palette/shape reference. Build the trail from a ribbon strip and 4–8 atlas sprites; preview cube is not part of the effect texture."
+    },
+    {
+      "id": "neon-surge",
+      "group": "trails",
+      "name": "NEON SURGE",
+      "portrait": "design-assets/unified-v1/trails/neon-surge.png",
+      "previousPortrait": "design-assets/cube-trails/neon-surge.png",
+      "figmaLineup": "66519:14231",
+      "implementation": "Use preview as palette/shape reference. Build the trail from a ribbon strip and 4–8 atlas sprites; preview cube is not part of the effect texture."
+    },
+    {
+      "id": "starfall",
+      "group": "trails",
+      "name": "STARFALL",
+      "portrait": "design-assets/unified-v1/trails/starfall.png",
+      "previousPortrait": "design-assets/cube-trails/starfall.png",
+      "figmaLineup": "66519:14233",
+      "implementation": "Use preview as palette/shape reference. Build the trail from a ribbon strip and 4–8 atlas sprites; preview cube is not part of the effect texture."
+    },
+    {
+      "id": "petal-drift",
+      "group": "trails",
+      "name": "PETAL DRIFT",
+      "portrait": "design-assets/unified-v1/trails/petal-drift.png",
+      "previousPortrait": "design-assets/cube-trails/petal-drift.png",
+      "figmaLineup": "66519:14235",
+      "implementation": "Use preview as palette/shape reference. Build the trail from a ribbon strip and 4–8 atlas sprites; preview cube is not part of the effect texture."
+    },
+    {
+      "id": "bubble-pop",
+      "group": "trails",
+      "name": "BUBBLE POP",
+      "portrait": "design-assets/unified-v1/trails/bubble-pop.png",
+      "previousPortrait": "design-assets/cube-trails/bubble-pop.png",
+      "figmaLineup": "66519:14237",
+      "implementation": "Use preview as palette/shape reference. Build the trail from a ribbon strip and 4–8 atlas sprites; preview cube is not part of the effect texture."
+    },
+    {
+      "id": "pixel-rush",
+      "group": "trails",
+      "name": "PIXEL RUSH",
+      "portrait": "design-assets/unified-v1/trails/pixel-rush.png",
+      "previousPortrait": "design-assets/cube-trails/pixel-rush.png",
+      "figmaLineup": "66519:14239",
+      "implementation": "Use preview as palette/shape reference. Build the trail from a ribbon strip and 4–8 atlas sprites; preview cube is not part of the effect texture."
+    },
+    {
+      "id": "gold-rush",
+      "group": "trails",
+      "name": "GOLD RUSH",
+      "portrait": "design-assets/unified-v1/trails/gold-rush.png",
+      "previousPortrait": "design-assets/cube-trails/gold-rush.png",
+      "figmaLineup": "66519:14241",
+      "implementation": "Use preview as palette/shape reference. Build the trail from a ribbon strip and 4–8 atlas sprites; preview cube is not part of the effect texture."
+    },
+    {
+      "id": "void-rift",
+      "group": "trails",
+      "name": "VOID RIFT",
+      "portrait": "design-assets/unified-v1/trails/void-rift.png",
+      "previousPortrait": "design-assets/cube-trails/void-rift.png",
+      "figmaLineup": "66519:14243",
+      "implementation": "Use preview as palette/shape reference. Build the trail from a ribbon strip and 4–8 atlas sprites; preview cube is not part of the effect texture."
+    },
+    {
+      "id": "rainbow-run",
+      "group": "trails",
+      "name": "RAINBOW RUN",
+      "portrait": "design-assets/unified-v1/trails/rainbow-run.png",
+      "previousPortrait": "design-assets/cube-trails/rainbow-run.png",
+      "figmaLineup": "66519:14245",
+      "implementation": "Use preview as palette/shape reference. Build the trail from a ribbon strip and 4–8 atlas sprites; preview cube is not part of the effect texture."
+    },
+    {
+      "id": "worm",
+      "group": "creatures",
+      "name": "WORM",
+      "portrait": "design-assets/creatures/worm.png",
+      "figmaLineup": "66519:14385",
+      "status": "Retained as shared art-style anchor",
+      "rigParts": [
+        "five body segments",
+        "eyes"
+      ]
+    },
+    {
+      "id": "bug",
+      "group": "creatures",
+      "name": "BUG",
+      "portrait": "design-assets/creatures/bug.png",
+      "figmaLineup": "66519:14387",
+      "status": "Retained as shared art-style anchor",
+      "rigParts": [
+        "oval split shell",
+        "head",
+        "six legs",
+        "two antennae"
+      ]
+    },
+    {
+      "id": "spider",
+      "group": "creatures",
+      "name": "SPIDER",
+      "portrait": "design-assets/creatures/spider.png",
+      "figmaLineup": "66519:14389",
+      "status": "Retained as shared art-style anchor",
+      "rigParts": [
+        "abdomen",
+        "head",
+        "eight jointed legs"
+      ]
+    },
+    {
+      "id": "scorpion",
+      "group": "creatures",
+      "name": "SCORPION",
+      "portrait": "design-assets/creatures/scorpion.png",
+      "figmaLineup": "66519:14391",
+      "status": "Retained as shared art-style anchor",
+      "rigParts": [
+        "three-segment body",
+        "two pincers",
+        "walking legs",
+        "five-segment tail",
+        "stinger"
+      ]
+    },
+    {
+      "id": "beetle",
+      "group": "creatures",
+      "name": "BEETLE",
+      "portrait": "design-assets/creatures/beetle.png",
+      "figmaLineup": "66519:14393",
+      "status": "Retained as shared art-style anchor",
+      "rigParts": [
+        "two shell plates",
+        "head",
+        "horn",
+        "six legs"
+      ]
+    },
+    {
+      "id": "slug",
+      "group": "creatures",
+      "name": "SLUG",
+      "portrait": "design-assets/creatures/slug.png",
+      "figmaLineup": "66519:14395",
+      "status": "Retained as shared art-style anchor",
+      "rigParts": [
+        "soft body",
+        "four movement lobes",
+        "two eye stalks"
+      ]
+    },
+    {
+      "id": "termite",
+      "group": "creatures",
+      "name": "TERMITE",
+      "portrait": "design-assets/creatures/termite.png",
+      "figmaLineup": "66519:14397",
+      "status": "Retained as shared art-style anchor",
+      "rigParts": [
+        "three cream segments",
+        "amber head",
+        "two mandibles",
+        "six legs"
+      ]
+    },
+    {
+      "id": "hornet",
+      "group": "creatures",
+      "name": "HORNET",
+      "portrait": "design-assets/creatures/hornet.png",
+      "figmaLineup": "66519:14399",
+      "status": "Retained as shared art-style anchor",
+      "rigParts": [
+        "striped abdomen",
+        "thorax",
+        "head",
+        "two wings",
+        "legs",
+        "stinger"
+      ]
+    },
+    {
+      "id": "mosquito",
+      "group": "creatures",
+      "name": "MOSQUITO",
+      "portrait": "design-assets/creatures/mosquito.png",
+      "figmaLineup": "66519:14401",
+      "status": "Retained as shared art-style anchor",
+      "rigParts": [
+        "slender abdomen",
+        "head",
+        "proboscis",
+        "six legs",
+        "two wings"
+      ]
+    },
+    {
+      "id": "pillbug",
+      "group": "creatures",
+      "name": "PILLBUG",
+      "portrait": "design-assets/creatures/pillbug.png",
+      "figmaLineup": "66519:14403",
+      "status": "Retained as shared art-style anchor",
+      "rigParts": [
+        "five overlapping armor plates",
+        "head",
+        "small paired legs"
+      ]
+    },
+    {
+      "id": "flea",
+      "group": "creatures",
+      "name": "FLEA",
+      "portrait": "design-assets/creatures/flea.png",
+      "figmaLineup": "66519:14405",
+      "status": "Retained as shared art-style anchor",
+      "rigParts": [
+        "compact tall body",
+        "head",
+        "oversized hind legs",
+        "front legs"
+      ]
+    },
+    {
+      "id": "locust",
+      "group": "creatures",
+      "name": "LOCUST",
+      "portrait": "design-assets/creatures/locust.png",
+      "figmaLineup": "66519:14407",
+      "status": "Retained as shared art-style anchor",
+      "rigParts": [
+        "elongated body",
+        "head",
+        "antennae",
+        "folded hind legs",
+        "front legs"
+      ]
+    },
+    {
+      "id": "eggsac",
+      "group": "creatures",
+      "name": "EGG SAC",
+      "portrait": "design-assets/creatures/eggsac.png",
+      "figmaLineup": "66519:14409",
+      "status": "Retained as shared art-style anchor",
+      "rigParts": [
+        "six egg forms"
+      ]
+    },
+    {
+      "id": "spitter",
+      "group": "creatures",
+      "name": "SPITTER",
+      "portrait": "design-assets/creatures/spitter.png",
+      "figmaLineup": "66519:14411",
+      "status": "Retained as shared art-style anchor",
+      "rigParts": [
+        "squat body",
+        "tube snout",
+        "inflating throat sac",
+        "four legs",
+        "eyes"
+      ]
+    }
+  ]
+}
