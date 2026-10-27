@@ -5,7 +5,7 @@ Current scope, 2026-10-27. Later requests supersede the earlier mutation and pho
 ## Gameplay
 
 - Original grass/grid retained, with restrained dry soil variation and fine surface grain. Procedural road, wood, mud and ash materials use the same restrained tile detail. Stylized teal water has animated highlights and contact ripples, not expensive live scene reflections.
-- One rare outdoor hell gate at (96, -72), with its corresponding return gate in hell. No repeated nearby portals. Roads and bridges cross the infinite deterministic terrain at irregular offsets in selected 64-tile regions. Only selected intersections have houses. Bush patches use sparse 13-tile regions; they no longer fill every clearing.
+- One rare outdoor hell gate at (96, -72), with its corresponding return gate in hell. No repeated nearby portals. Roads and bridges cross the infinite deterministic terrain at irregular offsets with gently curved, differently phased paths in selected 64-tile regions. Only selected intersections have houses. Bush patches use sparse 13-tile regions; they no longer fill every clearing.
 - Random obstacle density halved (.065 to .0325). Giant mode breaks all five obstacle props with pooled bouncing fragments, dust and wood/stone/metal audio. Structural house walls and map boundaries remain solid.
 - Jump with Space or the new on-screen jump button. Horizontal range follows accumulated movement speed and snaps to valid tile landings; speed boosts extend it. A stationary jump is a small hop. Bridge rails and house walls remain boundaries.
 - Six bugs spawn at the start, within a 5?8 tile ring. Spawns continue every roughly 1.1 seconds initially and accelerate. Population grows from 12 to 32; egg broods share the hard cap. Unlocks and swarm pressure depend on elapsed time, without levels or cube color changes.
@@ -18,11 +18,11 @@ Current scope, 2026-10-27. Later requests supersede the earlier mutation and pho
 
 ## Visuals and sound
 
-- Ten skin materials and ten trail styles, plus the original defaults. Cosmetic previews and thumbnails are rendered from the gameplay factories. Skins/trails are temporarily unlocked with `game/cosmetic-access.ts`; stored purchases and coins remain intact.
+- Ten skin materials and ten trail styles, plus the original defaults. Cosmetic previews and thumbnails are rendered from the gameplay factories. Skin/trail prices are restored; the temporary preview unlock in `game/cosmetic-access.ts` is disabled. Stored purchases and coins remain intact.
 - Trails use reference-derived ribbon and particle maps, wavy motion, style-specific drift/gravity and fading terrain traces. Trail residue has a separate, stationary texture transform.
 - Fourteen articulated insect models with matching reference palettes and recognizable bodies, eyes, shells and appendages. Each creature uses one skinned draw. Models interpret the reference renders in 3D; they are not pixel-identical copies of those images.
 - Falling entrance, squash/settle, impact and expanding dust. Existing menus and ranking flows remain, with only the jump control and gameplay readouts added.
-- Terrain-specific foley is quieter than reward/impact cues. Water movement uses water swishes or a shoreline splash and cancels dry movement tails. No generic cube-roll thump is used during ordinary movement.
+- Terrain-specific foley is quieter than reward/impact cues. Movement sounds share one exclusive channel. Water entry cancels dry movement tails and pending loads at takeoff; replacement sounds start only after the previous channel fades out. Water exit uses a single exit splash, not a second grass layer. No generic cube-roll thump is used during ordinary movement.
 - Door, chest, portal, bush, splash, lava, jump, destruction and loot sounds; quiet realm ambience. Original synthesis sources are in `Audio/tools`, with OGG and WAV runtime copies. Audio is capped at 12 voices, 64 decoded buffers and four concurrent loads.
 - Auras and mutations removed from runtime.
 

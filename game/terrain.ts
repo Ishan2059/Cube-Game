@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { makeWorldMaterials } from "./world-materials";
-import { roadsNear, housesNear, RARE_GATE, type Realm, type Surface } from "./world-rules";
+import { roadsNear, housesNear, ROAD_CURVE_GLSL, RARE_GATE, type Realm, type Surface } from "./world-rules";
 
 // Shared procedural art keeps props and terrain in the original grass style.
 const textures=new Map<string,THREE.Texture>();
@@ -24,6 +24,7 @@ export function createTerrain(scene:THREE.Scene,grass:THREE.Texture){
       uniform float uRoadX[3],uRoadZ[3];uniform vec4 uHouses[9];uniform vec2 uGate;
       uniform float uTime,uRealm; uniform vec3 uFog; uniform vec4 uContacts[8]; varying vec3 vWorld;
       float field(vec2 p){return sin(p.x*.19+sin(p.y*.11)*1.8)+cos(p.y*.17+sin(p.x*.09)*1.3)+sin((p.x+p.y)*.07)*.45;}
+      ${ROAD_CURVE_GLSL}
       float grain(vec2 p){return fract(sin(dot(floor(p),vec2(127.1,311.7)))*43758.5453);}
       void main(){
         vec2 p=vWorld.xz; float hell=step(1.5,uRealm)*(1.0-step(2.5,uRealm)),cabin=step(2.5,uRealm),mire=step(.5,uRealm)*(1.0-step(1.5,uRealm));
@@ -33,7 +34,7 @@ export function createTerrain(scene:THREE.Scene,grass:THREE.Texture){
         for(int i=0;i<9;i++){vec2 d=abs(p-uHouses[i].xy);safe=max(safe,(1.0-smoothstep(3.3,3.6,max(d.x,d.y)))*uHouses[i].w);}
         float water=smoothstep(threshold-.09,threshold+.09,f)*(1.0-safe);
         float roadDistance=100000.0;
-        for(int i=0;i<3;i++){roadDistance=min(roadDistance,min(abs(p.x-uRoadX[i]),abs(p.y-uRoadZ[i])));}
+        for(int i=0;i<3;i++){roadDistance=min(roadDistance,min(abs(p.x-roadCurve(uRoadX[i],p.y)),abs(p.y-roadCurve(uRoadZ[i],p.x))));}
         float road=1.0-smoothstep(.46,.66,roadDistance);
         vec3 grass=texture2D(uGrass,(p+.5)/8.0).rgb;
         vec3 mud=texture2D(uMud,(p+.5)/8.0).rgb;

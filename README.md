@@ -60,4 +60,4 @@ The older plans under `docs/` describe previous implementations; this README and
 
 See [the exploration notes](docs/exploration-checklist.md) for controls, world rules, rendering budgets, audio sources and validation. Space (or the on-screen jump button) jumps with your current momentum. Giant mode breaks obstacle props. Bushes hide the cube completely.
 
-All skins and trails are temporarily available through `PREVIEW_UNLOCK_ALL` in `game/cosmetic-access.ts`; this does not overwrite purchases or spend coins. This is a client-side preview setting, not an entitlement/security mechanism.
+Skin and trail prices are enabled again. Existing purchases remain owned; unpurchased preview selections fall back to Classic / None. The optional `PREVIEW_UNLOCK_ALL` development flag is disabled.

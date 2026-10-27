@@ -15,16 +15,21 @@ export function roadsNear(x:number,z:number){
   for(let i=-1;i<=1;i++){if(hasRoad(cx+i,0))vertical.push(roadLine(cx+i,0));if(hasRoad(cz+i,1))horizontal.push(roadLine(cz+i,1));}
   return {vertical,horizontal};
 }
+/** Gentle, differently phased bends; keep this formula shared with the terrain shader. */
+export function roadCurve(base:number,along:number){
+  return base+Math.sin(along*.024+base*.17)*5+Math.sin(along*.009-base*.11)*3;
+}
+export const ROAD_CURVE_GLSL="float roadCurve(float base,float along){return base+sin(along*.024+base*.17)*5.0+sin(along*.009-base*.11)*3.0;}";
 export function roadAt(x:number,z:number){
   const cx=Math.round(x/ROAD_SPACING),cz=Math.round(z/ROAD_SPACING);
-  return hasRoad(cx,0)&&Math.abs(x-roadLine(cx,0))<.6||hasRoad(cz,1)&&Math.abs(z-roadLine(cz,1))<.6;
+  return hasRoad(cx,0)&&Math.abs(x-roadCurve(roadLine(cx,0),z))<.6||hasRoad(cz,1)&&Math.abs(z-roadCurve(roadLine(cz,1),x))<.6;
 }
 export function housesNear(x:number,z:number):Landmark[]{
   const result:Landmark[]=[],cx=Math.round(x/ROAD_SPACING),cz=Math.round(z/ROAD_SPACING);
   for(let dx=-1;dx<=1;dx++)for(let dz=-1;dz<=1;dz++){
     const ix=cx+dx,iz=cz+dz;
     if(!hasRoad(ix,0)||!hasRoad(iz,1)||worldHash(ix+71,iz-91)>.32)continue;
-    const hx=roadLine(ix,0),hz=roadLine(iz,1)-8-Math.floor(worldHash(ix-17,iz+9)*14);
+    const hz=Math.round(roadCurve(roadLine(iz,1),roadLine(ix,0)))-8-Math.floor(worldHash(ix-17,iz+9)*14),hx=Math.round(roadCurve(roadLine(ix,0),hz));
     result.push({kind:"house",x:hx,z:hz,id:`house:${ix}:${iz}`});
   }
   return result;

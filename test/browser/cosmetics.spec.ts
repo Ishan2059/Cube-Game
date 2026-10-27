@@ -1,12 +1,13 @@
 import { test, expect } from "@playwright/test";
 import bank from "../../game/audio-bank.json";
 
-test("unlocked cosmetics, legacy selection, previews and guide", async ({ page }) => {
+test("paid cosmetics, legacy selection, previews and guide", async ({ page }) => {
   test.setTimeout(180000);
   const errors: string[]=[];
   page.on("pageerror",e=>errors.push(e.message));
   await page.route("**/api/**",route=>route.fulfill({json:{top10:[],neighbors:[],me:null,streak:0}}));
   await page.addInitScript(()=>{
+    if(localStorage.getItem("qa-cosmetics"))return;localStorage.setItem("qa-cosmetics","1");
     localStorage.setItem("crush-coins","30000");
     localStorage.setItem("crush-skins-owned",JSON.stringify(["classic","venom"]));
     localStorage.setItem("crush-skin",JSON.stringify("venom"));
@@ -24,8 +25,10 @@ test("unlocked cosmetics, legacy selection, previews and guide", async ({ page }
     await page.locator(`[data-item="${id}"]`).click();
     await expect(page.locator("#item-modal-preview canvas")).toBeVisible();
     if(id==="boba") {
+      await expect(page.locator("#item-modal-action")).toContainText("BUY");
+      await expect(page.locator("#item-modal-price")).toContainText("600");
       await page.locator("#item-modal-action").click();
-      await expect(page.locator("#shop-coins")).toHaveText("30,000");
+      await expect(page.locator("#shop-coins")).toHaveText("29,400");
     } else await page.locator("#item-modal-close").click();
     await expect(page.locator("#item-modal-preview canvas")).toHaveCount(0);
   }
@@ -36,7 +39,11 @@ test("unlocked cosmetics, legacy selection, previews and guide", async ({ page }
   for(const id of trailIds) {
     await page.locator(`[data-item="${id}"]`).click();
     await expect(page.locator("#item-modal-preview canvas")).toBeVisible();
-    await page.locator("#item-modal-close").click();
+    if(id==="bubble-pop"){
+      await expect(page.locator("#item-modal-action")).toContainText("BUY");
+      await page.locator("#item-modal-action").click();
+      await expect(page.locator("#shop-coins")).toHaveText("28,800");
+    }else await page.locator("#item-modal-close").click();
   }
   await page.locator("#shop-back").click();
   await expect(page.locator("#hero-skin-label")).toHaveText("BOBA BUDDY");
@@ -45,6 +52,13 @@ test("unlocked cosmetics, legacy selection, previews and guide", async ({ page }
   await expect.poll(()=>page.locator(".beast img").evaluateAll(images=>images.every(i=>(i as HTMLImageElement).naturalWidth>0))).toBe(true);
   await page.locator('[data-beast="spider"]').click();
   await expect(page.locator("#beast-modal")).toBeVisible();
+  await page.reload();
+  await expect(page.locator("#hero-skin-label")).toHaveText("BOBA BUDDY");
+  await page.evaluate(()=>localStorage.setItem("crush-coins","0"));
+  await page.locator("#shop-btn").click();await page.locator('[data-item="magma"]').click();
+  await expect(page.locator("#item-modal-action")).toBeDisabled();
+  await expect(page.locator("#item-modal-price")).toContainText("1600");
+  expect(await page.evaluate(()=>JSON.parse(localStorage.getItem("crush-trails-owned")||"[]"))).toContain("bubble-pop");
   expect(errors).toEqual([]);
 });
 

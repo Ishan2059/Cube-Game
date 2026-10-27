@@ -14,6 +14,7 @@ playCue,
 playScore,
 stopAudio,
 playSurfaceRoll,
+setMovementSurface,
 playSplat,
 playKnock,
 playLatch,
@@ -1713,6 +1714,7 @@ playKnock();
 S.shake = Math.max(S.shake, 0.08);
 return;
 }
+setMovementSurface(worldTile(nx,nz,realm).surface);
 const anchor = cubeMesh.position
 .clone()
 .add(new THREE.Vector3(dx * 0.5, -0.5, dz * 0.5));
@@ -1743,6 +1745,7 @@ function requestJump(){
   const profile=jumpProfile(momentum),[dx,dz]=momentumDir;
   const nx=S.cube.ix+dx*profile.tiles,nz=S.cube.iz+dz*profile.tiles;
   if(!canJump(S.cube.ix,S.cube.iz,dx,dz,profile.tiles,realm,brokenAt,S.giantT>0)||S.giantT<=0&&pitAt(nx,nz)){playKnock();return;}
+  setMovementSurface(worldTile(nx,nz,realm).surface);
   S.rolling={smash:S.giantT>0,t:0,dur:profile.duration,anchor:cubeMesh.position.clone(),axis:new THREE.Vector3(dz,0,-dx),startOffset:new THREE.Vector3(),startQuat:cubeMesh.quaternion.clone(),nx,nz,surface:worldTile(S.cube.ix,S.cube.iz,realm).surface,jump:{start:cubeMesh.position.clone(),height:profile.height,tiles:profile.tiles}};
   jumpPending=false;jumpCooldown=profile.duration+.25;playCue("exploration.jump",.55);buzz(12);
 }

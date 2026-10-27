@@ -1,6 +1,6 @@
 require('./register.cjs');
 const assert=require('node:assert/strict');
-const {worldTile,canTraverse,isDestructible,landmarksNear,housesNear,houseLoot,RARE_GATE,hellLockRemaining,HELL_LOCK_MS}=require('../game/world-rules.ts');
+const {worldTile,roadAt,roadCurve,roadsNear,canTraverse,isDestructible,landmarksNear,housesNear,houseLoot,RARE_GATE,hellLockRemaining,HELL_LOCK_MS}=require('../game/world-rules.ts');
 const {bushAt,createCover,bushPatchesNear}=require('../game/cover.ts');
 const {coinAt,createCoinLedger,visibleCoinBudget,coinsForKills}=require('../game/coin-rules.ts');
 const {jumpProfile,canJump}=require('../game/jump-rules.ts');
@@ -46,3 +46,13 @@ assert(!canJump(house.x,house.z,0,-1,2,'meadow',()=>false),'cannot jump through 
 assert.equal(isDestructible(house.x,house.z-1,'meadow'),false);
 assert(scoreRun([[95000,'beetle']],96000,97000,'normal')>0,'timed exploration unlock can save');
 console.log('ok - water/bridges, rare reachable loot, 3x3 cover, coin limits, momentum jumps and timed scoring');
+
+for(const base of roadsNear(0,0).vertical){
+  const centers=Array.from({length:201},(_,i)=>Math.round(roadCurve(base,i-100)));
+  assert(new Set(centers).size>6,'roads bend instead of repeating straight strips');
+  for(let i=1;i<centers.length;i++){
+    const z=i-100,prev=centers[i-1],next=centers[i];
+    assert(roadAt(next,z));
+    assert(prev===next||roadAt(prev,z)||roadAt(next,z-1),'bends remain connected on the roll grid');
+  }
+}
