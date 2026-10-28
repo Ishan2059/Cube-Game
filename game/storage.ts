@@ -1,3 +1,6 @@
+import { PREVIEW_UNLOCK_ALL } from "./cosmetic-access";
+import { SKINS } from "./skins";
+import { TRAILS } from "./trails";
 /* ================= persistent storage (localStorage) =================
  * Everything the game remembers between sessions lives here: best scores,
  * the coin wallet, cosmetic ownership, and settings. Online rankings and
@@ -39,42 +42,38 @@ export const spendCoins = (n: number) => {
   return true;
 };
 
+/* Legacy purchases retain ownership of their replacement cosmetic. */
+const skinAlias = (id: string) => id === "venom" ? "mossling" : id;
+const trailAlias = (id: string) => ({ ember: "afterburn", frost: "frostwake", toxin: "pixel-rush" }[id] ?? id);
 /* ---------- skins ---------- */
 export const getOwnedSkins = () => {
-  const owned = read<string[]>("crush-skins-owned", []);
-  return owned.includes("classic") ? owned : ["classic", ...owned];
+  const owned = read<string[]>("crush-skins-owned", []).map(skinAlias);
+  return PREVIEW_UNLOCK_ALL ? SKINS.map(s=>s.id) : owned.includes("classic") ? owned : ["classic", ...owned];
 };
 export const ownSkin = (id: string) => {
   const owned = getOwnedSkins();
   if (!owned.includes(id)) write("crush-skins-owned", [...owned, id]);
 };
-export const getEquippedSkin = () => read<string>("crush-skin", "classic");
+export const getEquippedSkin = () => {
+  const id=skinAlias(read<string>("crush-skin", "classic"));
+  return getOwnedSkins().includes(id)?id:"classic";
+};
 export const setEquippedSkin = (id: string) => write("crush-skin", id);
 
-/* ---------- trails & auras ----------
- * Same owned-list / equipped-id shape as skins. "none" is the always-owned,
- * default-equipped id for both — cosmetic layers are opt-in, not forced. */
+/* ---------- trails ---------- */
 export const getOwnedTrails = () => {
-  const owned = read<string[]>("crush-trails-owned", []);
-  return owned.includes("none") ? owned : ["none", ...owned];
+  const owned = read<string[]>("crush-trails-owned", []).map(trailAlias);
+  return PREVIEW_UNLOCK_ALL ? TRAILS.map(t=>t.id) : owned.includes("none") ? owned : ["none", ...owned];
 };
 export const ownTrail = (id: string) => {
   const owned = getOwnedTrails();
   if (!owned.includes(id)) write("crush-trails-owned", [...owned, id]);
 };
-export const getEquippedTrail = () => read<string>("crush-trail", "none");
+export const getEquippedTrail = () => {
+  const id=trailAlias(read<string>("crush-trail", "none"));
+  return getOwnedTrails().includes(id)?id:"none";
+};
 export const setEquippedTrail = (id: string) => write("crush-trail", id);
-
-export const getOwnedAuras = () => {
-  const owned = read<string[]>("crush-auras-owned", []);
-  return owned.includes("none") ? owned : ["none", ...owned];
-};
-export const ownAura = (id: string) => {
-  const owned = getOwnedAuras();
-  if (!owned.includes(id)) write("crush-auras-owned", [...owned, id]);
-};
-export const getEquippedAura = () => read<string>("crush-aura", "none");
-export const setEquippedAura = (id: string) => write("crush-aura", id);
 
 /* ---------- settings ---------- */
 export type ControlMode = "dpad" | "swipe";

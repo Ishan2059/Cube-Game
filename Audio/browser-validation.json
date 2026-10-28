@@ -1,0 +1,1837 @@
+{
+  "status": "pass",
+  "browser": "Chromium",
+  "checks": [
+    "102 cue cards",
+    "category filter",
+    "search",
+    "variant playback advances",
+    "demo playback advances",
+    "stop and Escape",
+    "364 WAV/Ogg assets decode",
+    "no page errors",
+    "mobile no horizontal overflow"
+  ],
+  "decoded": [
+    {
+      "file": "wav/kills/worm_01.wav",
+      "duration": 0.2755625,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/worm_01.ogg",
+      "duration": 0.27289583333333334,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/worm_02.wav",
+      "duration": 0.27758333333333335,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/worm_02.ogg",
+      "duration": 0.27491666666666664,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/worm_03.wav",
+      "duration": 0.2756458333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/worm_03.ogg",
+      "duration": 0.27297916666666666,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/bug_01.wav",
+      "duration": 0.25025,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/bug_01.ogg",
+      "duration": 0.24933333333333332,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/bug_02.wav",
+      "duration": 0.237125,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/bug_02.ogg",
+      "duration": 0.23445833333333332,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/bug_03.wav",
+      "duration": 0.24539583333333334,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/bug_03.ogg",
+      "duration": 0.24272916666666666,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/spider_01.wav",
+      "duration": 0.25858333333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/spider_01.ogg",
+      "duration": 0.25733333333333336,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/spider_02.wav",
+      "duration": 0.26966666666666667,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/spider_02.ogg",
+      "duration": 0.268,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/spider_03.wav",
+      "duration": 0.2705625,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/spider_03.ogg",
+      "duration": 0.26789583333333333,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/scorpion_01.wav",
+      "duration": 0.2136875,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/scorpion_01.ogg",
+      "duration": 0.21102083333333332,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/scorpion_02.wav",
+      "duration": 0.22214583333333332,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/scorpion_02.ogg",
+      "duration": 0.21947916666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/scorpion_03.wav",
+      "duration": 0.216625,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/scorpion_03.ogg",
+      "duration": 0.21395833333333333,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/beetle_01.wav",
+      "duration": 0.21147916666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/beetle_01.ogg",
+      "duration": 0.2088125,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/beetle_02.wav",
+      "duration": 0.21497916666666667,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/beetle_02.ogg",
+      "duration": 0.2123125,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/beetle_03.wav",
+      "duration": 0.21247916666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/beetle_03.ogg",
+      "duration": 0.2098125,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/slug_01.wav",
+      "duration": 0.27760416666666665,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/slug_01.ogg",
+      "duration": 0.2749375,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/slug_02.wav",
+      "duration": 0.2773541666666667,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/slug_02.ogg",
+      "duration": 0.2746875,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/slug_03.wav",
+      "duration": 0.278625,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/slug_03.ogg",
+      "duration": 0.27595833333333336,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/termite_01.wav",
+      "duration": 0.19083333333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/termite_01.ogg",
+      "duration": 0.18816666666666668,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/termite_02.wav",
+      "duration": 0.17154166666666668,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/termite_02.ogg",
+      "duration": 0.168875,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/termite_03.wav",
+      "duration": 0.19322916666666667,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/termite_03.ogg",
+      "duration": 0.1905625,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/hornet_01.wav",
+      "duration": 0.186375,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/hornet_01.ogg",
+      "duration": 0.18533333333333332,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/hornet_02.wav",
+      "duration": 0.17333333333333334,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/hornet_02.ogg",
+      "duration": 0.17066666666666666,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/hornet_03.wav",
+      "duration": 0.1774375,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/hornet_03.ogg",
+      "duration": 0.17477083333333332,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/mosquito_01.wav",
+      "duration": 0.15064583333333334,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/mosquito_01.ogg",
+      "duration": 0.14797916666666666,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/mosquito_02.wav",
+      "duration": 0.1505625,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/mosquito_02.ogg",
+      "duration": 0.14789583333333334,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/mosquito_03.wav",
+      "duration": 0.1489375,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/mosquito_03.ogg",
+      "duration": 0.14627083333333332,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/pillbug_01.wav",
+      "duration": 0.19716666666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/pillbug_01.ogg",
+      "duration": 0.1945,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/pillbug_02.wav",
+      "duration": 0.198875,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/pillbug_02.ogg",
+      "duration": 0.19620833333333335,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/pillbug_03.wav",
+      "duration": 0.20622916666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/pillbug_03.ogg",
+      "duration": 0.2035625,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/flea_01.wav",
+      "duration": 0.13697916666666668,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/flea_01.ogg",
+      "duration": 0.13466666666666666,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/flea_02.wav",
+      "duration": 0.131375,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/flea_02.ogg",
+      "duration": 0.12870833333333334,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/flea_03.wav",
+      "duration": 0.12766666666666668,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/flea_03.ogg",
+      "duration": 0.125,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/locust_01.wav",
+      "duration": 0.20283333333333334,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/locust_01.ogg",
+      "duration": 0.20016666666666666,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/locust_02.wav",
+      "duration": 0.2068125,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/locust_02.ogg",
+      "duration": 0.20666666666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/locust_03.wav",
+      "duration": 0.19477083333333334,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/locust_03.ogg",
+      "duration": 0.19210416666666666,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/eggsac_01.wav",
+      "duration": 0.2771458333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/eggsac_01.ogg",
+      "duration": 0.276,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/eggsac_02.wav",
+      "duration": 0.27758333333333335,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/eggsac_02.ogg",
+      "duration": 0.27491666666666664,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/eggsac_03.wav",
+      "duration": 0.2765,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/eggsac_03.ogg",
+      "duration": 0.2738333333333333,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/spitter_01.wav",
+      "duration": 0.27760416666666665,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/spitter_01.ogg",
+      "duration": 0.2749375,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/spitter_02.wav",
+      "duration": 0.2766458333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/spitter_02.ogg",
+      "duration": 0.27397916666666666,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/spitter_03.wav",
+      "duration": 0.2785625,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/spitter_03.ogg",
+      "duration": 0.27589583333333334,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/generic_01.wav",
+      "duration": 0.27397916666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/generic_01.ogg",
+      "duration": 0.2713125,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/generic_02.wav",
+      "duration": 0.27079166666666665,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/generic_02.ogg",
+      "duration": 0.27066666666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/kills/generic_03.wav",
+      "duration": 0.27047916666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/kills/generic_03.ogg",
+      "duration": 0.2678125,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/cube_roll_01.wav",
+      "duration": 0.23666666666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/cube_roll_01.ogg",
+      "duration": 0.234,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/cube_roll_02.wav",
+      "duration": 0.23247916666666665,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/cube_roll_02.ogg",
+      "duration": 0.2298125,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/cube_roll_03.wav",
+      "duration": 0.23520833333333332,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/cube_roll_03.ogg",
+      "duration": 0.23254166666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/cube_roll_04.wav",
+      "duration": 0.2353125,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/cube_roll_04.ogg",
+      "duration": 0.23264583333333333,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/heavy_land_01.wav",
+      "duration": 0.2577083333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/heavy_land_01.ogg",
+      "duration": 0.25504166666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/heavy_land_02.wav",
+      "duration": 0.253125,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/heavy_land_02.ogg",
+      "duration": 0.25045833333333334,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/heavy_land_03.wav",
+      "duration": 0.25314583333333335,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/heavy_land_03.ogg",
+      "duration": 0.25047916666666664,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/crush_impact_01.wav",
+      "duration": 0.25435416666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/crush_impact_01.ogg",
+      "duration": 0.2516875,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/crush_impact_02.wav",
+      "duration": 0.249125,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/crush_impact_02.ogg",
+      "duration": 0.24645833333333333,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/crush_impact_03.wav",
+      "duration": 0.2520625,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/crush_impact_03.ogg",
+      "duration": 0.252,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/heavy_crush_01.wav",
+      "duration": 0.2518958333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/heavy_crush_01.ogg",
+      "duration": 0.24933333333333332,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/heavy_crush_02.wav",
+      "duration": 0.2560625,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/heavy_crush_02.ogg",
+      "duration": 0.2533958333333333,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/heavy_crush_03.wav",
+      "duration": 0.25797916666666665,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/heavy_crush_03.ogg",
+      "duration": 0.2553125,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/multikill_01.wav",
+      "duration": 0.283875,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/multikill_01.ogg",
+      "duration": 0.28120833333333334,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/multikill_02.wav",
+      "duration": 0.2870625,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/multikill_02.ogg",
+      "duration": 0.28439583333333335,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/multikill_03.wav",
+      "duration": 0.28772916666666665,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/multikill_03.ogg",
+      "duration": 0.2850625,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/obstacle_knock_01.wav",
+      "duration": 0.14152083333333335,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/obstacle_knock_01.ogg",
+      "duration": 0.13885416666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/obstacle_knock_02.wav",
+      "duration": 0.14147916666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/obstacle_knock_02.ogg",
+      "duration": 0.1388125,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/obstacle_knock_03.wav",
+      "duration": 0.14158333333333334,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/obstacle_knock_03.ogg",
+      "duration": 0.13891666666666666,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/armor_crack_01.wav",
+      "duration": 0.212875,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/armor_crack_01.ogg",
+      "duration": 0.21020833333333333,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/armor_crack_02.wav",
+      "duration": 0.21847916666666667,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/armor_crack_02.ogg",
+      "duration": 0.2158125,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/armor_crack_03.wav",
+      "duration": 0.20933333333333334,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/armor_crack_03.ogg",
+      "duration": 0.20666666666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/armor_deflect_01.wav",
+      "duration": 0.22670833333333335,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/armor_deflect_01.ogg",
+      "duration": 0.22404166666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/armor_deflect_02.wav",
+      "duration": 0.23366666666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/armor_deflect_02.ogg",
+      "duration": 0.231,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/armor_deflect_03.wav",
+      "duration": 0.21308333333333335,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/armor_deflect_03.ogg",
+      "duration": 0.21041666666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/parasite_latch_01.wav",
+      "duration": 0.158875,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/parasite_latch_01.ogg",
+      "duration": 0.15620833333333334,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/parasite_latch_02.wav",
+      "duration": 0.15864583333333335,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/parasite_latch_02.ogg",
+      "duration": 0.15597916666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/parasite_latch_03.wav",
+      "duration": 0.15879166666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/parasite_latch_03.ogg",
+      "duration": 0.156125,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/parasite_bite_01.wav",
+      "duration": 0.21945833333333334,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/parasite_bite_01.ogg",
+      "duration": 0.21679166666666666,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/parasite_bite_02.wav",
+      "duration": 0.21945833333333334,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/parasite_bite_02.ogg",
+      "duration": 0.21679166666666666,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/parasite_bite_03.wav",
+      "duration": 0.21847916666666667,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/parasite_bite_03.ogg",
+      "duration": 0.2158125,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/player_hurt_01.wav",
+      "duration": 0.3133958333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/player_hurt_01.ogg",
+      "duration": 0.31333333333333335,
+      "channels": 1
+    },
+    {
+      "file": "wav/gameplay/player_hurt_02.wav",
+      "duration": 0.3133958333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/gameplay/player_hurt_02.ogg",
+      "duration": 0.31333333333333335,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/acid_spit_01.wav",
+      "duration": 0.15425,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/acid_spit_01.ogg",
+      "duration": 0.15158333333333332,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/acid_spit_02.wav",
+      "duration": 0.15229166666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/acid_spit_02.ogg",
+      "duration": 0.149625,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/acid_spit_03.wav",
+      "duration": 0.1521875,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/acid_spit_03.ogg",
+      "duration": 0.14952083333333333,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/acid_land_01.wav",
+      "duration": 0.4928958333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/acid_land_01.ogg",
+      "duration": 0.49022916666666666,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/acid_land_02.wav",
+      "duration": 0.4960625,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/acid_land_02.ogg",
+      "duration": 0.4933958333333333,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/acid_land_03.wav",
+      "duration": 0.4930833333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/acid_land_03.ogg",
+      "duration": 0.492,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/acid_hit_01.wav",
+      "duration": 0.49727083333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/acid_hit_01.ogg",
+      "duration": 0.4946041666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/acid_hit_02.wav",
+      "duration": 0.49633333333333335,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/acid_hit_02.ogg",
+      "duration": 0.49466666666666664,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/web_snare_01.wav",
+      "duration": 0.2436875,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/web_snare_01.ogg",
+      "duration": 0.24102083333333332,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/web_snare_02.wav",
+      "duration": 0.24352083333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/web_snare_02.ogg",
+      "duration": 0.24085416666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/slime_stick_01.wav",
+      "duration": 0.26508333333333334,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/slime_stick_01.ogg",
+      "duration": 0.2624166666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/slime_stick_02.wav",
+      "duration": 0.265125,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/slime_stick_02.ogg",
+      "duration": 0.26245833333333335,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/snare_release_01.wav",
+      "duration": 0.16545833333333335,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/snare_release_01.ogg",
+      "duration": 0.164,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/snare_release_02.wav",
+      "duration": 0.18333333333333332,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/snare_release_02.ogg",
+      "duration": 0.18066666666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/poison_start_01.wav",
+      "duration": 0.483625,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/poison_start_01.ogg",
+      "duration": 0.48133333333333334,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/poison_tick_01.wav",
+      "duration": 0.13097916666666667,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/poison_tick_01.ogg",
+      "duration": 0.1283125,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/poison_tick_02.wav",
+      "duration": 0.13220833333333334,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/poison_tick_02.ogg",
+      "duration": 0.12954166666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/daze_start_01.wav",
+      "duration": 0.3656875,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/daze_start_01.ogg",
+      "duration": 0.36302083333333335,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/egg_hatch_01.wav",
+      "duration": 0.44785416666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/egg_hatch_01.ogg",
+      "duration": 0.44785416666666666,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/egg_hatch_02.wav",
+      "duration": 0.4472083333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/egg_hatch_02.ogg",
+      "duration": 0.4472083333333333,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/egg_hatch_03.wav",
+      "duration": 0.44785416666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/egg_hatch_03.ogg",
+      "duration": 0.4451875,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/locust_lunge_01.wav",
+      "duration": 0.21079166666666665,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/locust_lunge_01.ogg",
+      "duration": 0.20933333333333334,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/locust_lunge_02.wav",
+      "duration": 0.21279166666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/locust_lunge_02.ogg",
+      "duration": 0.210125,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/flea_hop_01.wav",
+      "duration": 0.1206875,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/flea_hop_01.ogg",
+      "duration": 0.11802083333333334,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/flea_hop_02.wav",
+      "duration": 0.11997916666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/flea_hop_02.ogg",
+      "duration": 0.1173125,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/termite_dig_01.wav",
+      "duration": 0.329,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/termite_dig_01.ogg",
+      "duration": 0.3263333333333333,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/termite_dig_02.wav",
+      "duration": 0.3315416666666667,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/termite_dig_02.ogg",
+      "duration": 0.328875,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/pillbug_curl_01.wav",
+      "duration": 0.19075,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/pillbug_curl_01.ogg",
+      "duration": 0.18808333333333332,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/pillbug_curl_02.wav",
+      "duration": 0.1905,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/pillbug_curl_02.ogg",
+      "duration": 0.188,
+      "channels": 1
+    },
+    {
+      "file": "wav/hazards/low_health_01.wav",
+      "duration": 0.37575,
+      "channels": 1
+    },
+    {
+      "file": "ogg/hazards/low_health_01.ogg",
+      "duration": 0.37466666666666665,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/score_gain_1_01.wav",
+      "duration": 0.204125,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/score_gain_1_01.ogg",
+      "duration": 0.204,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/score_gain_2_01.wav",
+      "duration": 0.20429166666666668,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/score_gain_2_01.ogg",
+      "duration": 0.204,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/score_gain_3_01.wav",
+      "duration": 0.20422916666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/score_gain_3_01.ogg",
+      "duration": 0.204,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/score_gain_4_01.wav",
+      "duration": 0.20414583333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/score_gain_4_01.ogg",
+      "duration": 0.204,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/score_gain_5_01.wav",
+      "duration": 0.20408333333333334,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/score_gain_5_01.ogg",
+      "duration": 0.204,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/score_gain_6_01.wav",
+      "duration": 0.20425,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/score_gain_6_01.ogg",
+      "duration": 0.204,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/score_gain_7_01.wav",
+      "duration": 0.204375,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/score_gain_7_01.ogg",
+      "duration": 0.204,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/score_gain_8_01.wav",
+      "duration": 0.20433333333333334,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/score_gain_8_01.ogg",
+      "duration": 0.204,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/coin_pickup_01.wav",
+      "duration": 0.29952083333333335,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/coin_pickup_01.ogg",
+      "duration": 0.29685416666666664,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/coin_pickup_02.wav",
+      "duration": 0.29952083333333335,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/coin_pickup_02.ogg",
+      "duration": 0.29685416666666664,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/coin_pickup_03.wav",
+      "duration": 0.29952083333333335,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/coin_pickup_03.ogg",
+      "duration": 0.29685416666666664,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/xp_tick_01.wav",
+      "duration": 0.21808333333333332,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/xp_tick_01.ogg",
+      "duration": 0.21541666666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/xp_tick_02.wav",
+      "duration": 0.21802083333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/xp_tick_02.ogg",
+      "duration": 0.21535416666666668,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/xp_tick_03.wav",
+      "duration": 0.21802083333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/xp_tick_03.ogg",
+      "duration": 0.21535416666666668,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/coin_payout_01.wav",
+      "duration": 0.6449375,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/coin_payout_01.ogg",
+      "duration": 0.6422708333333333,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/xp_award_01.wav",
+      "duration": 0.6347291666666667,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/xp_award_01.ogg",
+      "duration": 0.6320625,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/xp_level_up_01.wav",
+      "duration": 1.0883125,
+      "channels": 2
+    },
+    {
+      "file": "ogg/rewards/xp_level_up_01.ogg",
+      "duration": 1.0883125,
+      "channels": 2
+    },
+    {
+      "file": "wav/rewards/level_up_01.wav",
+      "duration": 0.8333333333333334,
+      "channels": 2
+    },
+    {
+      "file": "ogg/rewards/level_up_01.ogg",
+      "duration": 0.8333333333333334,
+      "channels": 2
+    },
+    {
+      "file": "wav/rewards/personal_best_01.wav",
+      "duration": 1.2483541666666667,
+      "channels": 2
+    },
+    {
+      "file": "ogg/rewards/personal_best_01.ogg",
+      "duration": 1.2483541666666667,
+      "channels": 2
+    },
+    {
+      "file": "wav/rewards/combo_2_01.wav",
+      "duration": 0.32939583333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/combo_2_01.ogg",
+      "duration": 0.3267291666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/combo_4_01.wav",
+      "duration": 0.4345,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/combo_4_01.ogg",
+      "duration": 0.43333333333333335,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/combo_8_01.wav",
+      "duration": 0.4745,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/combo_8_01.ogg",
+      "duration": 0.4718333333333333,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/tally_finish_01.wav",
+      "duration": 0.40489583333333334,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/tally_finish_01.ogg",
+      "duration": 0.4022291666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/powerups/heal_01.wav",
+      "duration": 0.6049166666666667,
+      "channels": 1
+    },
+    {
+      "file": "ogg/powerups/heal_01.ogg",
+      "duration": 0.60225,
+      "channels": 1
+    },
+    {
+      "file": "wav/powerups/spawn_01.wav",
+      "duration": 0.38866666666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/powerups/spawn_01.ogg",
+      "duration": 0.386,
+      "channels": 1
+    },
+    {
+      "file": "wav/powerups/expire_01.wav",
+      "duration": 0.4044375,
+      "channels": 1
+    },
+    {
+      "file": "ogg/powerups/expire_01.ogg",
+      "duration": 0.40177083333333335,
+      "channels": 1
+    },
+    {
+      "file": "wav/powerups/rampage_end_01.wav",
+      "duration": 0.37397916666666664,
+      "channels": 1
+    },
+    {
+      "file": "ogg/powerups/rampage_end_01.ogg",
+      "duration": 0.3713125,
+      "channels": 1
+    },
+    {
+      "file": "wav/shop/purchase_01.wav",
+      "duration": 0.625125,
+      "channels": 1
+    },
+    {
+      "file": "ogg/shop/purchase_01.ogg",
+      "duration": 0.6224583333333333,
+      "channels": 1
+    },
+    {
+      "file": "wav/shop/unlock_01.wav",
+      "duration": 0.9980208333333334,
+      "channels": 2
+    },
+    {
+      "file": "ogg/shop/unlock_01.ogg",
+      "duration": 0.9980208333333334,
+      "channels": 2
+    },
+    {
+      "file": "wav/ui/save_success_01.wav",
+      "duration": 0.37466666666666665,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/save_success_01.ogg",
+      "duration": 0.372,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/login_success_01.wav",
+      "duration": 0.4247708333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/login_success_01.ogg",
+      "duration": 0.42210416666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/reset_complete_01.wav",
+      "duration": 0.404,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/reset_complete_01.ogg",
+      "duration": 0.4013333333333333,
+      "channels": 1
+    },
+    {
+      "file": "wav/session/ready_01.wav",
+      "duration": 0.5447291666666667,
+      "channels": 1
+    },
+    {
+      "file": "ogg/session/ready_01.ogg",
+      "duration": 0.5420625,
+      "channels": 1
+    },
+    {
+      "file": "wav/session/start_01.wav",
+      "duration": 0.7395625,
+      "channels": 2
+    },
+    {
+      "file": "ogg/session/start_01.ogg",
+      "duration": 0.7395625,
+      "channels": 2
+    },
+    {
+      "file": "wav/session/restart_01.wav",
+      "duration": 0.5595625,
+      "channels": 2
+    },
+    {
+      "file": "ogg/session/restart_01.ogg",
+      "duration": 0.5595625,
+      "channels": 2
+    },
+    {
+      "file": "wav/powerups/speed_01.wav",
+      "duration": 0.6690833333333334,
+      "channels": 2
+    },
+    {
+      "file": "ogg/powerups/speed_01.ogg",
+      "duration": 0.6690833333333334,
+      "channels": 2
+    },
+    {
+      "file": "wav/powerups/giant_01.wav",
+      "duration": 0.8959583333333333,
+      "channels": 2
+    },
+    {
+      "file": "ogg/powerups/giant_01.ogg",
+      "duration": 0.8959583333333333,
+      "channels": 2
+    },
+    {
+      "file": "wav/powerups/rampage_start_01.wav",
+      "duration": 0.9695208333333334,
+      "channels": 2
+    },
+    {
+      "file": "ogg/powerups/rampage_start_01.ogg",
+      "duration": 0.9695208333333334,
+      "channels": 2
+    },
+    {
+      "file": "wav/session/game_over_01.wav",
+      "duration": 1.2077916666666666,
+      "channels": 2
+    },
+    {
+      "file": "ogg/session/game_over_01.ogg",
+      "duration": 1.2077916666666666,
+      "channels": 2
+    },
+    {
+      "file": "wav/ui/hover_01.wav",
+      "duration": 0.09527083333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/hover_01.ogg",
+      "duration": 0.09260416666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/hover_02.wav",
+      "duration": 0.09535416666666667,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/hover_02.ogg",
+      "duration": 0.0926875,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/press_01.wav",
+      "duration": 0.1045625,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/press_01.ogg",
+      "duration": 0.10189583333333334,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/press_02.wav",
+      "duration": 0.10460416666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/press_02.ogg",
+      "duration": 0.1019375,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/press_03.wav",
+      "duration": 0.10483333333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/press_03.ogg",
+      "duration": 0.10216666666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/navigate_01.wav",
+      "duration": 0.10595833333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/navigate_01.ogg",
+      "duration": 0.10329166666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/navigate_02.wav",
+      "duration": 0.10539583333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/navigate_02.ogg",
+      "duration": 0.10272916666666666,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/back_01.wav",
+      "duration": 0.10539583333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/back_01.ogg",
+      "duration": 0.10272916666666666,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/tab_switch_01.wav",
+      "duration": 0.104,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/tab_switch_01.ogg",
+      "duration": 0.10133333333333333,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/tab_switch_02.wav",
+      "duration": 0.10335416666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/tab_switch_02.ogg",
+      "duration": 0.1006875,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/toggle_on_01.wav",
+      "duration": 0.10447916666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/toggle_on_01.ogg",
+      "duration": 0.1018125,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/toggle_off_01.wav",
+      "duration": 0.10277083333333334,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/toggle_off_01.ogg",
+      "duration": 0.10010416666666666,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/slider_tick_01.wav",
+      "duration": 0.0944375,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/slider_tick_01.ogg",
+      "duration": 0.09177083333333333,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/slider_tick_02.wav",
+      "duration": 0.09333333333333334,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/slider_tick_02.ogg",
+      "duration": 0.09066666666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/guide_select_01.wav",
+      "duration": 0.10404166666666667,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/guide_select_01.ogg",
+      "duration": 0.101375,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/guide_select_02.wav",
+      "duration": 0.1038125,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/guide_select_02.ogg",
+      "duration": 0.10114583333333334,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/notification_01.wav",
+      "duration": 0.10047916666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/notification_01.ogg",
+      "duration": 0.1,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/save_pending_01.wav",
+      "duration": 0.09870833333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/save_pending_01.ogg",
+      "duration": 0.09604166666666666,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/retry_01.wav",
+      "duration": 0.1028125,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/retry_01.ogg",
+      "duration": 0.10014583333333334,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/logout_01.wav",
+      "duration": 0.10235416666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/logout_01.ogg",
+      "duration": 0.1,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/modal_open_01.wav",
+      "duration": 0.19252083333333334,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/modal_open_01.ogg",
+      "duration": 0.18985416666666666,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/modal_close_01.wav",
+      "duration": 0.1920625,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/modal_close_01.ogg",
+      "duration": 0.18939583333333335,
+      "channels": 1
+    },
+    {
+      "file": "wav/session/pause_01.wav",
+      "duration": 0.19091666666666668,
+      "channels": 1
+    },
+    {
+      "file": "ogg/session/pause_01.ogg",
+      "duration": 0.18825,
+      "channels": 1
+    },
+    {
+      "file": "wav/session/resume_01.wav",
+      "duration": 0.193375,
+      "channels": 1
+    },
+    {
+      "file": "ogg/session/resume_01.ogg",
+      "duration": 0.19070833333333334,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/error_01.wav",
+      "duration": 0.24797916666666667,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/error_01.ogg",
+      "duration": 0.2453125,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/save_failed_01.wav",
+      "duration": 0.24797916666666667,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/save_failed_01.ogg",
+      "duration": 0.2453125,
+      "channels": 1
+    },
+    {
+      "file": "wav/ui/reset_arm_01.wav",
+      "duration": 0.24797916666666667,
+      "channels": 1
+    },
+    {
+      "file": "ogg/ui/reset_arm_01.ogg",
+      "duration": 0.2453125,
+      "channels": 1
+    },
+    {
+      "file": "wav/shop/insufficient_coins_01.wav",
+      "duration": 0.24797916666666667,
+      "channels": 1
+    },
+    {
+      "file": "ogg/shop/insufficient_coins_01.ogg",
+      "duration": 0.2453125,
+      "channels": 1
+    },
+    {
+      "file": "wav/shop/equip_skin_01.wav",
+      "duration": 0.3397291666666667,
+      "channels": 1
+    },
+    {
+      "file": "ogg/shop/equip_skin_01.ogg",
+      "duration": 0.3370625,
+      "channels": 1
+    },
+    {
+      "file": "wav/shop/equip_trail_01.wav",
+      "duration": 0.33991666666666664,
+      "channels": 1
+    },
+    {
+      "file": "ogg/shop/equip_trail_01.ogg",
+      "duration": 0.33725,
+      "channels": 1
+    },
+    {
+      "file": "wav/shop/equip_aura_01.wav",
+      "duration": 0.33970833333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/shop/equip_aura_01.ogg",
+      "duration": 0.3370416666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/tally_tick_01.wav",
+      "duration": 0.09814583333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/tally_tick_01.ogg",
+      "duration": 0.09547916666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/tally_tick_02.wav",
+      "duration": 0.09802083333333333,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/tally_tick_02.ogg",
+      "duration": 0.09535416666666667,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/tally_tick_03.wav",
+      "duration": 0.0989375,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/tally_tick_03.ogg",
+      "duration": 0.09627083333333333,
+      "channels": 1
+    },
+    {
+      "file": "wav/rewards/combo_break_01.wav",
+      "duration": 0.10235416666666666,
+      "channels": 1
+    },
+    {
+      "file": "ogg/rewards/combo_break_01.ogg",
+      "duration": 0.1,
+      "channels": 1
+    }
+  ]
+}

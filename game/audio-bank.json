@@ -1,0 +1,1065 @@
+{
+  "kills.worm": {
+    "files": [
+      "/audio/kills/worm_01",
+      "/audio/kills/worm_02",
+      "/audio/kills/worm_03"
+    ],
+    "cooldownMs": 60,
+    "maxVoices": 3,
+    "priority": 65
+  },
+  "kills.bug": {
+    "files": [
+      "/audio/kills/bug_01",
+      "/audio/kills/bug_02",
+      "/audio/kills/bug_03"
+    ],
+    "cooldownMs": 60,
+    "maxVoices": 3,
+    "priority": 65
+  },
+  "kills.spider": {
+    "files": [
+      "/audio/kills/spider_01",
+      "/audio/kills/spider_02",
+      "/audio/kills/spider_03"
+    ],
+    "cooldownMs": 60,
+    "maxVoices": 3,
+    "priority": 65
+  },
+  "kills.scorpion": {
+    "files": [
+      "/audio/kills/scorpion_01",
+      "/audio/kills/scorpion_02",
+      "/audio/kills/scorpion_03"
+    ],
+    "cooldownMs": 60,
+    "maxVoices": 3,
+    "priority": 65
+  },
+  "kills.beetle": {
+    "files": [
+      "/audio/kills/beetle_01",
+      "/audio/kills/beetle_02",
+      "/audio/kills/beetle_03"
+    ],
+    "cooldownMs": 60,
+    "maxVoices": 3,
+    "priority": 65
+  },
+  "kills.slug": {
+    "files": [
+      "/audio/kills/slug_01",
+      "/audio/kills/slug_02",
+      "/audio/kills/slug_03"
+    ],
+    "cooldownMs": 60,
+    "maxVoices": 3,
+    "priority": 65
+  },
+  "kills.termite": {
+    "files": [
+      "/audio/kills/termite_01",
+      "/audio/kills/termite_02",
+      "/audio/kills/termite_03"
+    ],
+    "cooldownMs": 60,
+    "maxVoices": 3,
+    "priority": 65
+  },
+  "kills.hornet": {
+    "files": [
+      "/audio/kills/hornet_01",
+      "/audio/kills/hornet_02",
+      "/audio/kills/hornet_03"
+    ],
+    "cooldownMs": 60,
+    "maxVoices": 3,
+    "priority": 65
+  },
+  "kills.mosquito": {
+    "files": [
+      "/audio/kills/mosquito_01",
+      "/audio/kills/mosquito_02",
+      "/audio/kills/mosquito_03"
+    ],
+    "cooldownMs": 60,
+    "maxVoices": 3,
+    "priority": 65
+  },
+  "kills.pillbug": {
+    "files": [
+      "/audio/kills/pillbug_01",
+      "/audio/kills/pillbug_02",
+      "/audio/kills/pillbug_03"
+    ],
+    "cooldownMs": 60,
+    "maxVoices": 3,
+    "priority": 65
+  },
+  "kills.flea": {
+    "files": [
+      "/audio/kills/flea_01",
+      "/audio/kills/flea_02",
+      "/audio/kills/flea_03"
+    ],
+    "cooldownMs": 60,
+    "maxVoices": 3,
+    "priority": 65
+  },
+  "kills.locust": {
+    "files": [
+      "/audio/kills/locust_01",
+      "/audio/kills/locust_02",
+      "/audio/kills/locust_03"
+    ],
+    "cooldownMs": 60,
+    "maxVoices": 3,
+    "priority": 65
+  },
+  "kills.eggsac": {
+    "files": [
+      "/audio/kills/eggsac_01",
+      "/audio/kills/eggsac_02",
+      "/audio/kills/eggsac_03"
+    ],
+    "cooldownMs": 60,
+    "maxVoices": 3,
+    "priority": 65
+  },
+  "kills.spitter": {
+    "files": [
+      "/audio/kills/spitter_01",
+      "/audio/kills/spitter_02",
+      "/audio/kills/spitter_03"
+    ],
+    "cooldownMs": 60,
+    "maxVoices": 3,
+    "priority": 65
+  },
+  "kills.generic": {
+    "files": [
+      "/audio/kills/generic_01",
+      "/audio/kills/generic_02",
+      "/audio/kills/generic_03"
+    ],
+    "cooldownMs": 60,
+    "maxVoices": 3,
+    "priority": 65
+  },
+  "gameplay.cube_roll": {
+    "files": [
+      "/audio/gameplay/cube_roll_01",
+      "/audio/gameplay/cube_roll_02",
+      "/audio/gameplay/cube_roll_03",
+      "/audio/gameplay/cube_roll_04"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 3,
+    "priority": 50
+  },
+  "gameplay.heavy_land": {
+    "files": [
+      "/audio/gameplay/heavy_land_01",
+      "/audio/gameplay/heavy_land_02",
+      "/audio/gameplay/heavy_land_03"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 3,
+    "priority": 50
+  },
+  "gameplay.crush_impact": {
+    "files": [
+      "/audio/gameplay/crush_impact_01",
+      "/audio/gameplay/crush_impact_02",
+      "/audio/gameplay/crush_impact_03"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 3,
+    "priority": 50
+  },
+  "gameplay.heavy_crush": {
+    "files": [
+      "/audio/gameplay/heavy_crush_01",
+      "/audio/gameplay/heavy_crush_02",
+      "/audio/gameplay/heavy_crush_03"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 3,
+    "priority": 50
+  },
+  "gameplay.multikill": {
+    "files": [
+      "/audio/gameplay/multikill_01",
+      "/audio/gameplay/multikill_02",
+      "/audio/gameplay/multikill_03"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 3,
+    "priority": 50
+  },
+  "gameplay.obstacle_knock": {
+    "files": [
+      "/audio/gameplay/obstacle_knock_01",
+      "/audio/gameplay/obstacle_knock_02",
+      "/audio/gameplay/obstacle_knock_03"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 3,
+    "priority": 50
+  },
+  "gameplay.armor_crack": {
+    "files": [
+      "/audio/gameplay/armor_crack_01",
+      "/audio/gameplay/armor_crack_02",
+      "/audio/gameplay/armor_crack_03"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 3,
+    "priority": 50
+  },
+  "gameplay.armor_deflect": {
+    "files": [
+      "/audio/gameplay/armor_deflect_01",
+      "/audio/gameplay/armor_deflect_02",
+      "/audio/gameplay/armor_deflect_03"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 3,
+    "priority": 50
+  },
+  "gameplay.parasite_latch": {
+    "files": [
+      "/audio/gameplay/parasite_latch_01",
+      "/audio/gameplay/parasite_latch_02",
+      "/audio/gameplay/parasite_latch_03"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 3,
+    "priority": 50
+  },
+  "gameplay.parasite_bite": {
+    "files": [
+      "/audio/gameplay/parasite_bite_01",
+      "/audio/gameplay/parasite_bite_02",
+      "/audio/gameplay/parasite_bite_03"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 3,
+    "priority": 70
+  },
+  "gameplay.player_hurt": {
+    "files": [
+      "/audio/gameplay/player_hurt_01",
+      "/audio/gameplay/player_hurt_02"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 3,
+    "priority": 50
+  },
+  "hazards.acid_spit": {
+    "files": [
+      "/audio/hazards/acid_spit_01",
+      "/audio/hazards/acid_spit_02",
+      "/audio/hazards/acid_spit_03"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 3,
+    "priority": 45
+  },
+  "hazards.acid_land": {
+    "files": [
+      "/audio/hazards/acid_land_01",
+      "/audio/hazards/acid_land_02",
+      "/audio/hazards/acid_land_03"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 3,
+    "priority": 45
+  },
+  "hazards.acid_hit": {
+    "files": [
+      "/audio/hazards/acid_hit_01",
+      "/audio/hazards/acid_hit_02"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 3,
+    "priority": 75
+  },
+  "hazards.web_snare": {
+    "files": [
+      "/audio/hazards/web_snare_01",
+      "/audio/hazards/web_snare_02"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 3,
+    "priority": 45
+  },
+  "hazards.slime_stick": {
+    "files": [
+      "/audio/hazards/slime_stick_01",
+      "/audio/hazards/slime_stick_02"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 3,
+    "priority": 45
+  },
+  "hazards.snare_release": {
+    "files": [
+      "/audio/hazards/snare_release_01",
+      "/audio/hazards/snare_release_02"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 3,
+    "priority": 45
+  },
+  "hazards.poison_start": {
+    "files": [
+      "/audio/hazards/poison_start_01"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 3,
+    "priority": 45
+  },
+  "hazards.poison_tick": {
+    "files": [
+      "/audio/hazards/poison_tick_01",
+      "/audio/hazards/poison_tick_02"
+    ],
+    "cooldownMs": 1000,
+    "maxVoices": 3,
+    "priority": 45
+  },
+  "hazards.daze_start": {
+    "files": [
+      "/audio/hazards/daze_start_01"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 3,
+    "priority": 45
+  },
+  "hazards.egg_hatch": {
+    "files": [
+      "/audio/hazards/egg_hatch_01",
+      "/audio/hazards/egg_hatch_02",
+      "/audio/hazards/egg_hatch_03"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 3,
+    "priority": 45
+  },
+  "hazards.locust_lunge": {
+    "files": [
+      "/audio/hazards/locust_lunge_01",
+      "/audio/hazards/locust_lunge_02"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 3,
+    "priority": 45
+  },
+  "hazards.flea_hop": {
+    "files": [
+      "/audio/hazards/flea_hop_01",
+      "/audio/hazards/flea_hop_02"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 3,
+    "priority": 45
+  },
+  "hazards.termite_dig": {
+    "files": [
+      "/audio/hazards/termite_dig_01",
+      "/audio/hazards/termite_dig_02"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 3,
+    "priority": 45
+  },
+  "hazards.pillbug_curl": {
+    "files": [
+      "/audio/hazards/pillbug_curl_01",
+      "/audio/hazards/pillbug_curl_02"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 3,
+    "priority": 45
+  },
+  "hazards.low_health": {
+    "files": [
+      "/audio/hazards/low_health_01"
+    ],
+    "cooldownMs": 1000,
+    "maxVoices": 3,
+    "priority": 75
+  },
+  "rewards.score_gain_1": {
+    "files": [
+      "/audio/rewards/score_gain_1_01"
+    ],
+    "cooldownMs": 70,
+    "maxVoices": 3,
+    "priority": 30
+  },
+  "rewards.score_gain_2": {
+    "files": [
+      "/audio/rewards/score_gain_2_01"
+    ],
+    "cooldownMs": 70,
+    "maxVoices": 3,
+    "priority": 30
+  },
+  "rewards.score_gain_3": {
+    "files": [
+      "/audio/rewards/score_gain_3_01"
+    ],
+    "cooldownMs": 70,
+    "maxVoices": 3,
+    "priority": 30
+  },
+  "rewards.score_gain_4": {
+    "files": [
+      "/audio/rewards/score_gain_4_01"
+    ],
+    "cooldownMs": 70,
+    "maxVoices": 3,
+    "priority": 30
+  },
+  "rewards.score_gain_5": {
+    "files": [
+      "/audio/rewards/score_gain_5_01"
+    ],
+    "cooldownMs": 70,
+    "maxVoices": 3,
+    "priority": 30
+  },
+  "rewards.score_gain_6": {
+    "files": [
+      "/audio/rewards/score_gain_6_01"
+    ],
+    "cooldownMs": 70,
+    "maxVoices": 3,
+    "priority": 30
+  },
+  "rewards.score_gain_7": {
+    "files": [
+      "/audio/rewards/score_gain_7_01"
+    ],
+    "cooldownMs": 70,
+    "maxVoices": 3,
+    "priority": 30
+  },
+  "rewards.score_gain_8": {
+    "files": [
+      "/audio/rewards/score_gain_8_01"
+    ],
+    "cooldownMs": 70,
+    "maxVoices": 3,
+    "priority": 30
+  },
+  "rewards.coin_pickup": {
+    "files": [
+      "/audio/rewards/coin_pickup_01",
+      "/audio/rewards/coin_pickup_02",
+      "/audio/rewards/coin_pickup_03"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 3,
+    "priority": 45
+  },
+  "rewards.coin_payout": {
+    "files": [
+      "/audio/rewards/coin_payout_01"
+    ],
+    "cooldownMs": 350,
+    "maxVoices": 3,
+    "priority": 55
+  },
+  "rewards.level_up": {
+    "files": [
+      "/audio/rewards/level_up_01"
+    ],
+    "cooldownMs": 350,
+    "maxVoices": 3,
+    "priority": 85
+  },
+  "rewards.personal_best": {
+    "files": [
+      "/audio/rewards/personal_best_01"
+    ],
+    "cooldownMs": 350,
+    "maxVoices": 3,
+    "priority": 85
+  },
+  "rewards.combo_2": {
+    "files": [
+      "/audio/rewards/combo_2_01"
+    ],
+    "cooldownMs": 350,
+    "maxVoices": 3,
+    "priority": 55
+  },
+  "rewards.combo_4": {
+    "files": [
+      "/audio/rewards/combo_4_01"
+    ],
+    "cooldownMs": 350,
+    "maxVoices": 3,
+    "priority": 55
+  },
+  "rewards.combo_8": {
+    "files": [
+      "/audio/rewards/combo_8_01"
+    ],
+    "cooldownMs": 350,
+    "maxVoices": 3,
+    "priority": 55
+  },
+  "powerups.heal": {
+    "files": [
+      "/audio/powerups/heal_01"
+    ],
+    "cooldownMs": 350,
+    "maxVoices": 3,
+    "priority": 55
+  },
+  "powerups.spawn": {
+    "files": [
+      "/audio/powerups/spawn_01"
+    ],
+    "cooldownMs": 350,
+    "maxVoices": 3,
+    "priority": 55
+  },
+  "powerups.expire": {
+    "files": [
+      "/audio/powerups/expire_01"
+    ],
+    "cooldownMs": 350,
+    "maxVoices": 3,
+    "priority": 55
+  },
+  "powerups.rampage_end": {
+    "files": [
+      "/audio/powerups/rampage_end_01"
+    ],
+    "cooldownMs": 350,
+    "maxVoices": 3,
+    "priority": 55
+  },
+  "shop.purchase": {
+    "files": [
+      "/audio/shop/purchase_01"
+    ],
+    "cooldownMs": 350,
+    "maxVoices": 1,
+    "priority": 55
+  },
+  "shop.unlock": {
+    "files": [
+      "/audio/shop/unlock_01"
+    ],
+    "cooldownMs": 350,
+    "maxVoices": 1,
+    "priority": 85
+  },
+  "ui.save_success": {
+    "files": [
+      "/audio/ui/save_success_01"
+    ],
+    "cooldownMs": 350,
+    "maxVoices": 1,
+    "priority": 55
+  },
+  "ui.reset_complete": {
+    "files": [
+      "/audio/ui/reset_complete_01"
+    ],
+    "cooldownMs": 350,
+    "maxVoices": 1,
+    "priority": 55
+  },
+  "session.start": {
+    "files": [
+      "/audio/session/start_01"
+    ],
+    "cooldownMs": 350,
+    "maxVoices": 1,
+    "priority": 85
+  },
+  "session.restart": {
+    "files": [
+      "/audio/session/restart_01"
+    ],
+    "cooldownMs": 350,
+    "maxVoices": 1,
+    "priority": 85
+  },
+  "powerups.speed": {
+    "files": [
+      "/audio/powerups/speed_01"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 3,
+    "priority": 80
+  },
+  "powerups.giant": {
+    "files": [
+      "/audio/powerups/giant_01"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 3,
+    "priority": 80
+  },
+  "powerups.rampage_start": {
+    "files": [
+      "/audio/powerups/rampage_start_01"
+    ],
+    "cooldownMs": 500,
+    "maxVoices": 3,
+    "priority": 90
+  },
+  "session.game_over": {
+    "files": [
+      "/audio/session/game_over_01"
+    ],
+    "cooldownMs": 1000,
+    "maxVoices": 1,
+    "priority": 95
+  },
+  "ui.hover": {
+    "files": [
+      "/audio/ui/hover_01",
+      "/audio/ui/hover_02"
+    ],
+    "cooldownMs": 100,
+    "maxVoices": 1,
+    "priority": 15
+  },
+  "ui.press": {
+    "files": [
+      "/audio/ui/press_01",
+      "/audio/ui/press_02",
+      "/audio/ui/press_03"
+    ],
+    "cooldownMs": 100,
+    "maxVoices": 1,
+    "priority": 15
+  },
+  "ui.navigate": {
+    "files": [
+      "/audio/ui/navigate_01",
+      "/audio/ui/navigate_02"
+    ],
+    "cooldownMs": 100,
+    "maxVoices": 1,
+    "priority": 15
+  },
+  "ui.back": {
+    "files": [
+      "/audio/ui/back_01"
+    ],
+    "cooldownMs": 100,
+    "maxVoices": 1,
+    "priority": 15
+  },
+  "ui.tab_switch": {
+    "files": [
+      "/audio/ui/tab_switch_01",
+      "/audio/ui/tab_switch_02"
+    ],
+    "cooldownMs": 100,
+    "maxVoices": 1,
+    "priority": 15
+  },
+  "ui.toggle_on": {
+    "files": [
+      "/audio/ui/toggle_on_01"
+    ],
+    "cooldownMs": 100,
+    "maxVoices": 1,
+    "priority": 15
+  },
+  "ui.toggle_off": {
+    "files": [
+      "/audio/ui/toggle_off_01"
+    ],
+    "cooldownMs": 100,
+    "maxVoices": 1,
+    "priority": 15
+  },
+  "ui.guide_select": {
+    "files": [
+      "/audio/ui/guide_select_01",
+      "/audio/ui/guide_select_02"
+    ],
+    "cooldownMs": 100,
+    "maxVoices": 1,
+    "priority": 15
+  },
+  "ui.notification": {
+    "files": [
+      "/audio/ui/notification_01"
+    ],
+    "cooldownMs": 100,
+    "maxVoices": 1,
+    "priority": 15
+  },
+  "ui.save_pending": {
+    "files": [
+      "/audio/ui/save_pending_01"
+    ],
+    "cooldownMs": 100,
+    "maxVoices": 1,
+    "priority": 15
+  },
+  "ui.retry": {
+    "files": [
+      "/audio/ui/retry_01"
+    ],
+    "cooldownMs": 100,
+    "maxVoices": 1,
+    "priority": 15
+  },
+  "ui.modal_open": {
+    "files": [
+      "/audio/ui/modal_open_01"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 1,
+    "priority": 35
+  },
+  "ui.modal_close": {
+    "files": [
+      "/audio/ui/modal_close_01"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 1,
+    "priority": 35
+  },
+  "session.pause": {
+    "files": [
+      "/audio/session/pause_01"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 1,
+    "priority": 35
+  },
+  "session.resume": {
+    "files": [
+      "/audio/session/resume_01"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 1,
+    "priority": 35
+  },
+  "ui.error": {
+    "files": [
+      "/audio/ui/error_01"
+    ],
+    "cooldownMs": 400,
+    "maxVoices": 1,
+    "priority": 65
+  },
+  "ui.save_failed": {
+    "files": [
+      "/audio/ui/save_failed_01"
+    ],
+    "cooldownMs": 400,
+    "maxVoices": 1,
+    "priority": 65
+  },
+  "ui.reset_arm": {
+    "files": [
+      "/audio/ui/reset_arm_01"
+    ],
+    "cooldownMs": 400,
+    "maxVoices": 1,
+    "priority": 65
+  },
+  "shop.insufficient_coins": {
+    "files": [
+      "/audio/shop/insufficient_coins_01"
+    ],
+    "cooldownMs": 400,
+    "maxVoices": 1,
+    "priority": 65
+  },
+  "shop.equip_skin": {
+    "files": [
+      "/audio/shop/equip_skin_01"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 1,
+    "priority": 50
+  },
+  "shop.equip_trail": {
+    "files": [
+      "/audio/shop/equip_trail_01"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 1,
+    "priority": 50
+  },
+  "rewards.combo_break": {
+    "files": [
+      "/audio/rewards/combo_break_01"
+    ],
+    "cooldownMs": 80,
+    "maxVoices": 3,
+    "priority": 20
+  },
+  "exploration.roll_grass": {
+    "files": [
+      "/audio/exploration/roll_grass_01",
+      "/audio/exploration/roll_grass_02",
+      "/audio/exploration/roll_grass_03",
+      "/audio/exploration/roll_grass_04"
+    ],
+    "cooldownMs": 120,
+    "maxVoices": 1,
+    "priority": 35
+  },
+  "exploration.roll_stone": {
+    "files": [
+      "/audio/exploration/roll_stone_01",
+      "/audio/exploration/roll_stone_02",
+      "/audio/exploration/roll_stone_03",
+      "/audio/exploration/roll_stone_04"
+    ],
+    "cooldownMs": 120,
+    "maxVoices": 1,
+    "priority": 35
+  },
+  "exploration.roll_wood": {
+    "files": [
+      "/audio/exploration/roll_wood_01",
+      "/audio/exploration/roll_wood_02",
+      "/audio/exploration/roll_wood_03",
+      "/audio/exploration/roll_wood_04"
+    ],
+    "cooldownMs": 120,
+    "maxVoices": 1,
+    "priority": 35
+  },
+  "exploration.roll_mud": {
+    "files": [
+      "/audio/exploration/roll_mud_01",
+      "/audio/exploration/roll_mud_02",
+      "/audio/exploration/roll_mud_03",
+      "/audio/exploration/roll_mud_04"
+    ],
+    "cooldownMs": 120,
+    "maxVoices": 1,
+    "priority": 35
+  },
+  "exploration.roll_water": {
+    "files": [
+      "/audio/exploration/roll_water_01",
+      "/audio/exploration/roll_water_02",
+      "/audio/exploration/roll_water_03",
+      "/audio/exploration/roll_water_04"
+    ],
+    "cooldownMs": 120,
+    "maxVoices": 1,
+    "priority": 35
+  },
+  "exploration.roll_ash": {
+    "files": [
+      "/audio/exploration/roll_ash_01",
+      "/audio/exploration/roll_ash_02",
+      "/audio/exploration/roll_ash_03",
+      "/audio/exploration/roll_ash_04"
+    ],
+    "cooldownMs": 120,
+    "maxVoices": 1,
+    "priority": 35
+  },
+  "exploration.door_open": {
+    "files": [
+      "/audio/exploration/door_open_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.door_close": {
+    "files": [
+      "/audio/exploration/door_close_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.chest_open": {
+    "files": [
+      "/audio/exploration/chest_open_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.portal_enter": {
+    "files": [
+      "/audio/exploration/portal_enter_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.portal_exit": {
+    "files": [
+      "/audio/exploration/portal_exit_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.portal_locked": {
+    "files": [
+      "/audio/exploration/portal_locked_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.splash": {
+    "files": [
+      "/audio/exploration/splash_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.mud_release": {
+    "files": [
+      "/audio/exploration/mud_release_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.lava_burn": {
+    "files": [
+      "/audio/exploration/lava_burn_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.loot": {
+    "files": [
+      "/audio/exploration/loot_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.coin_boost": {
+    "files": [
+      "/audio/exploration/coin_boost_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.bridge_creak": {
+    "files": [
+      "/audio/exploration/bridge_creak_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.ambient_meadow": {
+    "files": [
+      "/audio/exploration/ambient_meadow_01"
+    ],
+    "cooldownMs": 6500,
+    "maxVoices": 2,
+    "priority": 1
+  },
+  "exploration.ambient_mire": {
+    "files": [
+      "/audio/exploration/ambient_mire_01"
+    ],
+    "cooldownMs": 6500,
+    "maxVoices": 2,
+    "priority": 1
+  },
+  "exploration.ambient_cinder": {
+    "files": [
+      "/audio/exploration/ambient_cinder_01"
+    ],
+    "cooldownMs": 6500,
+    "maxVoices": 2,
+    "priority": 1
+  },
+  "exploration.ambient_cabin": {
+    "files": [
+      "/audio/exploration/ambient_cabin_01"
+    ],
+    "cooldownMs": 6500,
+    "maxVoices": 2,
+    "priority": 1
+  },
+  "exploration.bush_rustle": {
+    "files": [
+      "/audio/exploration/bush_rustle_01",
+      "/audio/exploration/bush_rustle_02",
+      "/audio/exploration/bush_rustle_03"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 2,
+    "priority": 35
+  },
+  "exploration.water_exit": {
+    "files": [
+      "/audio/exploration/water_exit_01",
+      "/audio/exploration/water_exit_02",
+      "/audio/exploration/water_exit_03"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 2,
+    "priority": 35
+  },
+  "exploration.break_wood": {
+    "files": [
+      "/audio/exploration/break_wood_01",
+      "/audio/exploration/break_wood_02",
+      "/audio/exploration/break_wood_03"
+    ],
+    "cooldownMs": 90,
+    "maxVoices": 2,
+    "priority": 75
+  },
+  "exploration.break_stone": {
+    "files": [
+      "/audio/exploration/break_stone_01",
+      "/audio/exploration/break_stone_02",
+      "/audio/exploration/break_stone_03"
+    ],
+    "cooldownMs": 90,
+    "maxVoices": 2,
+    "priority": 75
+  },
+  "exploration.break_metal": {
+    "files": [
+      "/audio/exploration/break_metal_01",
+      "/audio/exploration/break_metal_02",
+      "/audio/exploration/break_metal_03"
+    ],
+    "cooldownMs": 90,
+    "maxVoices": 2,
+    "priority": 75
+  },
+  "exploration.jump": {
+    "files": [
+      "/audio/exploration/jump_01"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 2,
+    "priority": 45
+  }
+}

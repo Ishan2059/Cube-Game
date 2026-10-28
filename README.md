@@ -44,7 +44,7 @@ Reset clears the authenticated player's current normal/casual rankings, revokes 
 ## Code map
 
 - `game/engine.ts`: game simulation, rendering and inputs.
-- `lib/game-rules.ts`, `game/levels.ts`: shared scoring rules and progression.
+- `lib/game-rules.ts`, `lib/exploration-rules.ts`: shared scoring and elapsed-time swarm progression. `game/levels.ts` remains only for validating historical pending runs.
 - `game/run-client.ts`: online runs, durable score queue and reset.
 - `game/leaderboard.ts`: ranking UI and profile client.
 - `game/storage.ts`: local coins, cosmetics and settings.
@@ -55,3 +55,9 @@ Reset clears the authenticated player's current normal/casual rankings, revokes 
 - `legacy/`: archived standalone prototype, not used by the current app.
 
 The older plans under `docs/` describe previous implementations; this README and `docs/leaderboard/all-time.md` describe the current behavior.
+
+## Exploration and visuals
+
+See [the exploration notes](docs/exploration-checklist.md) for controls, world rules, rendering budgets, audio sources and validation. Space (or the on-screen jump button) jumps with your current momentum. Giant mode breaks obstacle props. Bushes hide the cube completely.
+
+Skin and trail prices are enabled again. Existing purchases remain owned; unpurchased preview selections fall back to Classic / None. The optional `PREVIEW_UNLOCK_ALL` development flag is disabled.

@@ -1,0 +1,3652 @@
+{
+  "status": "pass",
+  "cueCount": 102,
+  "variationCount": 182,
+  "wavCount": 182,
+  "oggCount": 182,
+  "sampleRate": 48000,
+  "errors": [],
+  "files": [
+    {
+      "file": "wav/kills/worm_01.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.98,
+      "rmsDbFS": -27.04,
+      "dcOffset": 4.0745837911777576e-08,
+      "sha256": "ddefc5c2b4d903914c2ef34be3487da4c8e2dcd0c35cc2323e9e65a2cfd5b915",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/worm_02.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.99,
+      "rmsDbFS": -24.7,
+      "dcOffset": 1.1809986656186675e-09,
+      "sha256": "4c049c7199210225adf4d4cc443f4bd38e420a909b77d020a5b1fe9c4b69a73f",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/worm_03.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.82,
+      "rmsDbFS": -27.43,
+      "dcOffset": 1.8803551303188002e-08,
+      "sha256": "296628b1118b471637ad42fcefe396435900bd463e8993efea0e7c70fe8ddc03",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/bug_01.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.98,
+      "rmsDbFS": -27.2,
+      "dcOffset": 1.3893856591000146e-10,
+      "sha256": "637ee158c6a49dda8baba6a0f6b93da7fc5c74b8cd20a9e1abc8ad4bec23560c",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/bug_02.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.99,
+      "rmsDbFS": -26.64,
+      "dcOffset": 7.654028185179312e-08,
+      "sha256": "00d66e758c5e1ccf4988b071165d9b1e3850128bba76f3b0a5e9b55f0c32ccee",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/bug_03.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.91,
+      "rmsDbFS": -26.07,
+      "dcOffset": 1.1595049073633591e-07,
+      "sha256": "78c6f16aff2e301c2ba374dd558254ed9716051ac2ecde33d619e937b4a6cbeb",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/spider_01.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.94,
+      "rmsDbFS": -26.9,
+      "dcOffset": 7.574957030994294e-08,
+      "sha256": "c951821a84529d9c72038263a5ed9eaac08e3870a4d364bc040cebb8a256f7eb",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/spider_02.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.93,
+      "rmsDbFS": -27.71,
+      "dcOffset": 3.725290298461914e-08,
+      "sha256": "2e6e74e155d59a79b44812e1440877fc14ee3dce66baf6ed8565bf193699101c",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/spider_03.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.98,
+      "rmsDbFS": -26.12,
+      "dcOffset": 6.735641539413512e-08,
+      "sha256": "2c6790a89e3123b2714ec8389254a1a5d39026746afdcbae759ab90a2096fede",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/scorpion_01.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.99,
+      "rmsDbFS": -25.67,
+      "dcOffset": 2.429047627582459e-08,
+      "sha256": "60452f3486f4abee30ea1c68af224511fa317f0cfeb718027ba955fbabf0c8dd",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/scorpion_02.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.97,
+      "rmsDbFS": -28.38,
+      "dcOffset": 6.911299146609113e-08,
+      "sha256": "adbeed74acd94265083d1e3d598e0b6fb878bdb3b9007a49a287bb1e2e367e15",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/scorpion_03.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.99,
+      "rmsDbFS": -26.37,
+      "dcOffset": 1.3063953206685444e-07,
+      "sha256": "8d85abdcc685a16067dcf1d73956c0493539193dfbc67ce7527c2418371ce2c8",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/beetle_01.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.99,
+      "rmsDbFS": -27.2,
+      "dcOffset": 1.5337142365611302e-08,
+      "sha256": "fc3bc303f50ecd6dad87a862e462a274a80323ffe412e09bb1f83a37f18f554a",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/beetle_02.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.92,
+      "rmsDbFS": -24.98,
+      "dcOffset": 8.172172829559323e-08,
+      "sha256": "3f6017207cd405fb5e9a9361ef8892575276437af95964a7a74e307fa7e3612b",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/beetle_03.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.98,
+      "rmsDbFS": -27.43,
+      "dcOffset": 6.838842564581049e-08,
+      "sha256": "49f16d29e3ffda2e99b00c47f4978e4f23fbc552ab503a942e410d55c420b8a9",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/slug_01.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.97,
+      "rmsDbFS": -24.56,
+      "dcOffset": 6.516476285837828e-08,
+      "sha256": "1280f639b4420f2e7b229c14efb9e1b43541aad9a8de246d35063841cc560160",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/slug_02.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.99,
+      "rmsDbFS": -25.97,
+      "dcOffset": 2.0697089451489205e-07,
+      "sha256": "2dc65d891898a8255b13db60d6f464fdaa3ebfb1bc1ef8e62caa905ebbaf5114",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/slug_03.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.98,
+      "rmsDbFS": -24.24,
+      "dcOffset": 8.450899313825012e-08,
+      "sha256": "9d8a4f5508163000e48f8178916d347e2f3880da8c61b11c7cc5e44516805f8c",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/termite_01.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.99,
+      "rmsDbFS": -27.04,
+      "dcOffset": 7.856620971812952e-08,
+      "sha256": "6281cc95db71a556c48d8fcda32c4c8a1f9469859b39a3adef8242106259cc57",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/termite_02.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.82,
+      "rmsDbFS": -25.96,
+      "dcOffset": 3.1633750020458715e-08,
+      "sha256": "79f5cd4c1fc589540761ec4c0045e5c6d3ad83ffdf16b268975c402ccdf9940c",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/termite_03.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.9,
+      "rmsDbFS": -25.42,
+      "dcOffset": 4.589718307124958e-08,
+      "sha256": "b4727afdfc908ee7f61f0154a30e21f96dfd6c4fe899a33c89dc062e67a8c875",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/hornet_01.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.94,
+      "rmsDbFS": -26.95,
+      "dcOffset": 1.0043375981938724e-07,
+      "sha256": "d772080f24d645583f60cfe41d68a3fe37a70c34d233197f84055d7d977718ab",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/hornet_02.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.98,
+      "rmsDbFS": -26.5,
+      "dcOffset": 1.1505415806403527e-08,
+      "sha256": "c19fec509bfcfa327fbd90b1dc8c2f21fef277c55ad69c3e7635fe3512e71871",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/hornet_03.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.98,
+      "rmsDbFS": -26.92,
+      "dcOffset": 1.992140211548984e-07,
+      "sha256": "f21268749d2f10ff69381f9f61d0f57c9cbc1d071408fd96ee143e2725e9f5dc",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/mosquito_01.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.99,
+      "rmsDbFS": -25.02,
+      "dcOffset": 1.0485010116760735e-08,
+      "sha256": "40ab9fc4000279a25d543237d3c4451271e787f8f57d938c3db773d1205e0422",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/mosquito_02.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.78,
+      "rmsDbFS": -25.48,
+      "dcOffset": 6.337374988987153e-08,
+      "sha256": "f3d0c7eaef8c53251d15ea6f7039f41d2f06b6192c5f1ced6319e06c6e0dea33",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/mosquito_03.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.96,
+      "rmsDbFS": -24.45,
+      "dcOffset": 2.9091135340648056e-07,
+      "sha256": "81bede2d43e9468140bb9321019d491a46e24b963ca336320e7fefbac5890517",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/pillbug_01.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.99,
+      "rmsDbFS": -25.67,
+      "dcOffset": 7.866251196583146e-08,
+      "sha256": "aaa22d9801fa44f6ca8d8f7ebd24b9220e8e512de947af77769e43916f474ce8",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/pillbug_02.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.99,
+      "rmsDbFS": -27.71,
+      "dcOffset": 1.397518499227732e-07,
+      "sha256": "e948680c5185633a0bb971c6d457c2d3c8dfb9bb5f0d34a49eda05388de0808e",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/pillbug_03.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.95,
+      "rmsDbFS": -24.63,
+      "dcOffset": 1.8437157521188614e-07,
+      "sha256": "695f957f0155defeec0ec33ab74fc3dc05aa8d8dd16f8497b865c4860bc17bc9",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/flea_01.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.91,
+      "rmsDbFS": -26.56,
+      "dcOffset": 4.393066290213581e-08,
+      "sha256": "849a878623773e7cc2a3818b786eadb6b18f1c7fa03c1eee93d450093abc9d23",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/flea_02.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.88,
+      "rmsDbFS": -26.46,
+      "dcOffset": 1.3781092940456633e-07,
+      "sha256": "125cd5bab01ba831f9e5a7cbdf43e69945e64af14d9bc15e83abd711ed7f1895",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/flea_03.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.97,
+      "rmsDbFS": -25.47,
+      "dcOffset": 1.8933812258448986e-07,
+      "sha256": "e492baa8a39c9aced61a8d45ca6d4ea420da97859643eeabdaa777e6a5cc30fe",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/locust_01.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.99,
+      "rmsDbFS": -26.64,
+      "dcOffset": 8.55990286821602e-08,
+      "sha256": "bde9cd38bf1f7ad65f763d343cff8573d0177cc71ef29203f6ca87522a83e3b8",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/locust_02.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.99,
+      "rmsDbFS": -25.54,
+      "dcOffset": 1.595941833514539e-08,
+      "sha256": "a29bd67668f7a44bdb75df0774db969f52af170c04d5e5370054a88d951976ec",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/locust_03.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.88,
+      "rmsDbFS": -28.49,
+      "dcOffset": 5.558169784488774e-08,
+      "sha256": "f77da09a5962d4473578d0941d8c02fbd53ce3d73f8fefe6128973f269c451b6",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/eggsac_01.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.86,
+      "rmsDbFS": -27.33,
+      "dcOffset": 6.392836741000326e-08,
+      "sha256": "ce5b7997d7c861e061f627e8eb18d0a4d6397fd021cc1f325bc26ad92553c013",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/eggsac_02.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.98,
+      "rmsDbFS": -25.7,
+      "dcOffset": 4.7365204058978983e-08,
+      "sha256": "b58a43057fd80abde310e331d0516903dd5d207644e885154f362e5cae81e8bf",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/eggsac_03.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.99,
+      "rmsDbFS": -25.2,
+      "dcOffset": 1.0060753859691839e-07,
+      "sha256": "3bfdb990b4bde638a4c7033f8dbe3c049dba906411c5e7ae09f97bac69164467",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/spitter_01.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.97,
+      "rmsDbFS": -24.93,
+      "dcOffset": 2.6151789509556757e-07,
+      "sha256": "cd0b2ecc4fbdf069da2754913599c7794fc3d55dbe69c5cdc8299a605a772100",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/spitter_02.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.97,
+      "rmsDbFS": -23.87,
+      "dcOffset": 7.05434593937826e-08,
+      "sha256": "6cc3d23c82de59f55b8dcf304739f5b16a271365d254a5b6518d1ebd6805a591",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/spitter_03.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.94,
+      "rmsDbFS": -24.88,
+      "dcOffset": 7.798396946381598e-08,
+      "sha256": "7df0fecaa676a8dadb631c80c59f08ddc3adf5c725bb1affcc79db6a967348c9",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/generic_01.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.99,
+      "rmsDbFS": -26.71,
+      "dcOffset": 3.5560645038986755e-08,
+      "sha256": "9f7b0f907fa9173ac516f10d53311402557bf9427a1d91775f023ea86617529c",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/generic_02.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.92,
+      "rmsDbFS": -26.84,
+      "dcOffset": 2.806435036354752e-09,
+      "sha256": "cd8ce23d870d55c7289e172cbc4976057f5a405cb53c1afd7386e9fde5b7e2d2",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/kills/generic_03.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.99,
+      "rmsDbFS": -26.72,
+      "dcOffset": 7.578783608966714e-08,
+      "sha256": "5dd72dae40640cacdf1f09bbe0e3b132edcb0c87bdd1f126c9e887e95bbb658d",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/cube_roll_01.wav",
+      "peakDbFS": -15.0,
+      "estimatedTruePeakDbTP": -14.99,
+      "rmsDbFS": -30.54,
+      "dcOffset": 2.8721463512366927e-07,
+      "sha256": "26cbb0c3ee03870243de3a6513f6a69762a261ffc043afb2a3e86b5a6b3db1ee",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/cube_roll_02.wav",
+      "peakDbFS": -15.0,
+      "estimatedTruePeakDbTP": -14.99,
+      "rmsDbFS": -30.54,
+      "dcOffset": 9.60554035240438e-07,
+      "sha256": "9cdb401c21eca59a63b3ac72c592342606a6840e62dcb6391831376ca195b0db",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/cube_roll_03.wav",
+      "peakDbFS": -15.0,
+      "estimatedTruePeakDbTP": -14.99,
+      "rmsDbFS": -30.12,
+      "dcOffset": 6.61901925072615e-07,
+      "sha256": "08f91191d9b9c16c675f5a7b5b0227cb47106f6a3d2e410e83ce98272f445899",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/cube_roll_04.wav",
+      "peakDbFS": -15.0,
+      "estimatedTruePeakDbTP": -14.99,
+      "rmsDbFS": -30.74,
+      "dcOffset": 5.590224382148057e-07,
+      "sha256": "d8f76a4b38d5155caf38d800d5d9cc34edd342adf5014f16ebef6c1fd6d6d736",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/heavy_land_01.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.99,
+      "rmsDbFS": -24.44,
+      "dcOffset": 7.90905933179678e-08,
+      "sha256": "1e727f0862b44f01dec8aa9cef51ca6431c19b444fe092b65661bdd614900310",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/heavy_land_02.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.97,
+      "rmsDbFS": -24.24,
+      "dcOffset": 1.6640635674873008e-06,
+      "sha256": "de5a7f9a6906645904f05db41a5a17d1f7f2ad35881f7eedfa399bcc386820af",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/heavy_land_03.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.99,
+      "rmsDbFS": -23.96,
+      "dcOffset": 1.7273525143540863e-06,
+      "sha256": "27ccdc7b56a490bb1cf7948c2e095ed424015be3cf77318607d5f0c5e3c230af",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/crush_impact_01.wav",
+      "peakDbFS": -13.0,
+      "estimatedTruePeakDbTP": -12.97,
+      "rmsDbFS": -27.48,
+      "dcOffset": 8.878646176944583e-07,
+      "sha256": "58afe4b3210deb1541cd5e49c173cb9a4f3c6725c3458370851adf8ab0633d32",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/crush_impact_02.wav",
+      "peakDbFS": -13.0,
+      "estimatedTruePeakDbTP": -12.99,
+      "rmsDbFS": -27.69,
+      "dcOffset": 2.7381650060490036e-06,
+      "sha256": "98ababff21c61f7c26c6b4b903a6fb4a1d560bad2545b22d791f5b04c2f1e430",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/crush_impact_03.wav",
+      "peakDbFS": -13.0,
+      "estimatedTruePeakDbTP": -12.99,
+      "rmsDbFS": -27.89,
+      "dcOffset": 1.37842945918947e-06,
+      "sha256": "c2433249d703c73172c52300c78722d931ffcd7266cfe47fbaf7969aa18a224c",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/heavy_crush_01.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.99,
+      "rmsDbFS": -24.36,
+      "dcOffset": 2.177228368390495e-06,
+      "sha256": "a295f9754b9e9027f2bc1173883a2b8fcd27990a62377035d6b49d464140f4f1",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/heavy_crush_02.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.99,
+      "rmsDbFS": -24.22,
+      "dcOffset": 1.1139778830562633e-06,
+      "sha256": "46e155349063175bc833f7d06bff60d7607e5b04afa8af098960f60688ef476f",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/heavy_crush_03.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.99,
+      "rmsDbFS": -24.72,
+      "dcOffset": 5.67772387880641e-07,
+      "sha256": "60536a18eb49578abf6b3f51e5750abe1974b09e08913733aa4d0ad4e9c2860e",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/multikill_01.wav",
+      "peakDbFS": -8.0,
+      "estimatedTruePeakDbTP": -7.98,
+      "rmsDbFS": -22.77,
+      "dcOffset": 2.276542234679737e-06,
+      "sha256": "d5d544308ab51bf1b10e9faa72076b252553307e4618dca2a9ee13e4e785306a",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/multikill_02.wav",
+      "peakDbFS": -8.0,
+      "estimatedTruePeakDbTP": -7.94,
+      "rmsDbFS": -23.18,
+      "dcOffset": 1.032801115319919e-06,
+      "sha256": "1b444457437fba1158ab2a183568882c35c011b3ef6f0081cef6057282e8e251",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/multikill_03.wav",
+      "peakDbFS": -8.0,
+      "estimatedTruePeakDbTP": -7.9,
+      "rmsDbFS": -23.57,
+      "dcOffset": 5.207713616506289e-07,
+      "sha256": "4cc5b7ced022e4115fc9b86d722ca9090e7f41c13f903e0d7056a7518008d416",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/obstacle_knock_01.wav",
+      "peakDbFS": -14.0,
+      "estimatedTruePeakDbTP": -13.99,
+      "rmsDbFS": -28.98,
+      "dcOffset": 4.174869716492104e-08,
+      "sha256": "e0e1bf823a699904a741d977579f6e4d3091920584d9cee360d3796917c4a91a",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/obstacle_knock_02.wav",
+      "peakDbFS": -14.0,
+      "estimatedTruePeakDbTP": -13.99,
+      "rmsDbFS": -29.29,
+      "dcOffset": 4.379725775720795e-08,
+      "sha256": "3210a7e7bf1e951789c3071f9e819baa61e22f5fce49d1d82a2e0cba09718a75",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/obstacle_knock_03.wav",
+      "peakDbFS": -14.0,
+      "estimatedTruePeakDbTP": -13.98,
+      "rmsDbFS": -28.43,
+      "dcOffset": 3.9765665010538714e-08,
+      "sha256": "d2d13022f4001ec40c038c61e6d2cd4fb16d476f962b540d371a97a56399385b",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/armor_crack_01.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.99,
+      "rmsDbFS": -28.75,
+      "dcOffset": 9.811958190535678e-07,
+      "sha256": "8f9ba5b435cc5b39b7e7f122ea43b44d744253f8868e61e790b62016c940df96",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/armor_crack_02.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.76,
+      "rmsDbFS": -28.01,
+      "dcOffset": 1.0132732775118805e-06,
+      "sha256": "0e9c708e1cd4c81aa8ede6d5942d1f499930f886b64df838559c6ee7dc4b4679",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/armor_crack_03.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.83,
+      "rmsDbFS": -29.13,
+      "dcOffset": 9.530099334230849e-07,
+      "sha256": "6239eeba1aeefe0558531f85e215b291e973e06641c33e76324ca87131904e02",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/armor_deflect_01.wav",
+      "peakDbFS": -13.0,
+      "estimatedTruePeakDbTP": -12.73,
+      "rmsDbFS": -29.61,
+      "dcOffset": 1.0095324461084585e-06,
+      "sha256": "96967b39cd15af8b093007911a177dd25ba902ec09aa8cfcd2c30d671b5436a9",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/armor_deflect_02.wav",
+      "peakDbFS": -13.0,
+      "estimatedTruePeakDbTP": -12.98,
+      "rmsDbFS": -28.85,
+      "dcOffset": 3.593284291309569e-07,
+      "sha256": "39c45ba55bc43bae3beb730fa6178b701c153f0eb88e582bf4164d07d6bd2f50",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/armor_deflect_03.wav",
+      "peakDbFS": -13.0,
+      "estimatedTruePeakDbTP": -12.76,
+      "rmsDbFS": -33.26,
+      "dcOffset": 6.095548136699559e-07,
+      "sha256": "f8a4d0554c78e83387a77843136f39d6b55af372e34247ca8676c003397b3458",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/parasite_latch_01.wav",
+      "peakDbFS": -13.0,
+      "estimatedTruePeakDbTP": -12.99,
+      "rmsDbFS": -26.22,
+      "dcOffset": 8.549116241190961e-08,
+      "sha256": "0c61aa23d106556097e1653d5c9b3e61fb2c34eef39902843882e958cba17491",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/parasite_latch_02.wav",
+      "peakDbFS": -13.0,
+      "estimatedTruePeakDbTP": -12.98,
+      "rmsDbFS": -28.12,
+      "dcOffset": 6.346348783176195e-08,
+      "sha256": "067e0d35442f81f3e8c6c7a58a49ba8f6c65c8d3d1c477129cd8ab9ee4f90127",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/parasite_latch_03.wav",
+      "peakDbFS": -13.0,
+      "estimatedTruePeakDbTP": -12.92,
+      "rmsDbFS": -26.92,
+      "dcOffset": 7.554196648258639e-08,
+      "sha256": "0f288150bf5f412886e4aeaf966a02a961e047e85c7dc44a0859ae188e625030",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/parasite_bite_01.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.99,
+      "rmsDbFS": -25.27,
+      "dcOffset": 1.542002828383278e-07,
+      "sha256": "997cdfc15edee9fd2837e1f03748e40621c4d25bd1b5cbae6b66352fa2559b85",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/parasite_bite_02.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.84,
+      "rmsDbFS": -25.91,
+      "dcOffset": 1.5373630136200526e-07,
+      "sha256": "039c43a9f505c612449e5499c867f5a31930663847cd52da4236cfd2db495190",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/parasite_bite_03.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.97,
+      "rmsDbFS": -26.17,
+      "dcOffset": 3.056677597044443e-08,
+      "sha256": "3052ada82f175bad15a622dd8668aa40549aadc43cfb6342756f248b3559d2f9",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/player_hurt_01.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.99,
+      "rmsDbFS": -24.42,
+      "dcOffset": 4.916006300128109e-07,
+      "sha256": "b686bf42bddfe34b082a0f58a0b0bf40bf77e568e48a1569d9261e0fbf966a24",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/gameplay/player_hurt_02.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.99,
+      "rmsDbFS": -24.5,
+      "dcOffset": 4.903326989931922e-07,
+      "sha256": "5f3780ed2396c6dd5e227bfe6af56e0ae7074f74b8573c885517317eb6481eda",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/acid_spit_01.wav",
+      "peakDbFS": -13.0,
+      "estimatedTruePeakDbTP": -12.99,
+      "rmsDbFS": -25.98,
+      "dcOffset": 4.244134079630732e-08,
+      "sha256": "71f0d7ca874e24865ca80111d12efe0e41038f9f436a17f821d813571af4c9c7",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/acid_spit_02.wav",
+      "peakDbFS": -13.0,
+      "estimatedTruePeakDbTP": -12.96,
+      "rmsDbFS": -27.6,
+      "dcOffset": 3.1620630976602575e-08,
+      "sha256": "0bbaa316dba9a90327082b22d8289cdf5e30f3b371c44a8167685a403ee96f62",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/acid_spit_03.wav",
+      "peakDbFS": -13.0,
+      "estimatedTruePeakDbTP": -12.99,
+      "rmsDbFS": -29.19,
+      "dcOffset": 1.7510139313892987e-08,
+      "sha256": "077d9a82809aa7468a31706c486a2c25fa11dac567becb05fdb93c8961dbff18",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/acid_land_01.wav",
+      "peakDbFS": -15.0,
+      "estimatedTruePeakDbTP": -14.99,
+      "rmsDbFS": -33.23,
+      "dcOffset": 5.98994054769723e-08,
+      "sha256": "4470f7c800ff8dfd8e272d2a1fb114f997265b768509a24848dc7e712947738c",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/acid_land_02.wav",
+      "peakDbFS": -15.0,
+      "estimatedTruePeakDbTP": -14.98,
+      "rmsDbFS": -33.95,
+      "dcOffset": 5.8981338045346854e-08,
+      "sha256": "f0c427b3b1a3b91f648b4a1e4eefdb572fe961f0f8c2d5a83ce4651ee0c19a1f",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/acid_land_03.wav",
+      "peakDbFS": -15.0,
+      "estimatedTruePeakDbTP": -14.99,
+      "rmsDbFS": -32.6,
+      "dcOffset": 5.9307477795354454e-08,
+      "sha256": "2f314571485295ceba4fe554f98a28136350b8648853c0bb4b532e23031b7b53",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/acid_hit_01.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.99,
+      "rmsDbFS": -27.03,
+      "dcOffset": 6.011656199768545e-08,
+      "sha256": "85c18383222ece041ce91d5e71f28b9589eba73f1d48e16ac15bf3aec44e9ba1",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/acid_hit_02.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.99,
+      "rmsDbFS": -28.24,
+      "dcOffset": 5.902421002102987e-08,
+      "sha256": "f7c6685ec551eef1ccf101397c345fe993da4d0b6edec2fc01f287cf996f9b4c",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/web_snare_01.wav",
+      "peakDbFS": -13.0,
+      "estimatedTruePeakDbTP": -12.99,
+      "rmsDbFS": -25.05,
+      "dcOffset": 3.837077670844588e-08,
+      "sha256": "06c5c1fa6a353c7085cf0a6a64d0fd15ad9f39fc30511bb0d1d8ce4be917b159",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/web_snare_02.wav",
+      "peakDbFS": -13.0,
+      "estimatedTruePeakDbTP": -12.98,
+      "rmsDbFS": -27.06,
+      "dcOffset": 2.236512721232469e-08,
+      "sha256": "46ba1b411bc03a7f18201c5406935ab7baff5854d0649827433cc24cf194006d",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/slime_stick_01.wav",
+      "peakDbFS": -13.0,
+      "estimatedTruePeakDbTP": -12.99,
+      "rmsDbFS": -26.49,
+      "dcOffset": 8.296306985461161e-07,
+      "sha256": "b88c9b58a7e97312322d7260706579cb1bfdb84f9bff9075157e6af09313468c",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/slime_stick_02.wav",
+      "peakDbFS": -13.0,
+      "estimatedTruePeakDbTP": -12.99,
+      "rmsDbFS": -26.64,
+      "dcOffset": 8.693210512479296e-07,
+      "sha256": "cfbf13aae70b0602c68b4950fb58c4f133a3a3dc286344c4b3858c3ff076a739",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/snare_release_01.wav",
+      "peakDbFS": -18.0,
+      "estimatedTruePeakDbTP": -17.98,
+      "rmsDbFS": -31.41,
+      "dcOffset": 6.94046630513545e-07,
+      "sha256": "48966e09e687b3de43a1d4c985c078dddead93ac3736a371058dfdfa349c8262",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/snare_release_02.wav",
+      "peakDbFS": -18.0,
+      "estimatedTruePeakDbTP": -17.97,
+      "rmsDbFS": -31.77,
+      "dcOffset": 5.1232901486483485e-08,
+      "sha256": "add4b7c4564f8eeaeb200a1fa3be1e3c91b0ef58be8b7833bd7bfe569f73cf4c",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/poison_start_01.wav",
+      "peakDbFS": -13.0,
+      "estimatedTruePeakDbTP": -12.99,
+      "rmsDbFS": -24.68,
+      "dcOffset": 9.766185356581192e-08,
+      "sha256": "54e9a2994395705f5789e5898a66871fbc488765867b91cde09ab49e8ec3216c",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/poison_tick_01.wav",
+      "peakDbFS": -23.0,
+      "estimatedTruePeakDbTP": -22.99,
+      "rmsDbFS": -39.66,
+      "dcOffset": 7.976991906157734e-07,
+      "sha256": "d0dbfa0e1f4126402a75efe178308d1701d93eedc714f1132b74c530e842ab99",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/poison_tick_02.wav",
+      "peakDbFS": -23.0,
+      "estimatedTruePeakDbTP": -22.99,
+      "rmsDbFS": -37.08,
+      "dcOffset": 1.0223708767414545e-06,
+      "sha256": "5b26331e3f59983ee4b798b44adb8a825544bad6779b78bd4a7d531ee00be583",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/daze_start_01.wav",
+      "peakDbFS": -13.0,
+      "estimatedTruePeakDbTP": -12.99,
+      "rmsDbFS": -23.57,
+      "dcOffset": 4.582151635612836e-08,
+      "sha256": "57f9264fb5a81e21331b6871f893f1477b342e1753b628ada684ecaf2f6d98e4",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/egg_hatch_01.wav",
+      "peakDbFS": -11.0,
+      "estimatedTruePeakDbTP": -10.99,
+      "rmsDbFS": -24.76,
+      "dcOffset": 5.917487690358593e-08,
+      "sha256": "beacf2a2b816c9cfcc75d3b57a9414294e61794e0926227c71cf7105bc8c7109",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/egg_hatch_02.wav",
+      "peakDbFS": -11.0,
+      "estimatedTruePeakDbTP": -10.99,
+      "rmsDbFS": -23.81,
+      "dcOffset": 5.9204799958114177e-08,
+      "sha256": "33997ab08ed9d8d8da5d9e42fe0db1b6e3189f6f33032fbb2a27b2030c25f5d1",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/egg_hatch_03.wav",
+      "peakDbFS": -11.0,
+      "estimatedTruePeakDbTP": -10.87,
+      "rmsDbFS": -25.95,
+      "dcOffset": 5.876451790341112e-08,
+      "sha256": "9607d9281e62d30f4216de466f5caf08f3161cc11b4dda09b22bbfc706894fda",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/locust_lunge_01.wav",
+      "peakDbFS": -18.0,
+      "estimatedTruePeakDbTP": -17.99,
+      "rmsDbFS": -34.36,
+      "dcOffset": 5.962820858040165e-08,
+      "sha256": "e201868e131903f5020de47c76794d270c5ab2878a1f427cf884e9534a4ee909",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/locust_lunge_02.wav",
+      "peakDbFS": -18.0,
+      "estimatedTruePeakDbTP": -17.99,
+      "rmsDbFS": -34.8,
+      "dcOffset": 6.026990123754007e-08,
+      "sha256": "9426a790192cf84e277c47301fc65a4cbe4c625ed7e41dd621f1a92ece56cae1",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/flea_hop_01.wav",
+      "peakDbFS": -23.0,
+      "estimatedTruePeakDbTP": -22.98,
+      "rmsDbFS": -37.07,
+      "dcOffset": 5.803041542088782e-08,
+      "sha256": "82f4a3a8b7e419d7cfdba6e1eef9522dadaa6f8fc57d28bb5b2aa90bc9d7d64e",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/flea_hop_02.wav",
+      "peakDbFS": -23.0,
+      "estimatedTruePeakDbTP": -22.97,
+      "rmsDbFS": -38.57,
+      "dcOffset": 5.740013195421365e-08,
+      "sha256": "e5234aafb590e30d8a20957a7232adbc8cefb25cb3259a70baf0339d70e8287e",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/termite_dig_01.wav",
+      "peakDbFS": -21.0,
+      "estimatedTruePeakDbTP": -20.85,
+      "rmsDbFS": -38.99,
+      "dcOffset": 1.6581504902941115e-07,
+      "sha256": "c8fa6893c02bb67bd375bcae78c6463ee321b690b96214623f99a1f90963befb",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/termite_dig_02.wav",
+      "peakDbFS": -21.0,
+      "estimatedTruePeakDbTP": -20.84,
+      "rmsDbFS": -36.7,
+      "dcOffset": 9.045943072861847e-08,
+      "sha256": "ff99c22a6eb4e32748ad3228054e8dd4f7ece8aa7ac47c3456654b7f9aaac9a5",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/pillbug_curl_01.wav",
+      "peakDbFS": -22.0,
+      "estimatedTruePeakDbTP": -21.99,
+      "rmsDbFS": -33.59,
+      "dcOffset": 6.21955849917084e-08,
+      "sha256": "fd488c95957eb3ebbd746585c5be140a3d2f7e648bf4ae495f15033712770d8e",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/pillbug_curl_02.wav",
+      "peakDbFS": -22.0,
+      "estimatedTruePeakDbTP": -21.99,
+      "rmsDbFS": -37.23,
+      "dcOffset": 6.265527620090274e-08,
+      "sha256": "6117025d526ea3e440b281840995b00c53705051649bb6ed4ac76145c41c322e",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/hazards/low_health_01.wav",
+      "peakDbFS": -17.0,
+      "estimatedTruePeakDbTP": -16.99,
+      "rmsDbFS": -30.69,
+      "dcOffset": 6.968878832538103e-07,
+      "sha256": "3f3a775d1035a53dcdd3d3ab4a0148895ad621ec015d0b68a4501f0764d74a5e",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/score_gain_1_01.wav",
+      "peakDbFS": -20.0,
+      "estimatedTruePeakDbTP": -19.99,
+      "rmsDbFS": -32.83,
+      "dcOffset": 5.285212837401447e-08,
+      "sha256": "43df43e53fea1c2c59372bc037904ea8d41c063ad1c2f43a16d9c07f91b1a4eb",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/score_gain_2_01.wav",
+      "peakDbFS": -20.0,
+      "estimatedTruePeakDbTP": -19.99,
+      "rmsDbFS": -32.63,
+      "dcOffset": 6.902614175701978e-08,
+      "sha256": "38d7bb38f2d126e7870b0c7ef8c323646126b27231753dbb0df81b551c5bd6c6",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/score_gain_3_01.wav",
+      "peakDbFS": -20.0,
+      "estimatedTruePeakDbTP": -19.99,
+      "rmsDbFS": -32.59,
+      "dcOffset": 4.938375240903016e-08,
+      "sha256": "616dc0aab44dd7c67905eeeab5cd223713718b43191d21f40eb38c5cb78e8291",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/score_gain_4_01.wav",
+      "peakDbFS": -20.0,
+      "estimatedTruePeakDbTP": -19.99,
+      "rmsDbFS": -32.78,
+      "dcOffset": 5.228712383807101e-08,
+      "sha256": "097c9f9803113900a0ef7e48f7ceb7ca519b13ff3fa353dfd996c8235fbc9c24",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/score_gain_5_01.wav",
+      "peakDbFS": -20.0,
+      "estimatedTruePeakDbTP": -19.99,
+      "rmsDbFS": -32.86,
+      "dcOffset": 5.395814514783218e-08,
+      "sha256": "acee9137c86db3413aa992ca8a5d42483a8344f3c43e7f6420f8c61f3467c6db",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/score_gain_6_01.wav",
+      "peakDbFS": -20.0,
+      "estimatedTruePeakDbTP": -19.98,
+      "rmsDbFS": -32.91,
+      "dcOffset": 6.18419468232633e-08,
+      "sha256": "4923295b21e130e5fc1428df62b03433727f5b2c7d1742a5d5231838612abd1a",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/score_gain_7_01.wav",
+      "peakDbFS": -20.0,
+      "estimatedTruePeakDbTP": -19.98,
+      "rmsDbFS": -32.88,
+      "dcOffset": 5.5412269148987004e-08,
+      "sha256": "d7c3ba739dfaab71108837f0d92b5aa4a0d7a89132aa2ed5ec83c94ac2843db7",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/score_gain_8_01.wav",
+      "peakDbFS": -20.0,
+      "estimatedTruePeakDbTP": -19.99,
+      "rmsDbFS": -32.82,
+      "dcOffset": 5.978695914562531e-08,
+      "sha256": "540cb68f62d4724af6f421b3b109e7f1372d09e7890b9386f8fceb65639d8ac5",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/coin_pickup_01.wav",
+      "peakDbFS": -15.0,
+      "estimatedTruePeakDbTP": -14.99,
+      "rmsDbFS": -26.82,
+      "dcOffset": 6.139979057686132e-08,
+      "sha256": "5e5f93eb16bb934ae00eafc72e8167b3b82df245e6f973cf7f13341c2d1a7f20",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/coin_pickup_02.wav",
+      "peakDbFS": -15.0,
+      "estimatedTruePeakDbTP": -14.95,
+      "rmsDbFS": -27.62,
+      "dcOffset": 6.080279058745767e-08,
+      "sha256": "6828faf3ca280ba99232d8e73b6646c857a2afc55acd12ffdb245fc01594abbd",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/coin_pickup_03.wav",
+      "peakDbFS": -15.0,
+      "estimatedTruePeakDbTP": -14.93,
+      "rmsDbFS": -27.47,
+      "dcOffset": 5.986583227075472e-08,
+      "sha256": "dff1e184aa71a9c19e906dd12e796c97dc4c55890466126c03137d3d0895420d",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/xp_tick_01.wav",
+      "peakDbFS": -21.0,
+      "estimatedTruePeakDbTP": -20.99,
+      "rmsDbFS": -33.99,
+      "dcOffset": 6.091426154061223e-08,
+      "sha256": "8f341d33328ff6a501223eb6d4210d5dc6919d13ad2641691c9bebb5bc4ff887",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/xp_tick_02.wav",
+      "peakDbFS": -21.0,
+      "estimatedTruePeakDbTP": -20.99,
+      "rmsDbFS": -33.99,
+      "dcOffset": 6.211641241475491e-08,
+      "sha256": "0b61c8bce0aacbcac19cde1df6ad2172d14effc7967a64dcb2b1f7626545f316",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/xp_tick_03.wav",
+      "peakDbFS": -21.0,
+      "estimatedTruePeakDbTP": -20.99,
+      "rmsDbFS": -33.94,
+      "dcOffset": 5.834591314659356e-08,
+      "sha256": "85dc1f754eea76f8edbda3fcef14a61a6e7b96ee476a922d233652333bcf9744",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/coin_payout_01.wav",
+      "peakDbFS": -12.0,
+      "estimatedTruePeakDbTP": -11.96,
+      "rmsDbFS": -24.52,
+      "dcOffset": 5.964507820047326e-08,
+      "sha256": "fefc33d30564438471ebd7937ffc15b43a01c162f0bcc481cdb5422190b6c9d7",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/xp_award_01.wav",
+      "peakDbFS": -14.0,
+      "estimatedTruePeakDbTP": -13.99,
+      "rmsDbFS": -25.73,
+      "dcOffset": 5.730982584600693e-08,
+      "sha256": "a5de0acaa919bd012aef6d43654333c8f8d03493a2372afaef6489447e09470a",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/xp_level_up_01.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.98,
+      "rmsDbFS": -24.09,
+      "dcOffset": 5.981344758543478e-08,
+      "sha256": "f2d2ed512cbc5542a51014a3a4db524350ab5f197acaf112a850a1c563a0d20e",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/level_up_01.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.99,
+      "rmsDbFS": -24.92,
+      "dcOffset": 6.0272216796875e-08,
+      "sha256": "5e53e1a4ac349a67dfd8befd8bd89f836a94533d3a5a4e7e06d969fd4c6b4025",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/personal_best_01.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.94,
+      "rmsDbFS": -23.3,
+      "dcOffset": 5.955391403185255e-08,
+      "sha256": "391c49d8f53c149166c9fbaf3a6462a1635c08a3451afb608502a4626e8ef0e6",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/combo_2_01.wav",
+      "peakDbFS": -17.0,
+      "estimatedTruePeakDbTP": -16.99,
+      "rmsDbFS": -29.21,
+      "dcOffset": 6.499171943126521e-08,
+      "sha256": "d8413dba786c4dbf4403d0b79303920678dfdb0824ab1936505dfa4a259ab86f",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/combo_4_01.wav",
+      "peakDbFS": -16.0,
+      "estimatedTruePeakDbTP": -15.99,
+      "rmsDbFS": -28.65,
+      "dcOffset": 6.033627064144835e-08,
+      "sha256": "2e05407406df0081ea5e6659dd1ca403db6062b53e374046a7f7a7d964b757d7",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/combo_8_01.wav",
+      "peakDbFS": -15.0,
+      "estimatedTruePeakDbTP": -14.97,
+      "rmsDbFS": -27.7,
+      "dcOffset": 6.134232848327873e-08,
+      "sha256": "3b50af43c04e7166c6ac86dbbd6737619505ed57fb5919b8be8e88be16cb85e1",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/tally_finish_01.wav",
+      "peakDbFS": -15.0,
+      "estimatedTruePeakDbTP": -14.96,
+      "rmsDbFS": -27.98,
+      "dcOffset": 5.741796549960706e-08,
+      "sha256": "c48fe459cb2368c82f3f88fd18d45ccea7f2cab93bdd62ef34e4c142f158d292",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/powerups/heal_01.wav",
+      "peakDbFS": -12.0,
+      "estimatedTruePeakDbTP": -11.99,
+      "rmsDbFS": -24.78,
+      "dcOffset": 5.980171206766358e-08,
+      "sha256": "41fe1c8392f196b2a7e9cb1232687584011bfc9028ff87a49dfa43e68112b468",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/powerups/spawn_01.wav",
+      "peakDbFS": -21.0,
+      "estimatedTruePeakDbTP": -20.99,
+      "rmsDbFS": -33.32,
+      "dcOffset": 6.088261743352507e-08,
+      "sha256": "2c69b98fca8aa3466862fbe7b40af525eab8fa4a4b1405074a363ad669b9a796",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/powerups/expire_01.wav",
+      "peakDbFS": -18.0,
+      "estimatedTruePeakDbTP": -17.99,
+      "rmsDbFS": -29.39,
+      "dcOffset": 5.563468620666966e-08,
+      "sha256": "a778b141d9e62ec145358f68ef05c24a0d2d2f096ef745ba5e59165739b67f4d",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/powerups/rampage_end_01.wav",
+      "peakDbFS": -19.0,
+      "estimatedTruePeakDbTP": -18.99,
+      "rmsDbFS": -30.88,
+      "dcOffset": 5.6878589772293547e-08,
+      "sha256": "a0771ec45741319fdbd68d3b582b1095e0c9cb3155f1981fa5ef94dc27b9eb34",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/shop/purchase_01.wav",
+      "peakDbFS": -12.0,
+      "estimatedTruePeakDbTP": -11.97,
+      "rmsDbFS": -25.33,
+      "dcOffset": 6.052237275933485e-08,
+      "sha256": "8e817e2b9e3857edfa564d534a14db10a5bc64c2e0014b7cf32f5c8a82b0fdc1",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/shop/unlock_01.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.97,
+      "rmsDbFS": -23.88,
+      "dcOffset": 6.002146047312064e-08,
+      "sha256": "1029654325a58345d2bdb849e0bfde51087a2b36ae6ccc87bc1733bf4febaa98",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/save_success_01.wav",
+      "peakDbFS": -17.0,
+      "estimatedTruePeakDbTP": -16.99,
+      "rmsDbFS": -29.04,
+      "dcOffset": 5.5448493499348597e-08,
+      "sha256": "ca9e4b5b0d096feb913f661791ef0e6df498f265db9c13da9dd8e59ef277fad8",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/login_success_01.wav",
+      "peakDbFS": -16.0,
+      "estimatedTruePeakDbTP": -15.99,
+      "rmsDbFS": -28.57,
+      "dcOffset": 6.120957635524689e-08,
+      "sha256": "c034f53d9cda9b896ad72fd679aaf20c55a30fe03a4751202be2fad65838083e",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/reset_complete_01.wav",
+      "peakDbFS": -17.0,
+      "estimatedTruePeakDbTP": -16.99,
+      "rmsDbFS": -29.64,
+      "dcOffset": 6.726423505902683e-08,
+      "sha256": "94945c3f4b2c98e5e8255e1c3660a61d005db991813b5ed0fecff07c2adb4aa7",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/session/ready_01.wav",
+      "peakDbFS": -15.0,
+      "estimatedTruePeakDbTP": -14.99,
+      "rmsDbFS": -26.89,
+      "dcOffset": 5.999445600637666e-08,
+      "sha256": "01c37f91a6581905d7ac3114d107a2b0494b3229712b91675df1a55a6b589155",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/session/start_01.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.99,
+      "rmsDbFS": -23.41,
+      "dcOffset": 5.987833014958113e-08,
+      "sha256": "5963e0ddad1e5f40343dea6c7d678981e51f39cf5c140472d7f0407556e1590e",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/session/restart_01.wav",
+      "peakDbFS": -12.0,
+      "estimatedTruePeakDbTP": -11.99,
+      "rmsDbFS": -26.73,
+      "dcOffset": 5.938050876428394e-08,
+      "sha256": "bc53414f841938e9fae78c08f680f1df01b9bb2ed29c601f6f91ee84fe36b3f1",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/powerups/speed_01.wav",
+      "peakDbFS": -11.0,
+      "estimatedTruePeakDbTP": -10.98,
+      "rmsDbFS": -23.88,
+      "dcOffset": 5.929285064404595e-08,
+      "sha256": "8a4a16348737da18011fd86d257d0d62d0f031062aa8420207769faf12561750",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/powerups/giant_01.wav",
+      "peakDbFS": -10.0,
+      "estimatedTruePeakDbTP": -9.99,
+      "rmsDbFS": -24.73,
+      "dcOffset": 5.970443397745146e-08,
+      "sha256": "fd80e1fdd259addd65d55df35c38a53c10aaa2bd16e0cd90e4e209af13406805",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/powerups/rampage_start_01.wav",
+      "peakDbFS": -9.0,
+      "estimatedTruePeakDbTP": -8.99,
+      "rmsDbFS": -21.57,
+      "dcOffset": 5.98211001757611e-08,
+      "sha256": "5a3523dac32438b05cba89ecfa4be4dad3ac9fdbefaf57fc239087d5ecf633bc",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/session/game_over_01.wav",
+      "peakDbFS": -11.0,
+      "estimatedTruePeakDbTP": -10.99,
+      "rmsDbFS": -23.93,
+      "dcOffset": 5.913581878412595e-08,
+      "sha256": "483a4c9d70288e6a3fa6575b160eeb606eed5cf5fb224374cc9116d3135b5408",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/hover_01.wav",
+      "peakDbFS": -26.0,
+      "estimatedTruePeakDbTP": -25.99,
+      "rmsDbFS": -39.58,
+      "dcOffset": 5.602028498679836e-08,
+      "sha256": "c0c2bceb1d3a49d86a49d712b5e4c5a4f7539786744e59dcbfcd6af60787a5ea",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/hover_02.wav",
+      "peakDbFS": -26.0,
+      "estimatedTruePeakDbTP": -25.95,
+      "rmsDbFS": -39.72,
+      "dcOffset": 6.115433949426139e-08,
+      "sha256": "b7fb5c9fe88c486edebd61d1aa1e5048c4515d147ab43125996ed92191819aa9",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/press_01.wav",
+      "peakDbFS": -19.0,
+      "estimatedTruePeakDbTP": -18.97,
+      "rmsDbFS": -34.16,
+      "dcOffset": 6.14453939166908e-08,
+      "sha256": "40222f190e971b98ee4f713786cf2e3777e270ced885e9cb70667128f707b7da",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/press_02.wav",
+      "peakDbFS": -19.0,
+      "estimatedTruePeakDbTP": -18.94,
+      "rmsDbFS": -34.13,
+      "dcOffset": 5.344355920709193e-08,
+      "sha256": "d526cd534a214355727257eb403de962d656d0be7538e4266d16acac3c0d4022",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/press_03.wav",
+      "peakDbFS": -19.0,
+      "estimatedTruePeakDbTP": -18.99,
+      "rmsDbFS": -34.12,
+      "dcOffset": 6.417686116714356e-08,
+      "sha256": "580b634ec8ee8dcbe03a0085bb4c5db7e3a57ca8df8a0beee81f46a64f8af9d1",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/navigate_01.wav",
+      "peakDbFS": -19.0,
+      "estimatedTruePeakDbTP": -18.99,
+      "rmsDbFS": -33.43,
+      "dcOffset": 5.99562254563308e-08,
+      "sha256": "f1a45d875359ac21cf96c7a68d2e66c3b9287107e6f6180181ed25e102efacaf",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/navigate_02.wav",
+      "peakDbFS": -19.0,
+      "estimatedTruePeakDbTP": -18.98,
+      "rmsDbFS": -33.95,
+      "dcOffset": 6.022908560818282e-08,
+      "sha256": "c56ae6c9b4215bda6dd90fc139f2037a272fd051f68f3b77a3304aba79957d14",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/back_01.wav",
+      "peakDbFS": -20.0,
+      "estimatedTruePeakDbTP": -19.97,
+      "rmsDbFS": -34.09,
+      "dcOffset": 5.351340118004037e-08,
+      "sha256": "c3bdf6f1ac933d0931777533899f0d1fca8d32268f7f0ee7540412e1c21790fb",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/tab_switch_01.wav",
+      "peakDbFS": -20.0,
+      "estimatedTruePeakDbTP": -19.99,
+      "rmsDbFS": -34.52,
+      "dcOffset": 6.230309223517393e-08,
+      "sha256": "828cd1c5f98246510c490a056805dc6af0c44e11904c64bde1207d0c6a9a9b02",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/tab_switch_02.wav",
+      "peakDbFS": -20.0,
+      "estimatedTruePeakDbTP": -19.99,
+      "rmsDbFS": -35.08,
+      "dcOffset": 6.213973448464429e-08,
+      "sha256": "4507c919925df6a769da9bcfc59dfca9cacaf356ca87c04407bd56c719f2f496",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/toggle_on_01.wav",
+      "peakDbFS": -20.0,
+      "estimatedTruePeakDbTP": -19.99,
+      "rmsDbFS": -34.45,
+      "dcOffset": 6.254030723990139e-08,
+      "sha256": "91739f5bf793215f959b896dee61bacbf1336749c1c3c022108fd374e03d5fdb",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/toggle_off_01.wav",
+      "peakDbFS": -21.0,
+      "estimatedTruePeakDbTP": -20.97,
+      "rmsDbFS": -35.26,
+      "dcOffset": 5.115874031603566e-08,
+      "sha256": "80041952225e990bff9bbbc278c2339418435ab0137e666bda59137f6dd16edc",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/slider_tick_01.wav",
+      "peakDbFS": -27.0,
+      "estimatedTruePeakDbTP": -26.99,
+      "rmsDbFS": -40.18,
+      "dcOffset": 6.524558733189682e-08,
+      "sha256": "ce2aebdde8cb79d1ae7578de76976dde84ec036f3ee251e94a9a8a831a189a22",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/slider_tick_02.wav",
+      "peakDbFS": -27.0,
+      "estimatedTruePeakDbTP": -26.99,
+      "rmsDbFS": -40.77,
+      "dcOffset": 6.35694180216108e-08,
+      "sha256": "3589b5ea238bec67059fade5c8ebadb355bef47ed7529193d4ca51f9b79f8a89",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/guide_select_01.wav",
+      "peakDbFS": -21.0,
+      "estimatedTruePeakDbTP": -20.97,
+      "rmsDbFS": -34.67,
+      "dcOffset": 5.974786779046966e-08,
+      "sha256": "4e1d7e03424b298ba20cfdaac1a02f5783e8aa31a14b71382e77097539a39c84",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/guide_select_02.wav",
+      "peakDbFS": -21.0,
+      "estimatedTruePeakDbTP": -20.99,
+      "rmsDbFS": -34.72,
+      "dcOffset": 5.928168161887135e-08,
+      "sha256": "f1e2066ecc8a5bf5e928f7e93796963263b173b9d89732fcf9291162b89d8905",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/notification_01.wav",
+      "peakDbFS": -23.0,
+      "estimatedTruePeakDbTP": -22.99,
+      "rmsDbFS": -36.71,
+      "dcOffset": 6.171793406765515e-08,
+      "sha256": "b203ed7fdcac16e6a8f3ff9935a0c3bb5a16d921da0208ee27f47ef872108c03",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/save_pending_01.wav",
+      "peakDbFS": -24.0,
+      "estimatedTruePeakDbTP": -23.99,
+      "rmsDbFS": -37.72,
+      "dcOffset": 5.3817786059333285e-08,
+      "sha256": "1bffd52a5f7c50f7b1aa674563eee2dacc9995f89e28063b04cf44adf3a71e86",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/retry_01.wav",
+      "peakDbFS": -21.0,
+      "estimatedTruePeakDbTP": -20.91,
+      "rmsDbFS": -35.47,
+      "dcOffset": 6.258789649971108e-08,
+      "sha256": "209b3581f4ace9ddfd79e53b28a3a08209571f46fd38168018588394f78cfb31",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/logout_01.wav",
+      "peakDbFS": -22.0,
+      "estimatedTruePeakDbTP": -21.97,
+      "rmsDbFS": -35.91,
+      "dcOffset": 4.976557151814621e-08,
+      "sha256": "d7e3d3565149e6f2adaa87eed60cb76b57dd076f0d7edb1c31cbcd83e3f02731",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/modal_open_01.wav",
+      "peakDbFS": -20.0,
+      "estimatedTruePeakDbTP": -19.99,
+      "rmsDbFS": -35.12,
+      "dcOffset": 5.8114689906532795e-08,
+      "sha256": "ba82c1237440baf01056b78b46eb6549f7091e96402b35f05f4ebc238ad72c91",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/modal_close_01.wav",
+      "peakDbFS": -20.0,
+      "estimatedTruePeakDbTP": -19.98,
+      "rmsDbFS": -34.71,
+      "dcOffset": 5.729649224422516e-08,
+      "sha256": "88a71109146344ac4a58f3c482e8a8f12900fbda353f7eae12c65fd965e78701",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/session/pause_01.wav",
+      "peakDbFS": -20.0,
+      "estimatedTruePeakDbTP": -19.99,
+      "rmsDbFS": -35.84,
+      "dcOffset": 6.050222672421253e-08,
+      "sha256": "ee26edf3f0e442020820c6faad74bea2bf40ad4932184edf51b2a6a4110e3ca8",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/session/resume_01.wav",
+      "peakDbFS": -20.0,
+      "estimatedTruePeakDbTP": -19.91,
+      "rmsDbFS": -36.53,
+      "dcOffset": 5.933494050038886e-08,
+      "sha256": "288cddbf319fa6418021069ae9c7cc6fa5ddf9ba0699dc68bd7d17dfbbaadcb6",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/error_01.wav",
+      "peakDbFS": -18.0,
+      "estimatedTruePeakDbTP": -17.99,
+      "rmsDbFS": -29.61,
+      "dcOffset": 7.547351138827922e-08,
+      "sha256": "82d54021d0c02ebc762f600ea8118fa491b5dc261cbab5476f1374a58c701882",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/save_failed_01.wav",
+      "peakDbFS": -18.0,
+      "estimatedTruePeakDbTP": -17.99,
+      "rmsDbFS": -29.63,
+      "dcOffset": 7.531327038745485e-08,
+      "sha256": "9ce0229afaffbeab8de61eb2dbdad91656992b567877e3c6bd18f785d967b8e7",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/ui/reset_arm_01.wav",
+      "peakDbFS": -18.0,
+      "estimatedTruePeakDbTP": -17.99,
+      "rmsDbFS": -29.63,
+      "dcOffset": 7.569384276441273e-08,
+      "sha256": "1258d52a3536899717118431595400017c1056ce94fb9b9c31b65b6da9095d20",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/shop/insufficient_coins_01.wav",
+      "peakDbFS": -18.0,
+      "estimatedTruePeakDbTP": -17.99,
+      "rmsDbFS": -29.69,
+      "dcOffset": 7.616455070433432e-08,
+      "sha256": "9eadc2f2c8a54d63e0b47fd3a082a8570b1d13b276f38d4542f57339eed2c35b",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/shop/equip_skin_01.wav",
+      "peakDbFS": -16.0,
+      "estimatedTruePeakDbTP": -15.99,
+      "rmsDbFS": -28.69,
+      "dcOffset": 5.536831784249814e-08,
+      "sha256": "6b9d9391b0b75051e0a5a1f100dce44315d4ec0d2525ff9a36f8375f07c88bb7",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/shop/equip_trail_01.wav",
+      "peakDbFS": -16.0,
+      "estimatedTruePeakDbTP": -15.99,
+      "rmsDbFS": -28.68,
+      "dcOffset": 5.7200878149856974e-08,
+      "sha256": "02a28652f20e4ba05ef44eba0deb19dab001ca4296c365d4d8c7fba9fc884f7a",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/shop/equip_aura_01.wav",
+      "peakDbFS": -16.0,
+      "estimatedTruePeakDbTP": -15.99,
+      "rmsDbFS": -28.69,
+      "dcOffset": 6.342817344183602e-08,
+      "sha256": "e3a9489c5b30d9a246961bcd2b0bfc301068269ce2e84ab335a506e22ba37580",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/tally_tick_01.wav",
+      "peakDbFS": -24.0,
+      "estimatedTruePeakDbTP": -23.99,
+      "rmsDbFS": -37.77,
+      "dcOffset": 5.1899438095659594e-08,
+      "sha256": "12eab891efedd99cd40ff6d338c0ddbaa71b55e953011bef7b8f825980cc0ea4",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/tally_tick_02.wav",
+      "peakDbFS": -24.0,
+      "estimatedTruePeakDbTP": -23.99,
+      "rmsDbFS": -38.14,
+      "dcOffset": 5.049609225817365e-08,
+      "sha256": "832e81664b278d10e6dc7fcd07aad4ddacca54f80df72fbc2c69d31db2792d2a",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/tally_tick_03.wav",
+      "peakDbFS": -24.0,
+      "estimatedTruePeakDbTP": -23.99,
+      "rmsDbFS": -37.82,
+      "dcOffset": 5.1132727482615585e-08,
+      "sha256": "0615a190f599b0aeb17ff76e7d3b243c1049b17b9a00d862b3ebb3e8f28158e2",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    },
+    {
+      "file": "wav/rewards/combo_break_01.wav",
+      "peakDbFS": -22.0,
+      "estimatedTruePeakDbTP": -21.98,
+      "rmsDbFS": -36.01,
+      "dcOffset": 1.1962177844196043e-07,
+      "sha256": "585016c847d84faaf32004f6de545e90e113f2734593904866acc7b83927e831",
+      "checks": {
+        "sample_rate": true,
+        "non_silent": true,
+        "finite": true,
+        "headroom": true,
+        "ogg_headroom": true,
+        "dc_offset": true,
+        "quiet_edges": true,
+        "decode_length": true,
+        "unique_pcm": true,
+        "distinct_at_16_bit": true
+      }
+    }
+  ],
+  "review": "Automated signal and decode checks. Listen in preview.html for perceptual review; no claim of human listening approval."
+}

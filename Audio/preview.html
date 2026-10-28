@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CubeCrush — Audio</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0b100f;--panel:#141d19;--line:#2b3b32;--muted:#9baea3;--lime:#d9ff43}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 85% 0,#29382b 0,transparent 50%),var(--bg);color:#edf3e9;font:15px/1.5 'Segoe UI',Arial,sans-serif;min-height:100vh}
+    main{max-width:1280px;margin:auto;padding:48px 32px 160px}h1{font-size:48px;line-height:1;margin:12px 0 16px;letter-spacing:-2px}h2{font-size:21px;margin:0 0 10px}p{margin:0;color:var(--muted)}.brand{color:var(--lime);font-weight:800;letter-spacing:2px;font-size:12px}
+    .demos{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:32px 0}.demo,.card{border:1px solid var(--line);background:#141d19d9;border-radius:12px;padding:20px}.demo{background:linear-gradient(120deg,#2b3c22,#141d19)}.demo p{margin-bottom:20px}
+    button,input,a{font:inherit}button{cursor:pointer;background:#233026;color:#edf3e9;border:1px solid #3c4d3e;border-radius:6px;padding:9px 16px;font-weight:600}button:hover{border-color:var(--lime);color:var(--lime)}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--lime);outline-offset:3px}.primary{background:var(--lime);color:#142006;border-color:var(--lime)}.primary:hover{background:#e6ff8a;color:#142006}
+    .toolbar{position:sticky;top:0;padding:14px 0;background:#0b100ff2;backdrop-filter:blur(16px);z-index:1}input[type=search]{width:100%;background:#141d19;border:1px solid var(--line);border-radius:8px;color:#edf3e9;padding:13px 16px}.filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.filters button{font-size:13px;padding:7px 12px}.filters button[aria-pressed=true]{background:var(--lime);color:#142006;border-color:var(--lime)}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}.card h3{font-size:18px;margin:4px 0 7px}.tag{font-size:11px;color:var(--lime);text-transform:uppercase;letter-spacing:1.2px;font-weight:700}.card p{font-size:13px;min-height:40px}.actions{display:flex;align-items:center;gap:7px;margin-top:16px}.actions button{font-size:13px;padding:6px 10px}.actions a{margin-left:auto;color:var(--muted);text-decoration:none;font-size:12px}.actions a+a{margin-left:3px}.actions a:hover{color:var(--lime)}.meta{font-size:11px;color:#8a9c90;margin-top:12px}.playing{border-color:var(--lime);box-shadow:0 0 0 1px #d9ff4320}
+    footer{position:fixed;bottom:0;left:0;right:0;background:#152019f5;border-top:1px solid var(--line);backdrop-filter:blur(20px);padding:14px 28px;z-index:2}.transport{display:flex;align-items:center;gap:20px;max-width:1216px;margin:auto}.now{width:260px;flex-shrink:0}.now strong{display:block}.now small{color:var(--muted)}audio{width:100%;height:40px}.empty{padding:40px;color:var(--muted)}
+    @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.transport{flex-wrap:wrap;gap:8px}.now{width:auto;flex:1}audio{order:3}.demos{grid-template-columns:1fr}main{padding:28px 18px 190px}h1{font-size:38px}}@media(max-width:520px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<main>
+  <div class="brand">CUBECRUSH</div><h1>Sound collection</h1><p id="summary">Loading collection…</p>
+  <div class="demos">
+    <section class="demo"><h2>In the arena</h2><p>A mixed gameplay sequence, from the first roll to the final reward.</p><button class="primary" data-demo="0">Play gameplay mix</button></section>
+    <section class="demo"><h2>Every creature</h2><p>All 14 kill sounds: soft splats, shell cracks, and liquid pops.</p><button class="primary" data-demo="1">Play kill collection</button></section>
+  </div>
+  <div class="toolbar"><input id="search" type="search" aria-label="Search sounds" placeholder="Search sounds…"><nav class="filters" id="filters" aria-label="Sound categories"></nav></div>
+  <div id="grid" class="grid"></div>
+</main>
+<footer><div class="transport"><div class="now" aria-live="polite"><strong id="now">Choose a sound</strong><small id="detail">WAV · 48 kHz · 24-bit</small></div><audio id="player" controls preload="none"></audio><button id="stop">Stop</button></div></footer>
+<script src="catalog.js"></script>
+<script>
+  'use strict';
+  const data=window.CUBE_AUDIO, player=document.getElementById('player'), grid=document.getElementById('grid');
+  let category='all',activeId=null,currentMarkers=[];
+  player.volume=.65;
+  document.getElementById('summary').textContent=`${data.cues.length} cues · ${data.cues.reduce((n,c)=>n+c.assets.length,0)} variations · Original synthesized effects`;
+  const categories=['all',...new Set(data.cues.map(c=>c.category))];
+  for(const name of categories){const button=document.createElement('button');button.textContent=name[0].toUpperCase()+name.slice(1);button.setAttribute('aria-pressed',String(name===category));button.onclick=()=>{category=name;for(const b of button.parentNode.children)b.setAttribute('aria-pressed',String(b===button));render()};document.getElementById('filters').append(button)}
+  function setPlaying(id){activeId=id;for(const c of grid.children)c.classList.toggle('playing',c.dataset.id===id)}
+  async function play(path,title,id,markers=[]){player.pause();player.src=path;currentMarkers=markers;document.getElementById('now').textContent=title;document.getElementById('detail').textContent='WAV · 48 kHz · 24-bit';setPlaying(id);try{await player.play()}catch(error){document.getElementById('detail').textContent='Unable to play this file. Check that the wav folder is beside preview.html.';console.error(error)}}
+  function render(){grid.replaceChildren();const query=document.getElementById('search').value.toLowerCase().trim();const cues=data.cues.filter(c=>(category==='all'||category===c.category)&&`${c.name} ${c.trigger}`.toLowerCase().includes(query));for(const cue of cues){const card=document.createElement('article');card.className='card';card.dataset.id=cue.id;const tag=document.createElement('div');tag.className='tag';tag.textContent=cue.category;const title=document.createElement('h3');title.textContent=cue.name;const description=document.createElement('p');description.textContent=cue.trigger;const actions=document.createElement('div');actions.className='actions';cue.assets.forEach((asset,i)=>{const b=document.createElement('button');b.textContent=cue.assets.length>1?`Play ${i+1}`:'Play';b.setAttribute('aria-label',`Play ${cue.name}, variation ${i+1}`);b.onclick=()=>play(asset.wav,`${cue.name}${cue.assets.length>1?' · '+(i+1):''}`,cue.id);actions.append(b)});for(const format of ['wav','ogg']){const link=document.createElement('a');link.href=cue.assets[0][format];link.download='';link.textContent=format.toUpperCase();link.title=`Download ${format.toUpperCase()} variation 1`;actions.append(link)}const meta=document.createElement('div');meta.className='meta';meta.textContent=`${cue.assets[0].duration.toFixed(2)} s · ${cue.assets[0].channels===2?'Stereo':'Mono'}${cue.optional?' · Optional':''}`;card.append(tag,title,description,actions,meta);grid.append(card)}if(!cues.length){const p=document.createElement('p');p.className='empty';p.textContent='No matching sounds.';grid.append(p)}setPlaying(activeId)}
+  document.getElementById('search').addEventListener('input',render);
+  document.getElementById('stop').onclick=()=>{player.pause();player.currentTime=0;currentMarkers=[];setPlaying(null)};
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('stop').click()});
+  document.querySelectorAll('[data-demo]').forEach(b=>b.onclick=()=>{const demo=data.previews[Number(b.dataset.demo)];play(demo.file,Number(b.dataset.demo)===0?'Gameplay mix':'Every creature',null,demo.markers)});
+  player.addEventListener('timeupdate',()=>{if(!currentMarkers.length)return;const marker=currentMarkers.findLast(m=>m.at<=player.currentTime);if(marker){const cue=data.cues.find(c=>c.id===marker.cue);document.getElementById('detail').textContent=cue?cue.name:marker.cue;setPlaying(marker.cue)}});
+  player.addEventListener('ended',()=>{currentMarkers=[];setPlaying(null)});
+  render();
+</script>
+</body>
+</html>

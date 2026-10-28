@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "node test/unit.cjs && node test/client.cjs",
+    "test": "node test/unit.cjs && node test/client.cjs && node test/visuals.cjs && node test/exploration.cjs",
     "test:integration": "node test/integration.cjs",
     "test:browser": "playwright test"
   },

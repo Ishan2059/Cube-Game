@@ -1,6 +1,6 @@
 /* ================= shared shop-item 3D preview =================
  * One renderer/scene/camera/resize/RAF setup used by every item-modal
- * preview (Skins, Trails, Auras). Each category only supplies the frame its
+ * preview (Skins, Trails). Each category only supplies the frame its
  * content actually occupies (a sphere that comfortably contains the cube
  * plus whatever effect it's showing) and a `build()` callback that adds its
  * own objects to the scene. The camera is derived from that frame with
@@ -10,12 +10,12 @@
  */
 
 import * as THREE from "three";
+import { getStudioEnvironment } from "./lighting";
 
 const FOV_DEG = 34;
 /** How much of the frustum height the bounding sphere fills — 1 / PADDING,
  *  so PADDING 1.3 leaves ~23% breathing room around the item on every side. */
 const PADDING = 1.3;
-const FIXED_DT = 1 / 60;
 /** Default 3/4 view: high enough to show the cube's top face, shallow enough
  *  that it still reads as a cube and not a plan view. */
 const DEFAULT_CAMERA_DIR = new THREE.Vector3(0.72, 0.72, 1);
@@ -33,8 +33,7 @@ export interface PreviewFrame {
 }
 
 export interface PreviewBuild {
-  /** Called once per frame with a fixed dt (matches the rest of the game's
-   *  cosmetic-preview loops — no need to be real-time accurate). */
+  /** Elapsed seconds, capped at 50 ms to avoid jumps after a stall. */
   tick: (dt: number) => void;
   /** Optional point for the camera to track, updated by `tick`. Categories
    *  whose content travels (Trails) keep it framed by following it, the same
@@ -52,7 +51,7 @@ export interface PreviewBuild {
 export function mountItemPreview(
   container: HTMLElement,
   frame: PreviewFrame,
-  build: (scene: THREE.Scene) => PreviewBuild,
+  build: (scene: THREE.Scene, camera: THREE.PerspectiveCamera) => PreviewBuild,
 ): () => void {
   const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -61,6 +60,7 @@ export function mountItemPreview(
   renderer.domElement.style.height = "100%";
 
   const scene = new THREE.Scene();
+  scene.environment = getStudioEnvironment();
   scene.add(new THREE.HemisphereLight(0xfff2dc, 0x2c2418, 1.2));
   const sun = new THREE.DirectionalLight(0xffe6c0, 1.8);
   sun.position.set(2, 3, 2);
@@ -79,7 +79,7 @@ export function mountItemPreview(
   camera.position.copy(camOffset).add(center);
   camera.lookAt(center);
 
-  const { tick, focus, dispose: disposeContent } = build(scene);
+  const { tick, focus, dispose: disposeContent } = build(scene, camera);
 
   const resize = () => {
     const s = Math.max(1, Math.min(container.clientWidth, container.clientHeight));
@@ -90,8 +90,10 @@ export function mountItemPreview(
   ro.observe(container);
 
   let raf = 0;
-  const loop = () => {
-    tick(FIXED_DT);
+  let previous=performance.now();
+  const loop = (now:number) => {
+    const dt=Math.min(.05,(now-previous)/1000);previous=now;
+    tick(document.hidden?0:dt);
     if (focus) {
       camera.position.copy(focus).add(camOffset);
       camera.lookAt(focus);
@@ -106,6 +108,7 @@ export function mountItemPreview(
     ro.disconnect();
     disposeContent();
     renderer.dispose();
+    renderer.forceContextLoss();
     renderer.domElement.remove();
   };
 }

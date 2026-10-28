@@ -1,0 +1,3044 @@
+{
+  "name": "CubeCrush / Tactile Arcade",
+  "version": 1,
+  "sampleRate": 48000,
+  "masters": "48 kHz / 24-bit PCM WAV",
+  "web": "48 kHz Ogg Vorbis",
+  "creation": "Original deterministic procedural synthesis; no third-party recordings or samples.",
+  "integrationStatus": "Asset pack only; game/audio.ts and live game are unchanged.",
+  "cues": [
+    {
+      "id": "kills.worm",
+      "category": "kills",
+      "name": "Worm",
+      "trigger": "Crush worm; one kill cue per impact, chosen from the most prominent victim.",
+      "source": "game/engine.ts:crushList \u2192 playSplat()",
+      "priority": 65,
+      "cooldownMs": 60,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -9,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/kills/worm_01.wav",
+          "ogg": "ogg/kills/worm_01.ogg",
+          "duration": 0.2756,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/worm_02.wav",
+          "ogg": "ogg/kills/worm_02.ogg",
+          "duration": 0.2776,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/worm_03.wav",
+          "ogg": "ogg/kills/worm_03.ogg",
+          "duration": 0.2756,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "kills.bug",
+      "category": "kills",
+      "name": "Bug",
+      "trigger": "Crush bug; one kill cue per impact, chosen from the most prominent victim.",
+      "source": "game/engine.ts:crushList \u2192 playSplat()",
+      "priority": 65,
+      "cooldownMs": 60,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -9,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/kills/bug_01.wav",
+          "ogg": "ogg/kills/bug_01.ogg",
+          "duration": 0.2502,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/bug_02.wav",
+          "ogg": "ogg/kills/bug_02.ogg",
+          "duration": 0.2371,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/bug_03.wav",
+          "ogg": "ogg/kills/bug_03.ogg",
+          "duration": 0.2454,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "kills.spider",
+      "category": "kills",
+      "name": "Spider",
+      "trigger": "Crush spider; one kill cue per impact, chosen from the most prominent victim.",
+      "source": "game/engine.ts:crushList \u2192 playSplat()",
+      "priority": 65,
+      "cooldownMs": 60,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -9,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/kills/spider_01.wav",
+          "ogg": "ogg/kills/spider_01.ogg",
+          "duration": 0.2586,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/spider_02.wav",
+          "ogg": "ogg/kills/spider_02.ogg",
+          "duration": 0.2697,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/spider_03.wav",
+          "ogg": "ogg/kills/spider_03.ogg",
+          "duration": 0.2706,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "kills.scorpion",
+      "category": "kills",
+      "name": "Scorpion",
+      "trigger": "Crush scorpion; one kill cue per impact, chosen from the most prominent victim.",
+      "source": "game/engine.ts:crushList \u2192 playSplat()",
+      "priority": 65,
+      "cooldownMs": 60,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -9,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/kills/scorpion_01.wav",
+          "ogg": "ogg/kills/scorpion_01.ogg",
+          "duration": 0.2137,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/scorpion_02.wav",
+          "ogg": "ogg/kills/scorpion_02.ogg",
+          "duration": 0.2221,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/scorpion_03.wav",
+          "ogg": "ogg/kills/scorpion_03.ogg",
+          "duration": 0.2166,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "kills.beetle",
+      "category": "kills",
+      "name": "Beetle",
+      "trigger": "Crush beetle; one kill cue per impact, chosen from the most prominent victim.",
+      "source": "game/engine.ts:crushList \u2192 playSplat()",
+      "priority": 65,
+      "cooldownMs": 60,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -9,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/kills/beetle_01.wav",
+          "ogg": "ogg/kills/beetle_01.ogg",
+          "duration": 0.2115,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/beetle_02.wav",
+          "ogg": "ogg/kills/beetle_02.ogg",
+          "duration": 0.215,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/beetle_03.wav",
+          "ogg": "ogg/kills/beetle_03.ogg",
+          "duration": 0.2125,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "kills.slug",
+      "category": "kills",
+      "name": "Slug",
+      "trigger": "Crush slug; one kill cue per impact, chosen from the most prominent victim.",
+      "source": "game/engine.ts:crushList \u2192 playSplat()",
+      "priority": 65,
+      "cooldownMs": 60,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -9,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/kills/slug_01.wav",
+          "ogg": "ogg/kills/slug_01.ogg",
+          "duration": 0.2776,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/slug_02.wav",
+          "ogg": "ogg/kills/slug_02.ogg",
+          "duration": 0.2774,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/slug_03.wav",
+          "ogg": "ogg/kills/slug_03.ogg",
+          "duration": 0.2786,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "kills.termite",
+      "category": "kills",
+      "name": "Termite",
+      "trigger": "Crush termite; one kill cue per impact, chosen from the most prominent victim.",
+      "source": "game/engine.ts:crushList \u2192 playSplat()",
+      "priority": 65,
+      "cooldownMs": 60,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -9,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/kills/termite_01.wav",
+          "ogg": "ogg/kills/termite_01.ogg",
+          "duration": 0.1908,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/termite_02.wav",
+          "ogg": "ogg/kills/termite_02.ogg",
+          "duration": 0.1715,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/termite_03.wav",
+          "ogg": "ogg/kills/termite_03.ogg",
+          "duration": 0.1932,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "kills.hornet",
+      "category": "kills",
+      "name": "Hornet",
+      "trigger": "Crush hornet; one kill cue per impact, chosen from the most prominent victim.",
+      "source": "game/engine.ts:crushList \u2192 playSplat()",
+      "priority": 65,
+      "cooldownMs": 60,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -9,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/kills/hornet_01.wav",
+          "ogg": "ogg/kills/hornet_01.ogg",
+          "duration": 0.1864,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/hornet_02.wav",
+          "ogg": "ogg/kills/hornet_02.ogg",
+          "duration": 0.1733,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/hornet_03.wav",
+          "ogg": "ogg/kills/hornet_03.ogg",
+          "duration": 0.1774,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "kills.mosquito",
+      "category": "kills",
+      "name": "Mosquito",
+      "trigger": "Crush mosquito; one kill cue per impact, chosen from the most prominent victim.",
+      "source": "game/engine.ts:crushList \u2192 playSplat()",
+      "priority": 65,
+      "cooldownMs": 60,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -9,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/kills/mosquito_01.wav",
+          "ogg": "ogg/kills/mosquito_01.ogg",
+          "duration": 0.1506,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/mosquito_02.wav",
+          "ogg": "ogg/kills/mosquito_02.ogg",
+          "duration": 0.1506,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/mosquito_03.wav",
+          "ogg": "ogg/kills/mosquito_03.ogg",
+          "duration": 0.1489,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "kills.pillbug",
+      "category": "kills",
+      "name": "Pillbug",
+      "trigger": "Crush pillbug; one kill cue per impact, chosen from the most prominent victim.",
+      "source": "game/engine.ts:crushList \u2192 playSplat()",
+      "priority": 65,
+      "cooldownMs": 60,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -9,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/kills/pillbug_01.wav",
+          "ogg": "ogg/kills/pillbug_01.ogg",
+          "duration": 0.1972,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/pillbug_02.wav",
+          "ogg": "ogg/kills/pillbug_02.ogg",
+          "duration": 0.1989,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/pillbug_03.wav",
+          "ogg": "ogg/kills/pillbug_03.ogg",
+          "duration": 0.2062,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "kills.flea",
+      "category": "kills",
+      "name": "Flea",
+      "trigger": "Crush flea; one kill cue per impact, chosen from the most prominent victim.",
+      "source": "game/engine.ts:crushList \u2192 playSplat()",
+      "priority": 65,
+      "cooldownMs": 60,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -9,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/kills/flea_01.wav",
+          "ogg": "ogg/kills/flea_01.ogg",
+          "duration": 0.137,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/flea_02.wav",
+          "ogg": "ogg/kills/flea_02.ogg",
+          "duration": 0.1314,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/flea_03.wav",
+          "ogg": "ogg/kills/flea_03.ogg",
+          "duration": 0.1277,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "kills.locust",
+      "category": "kills",
+      "name": "Locust",
+      "trigger": "Crush locust; one kill cue per impact, chosen from the most prominent victim.",
+      "source": "game/engine.ts:crushList \u2192 playSplat()",
+      "priority": 65,
+      "cooldownMs": 60,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -9,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/kills/locust_01.wav",
+          "ogg": "ogg/kills/locust_01.ogg",
+          "duration": 0.2028,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/locust_02.wav",
+          "ogg": "ogg/kills/locust_02.ogg",
+          "duration": 0.2068,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/locust_03.wav",
+          "ogg": "ogg/kills/locust_03.ogg",
+          "duration": 0.1948,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "kills.eggsac",
+      "category": "kills",
+      "name": "Eggsac",
+      "trigger": "Crush eggsac; one kill cue per impact, chosen from the most prominent victim.",
+      "source": "game/engine.ts:crushList \u2192 playSplat()",
+      "priority": 65,
+      "cooldownMs": 60,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -9,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/kills/eggsac_01.wav",
+          "ogg": "ogg/kills/eggsac_01.ogg",
+          "duration": 0.2771,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/eggsac_02.wav",
+          "ogg": "ogg/kills/eggsac_02.ogg",
+          "duration": 0.2776,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/eggsac_03.wav",
+          "ogg": "ogg/kills/eggsac_03.ogg",
+          "duration": 0.2765,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "kills.spitter",
+      "category": "kills",
+      "name": "Spitter",
+      "trigger": "Crush spitter; one kill cue per impact, chosen from the most prominent victim.",
+      "source": "game/engine.ts:crushList \u2192 playSplat()",
+      "priority": 65,
+      "cooldownMs": 60,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -9,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/kills/spitter_01.wav",
+          "ogg": "ogg/kills/spitter_01.ogg",
+          "duration": 0.2776,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/spitter_02.wav",
+          "ogg": "ogg/kills/spitter_02.ogg",
+          "duration": 0.2766,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/spitter_03.wav",
+          "ogg": "ogg/kills/spitter_03.ogg",
+          "duration": 0.2786,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "kills.generic",
+      "category": "kills",
+      "name": "Generic",
+      "trigger": "Crush generic; one kill cue per impact, chosen from the most prominent victim.",
+      "source": "game/engine.ts:crushList \u2192 playSplat()",
+      "priority": 65,
+      "cooldownMs": 60,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -9,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/kills/generic_01.wav",
+          "ogg": "ogg/kills/generic_01.ogg",
+          "duration": 0.274,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/generic_02.wav",
+          "ogg": "ogg/kills/generic_02.ogg",
+          "duration": 0.2708,
+          "channels": 1
+        },
+        {
+          "wav": "wav/kills/generic_03.wav",
+          "ogg": "ogg/kills/generic_03.ogg",
+          "duration": 0.2705,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "gameplay.cube_roll",
+      "category": "gameplay",
+      "name": "Cube Roll",
+      "trigger": "Cube finishes one roll",
+      "source": "game/engine.ts: playThud(false) / roll completion",
+      "priority": 50,
+      "cooldownMs": 80,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -15,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/gameplay/cube_roll_01.wav",
+          "ogg": "ogg/gameplay/cube_roll_01.ogg",
+          "duration": 0.2367,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/cube_roll_02.wav",
+          "ogg": "ogg/gameplay/cube_roll_02.ogg",
+          "duration": 0.2325,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/cube_roll_03.wav",
+          "ogg": "ogg/gameplay/cube_roll_03.ogg",
+          "duration": 0.2352,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/cube_roll_04.wav",
+          "ogg": "ogg/gameplay/cube_roll_04.ogg",
+          "duration": 0.2353,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "gameplay.heavy_land",
+      "category": "gameplay",
+      "name": "Heavy Land",
+      "trigger": "Giant cube lands",
+      "source": "game/engine.ts: playThud / giant landing",
+      "priority": 50,
+      "cooldownMs": 80,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -10,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/gameplay/heavy_land_01.wav",
+          "ogg": "ogg/gameplay/heavy_land_01.ogg",
+          "duration": 0.2577,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/heavy_land_02.wav",
+          "ogg": "ogg/gameplay/heavy_land_02.ogg",
+          "duration": 0.2531,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/heavy_land_03.wav",
+          "ogg": "ogg/gameplay/heavy_land_03.ogg",
+          "duration": 0.2531,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "gameplay.crush_impact",
+      "category": "gameplay",
+      "name": "Crush Impact",
+      "trigger": "Stone body under a kill splat",
+      "source": "game/engine.ts: playThud(false) / crushList",
+      "priority": 50,
+      "cooldownMs": 80,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -13,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/gameplay/crush_impact_01.wav",
+          "ogg": "ogg/gameplay/crush_impact_01.ogg",
+          "duration": 0.2544,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/crush_impact_02.wav",
+          "ogg": "ogg/gameplay/crush_impact_02.ogg",
+          "duration": 0.2491,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/crush_impact_03.wav",
+          "ogg": "ogg/gameplay/crush_impact_03.ogg",
+          "duration": 0.2521,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "gameplay.heavy_crush",
+      "category": "gameplay",
+      "name": "Heavy Crush",
+      "trigger": "Heavy crush body under a splat",
+      "source": "game/engine.ts: playThud(true) / crushList",
+      "priority": 50,
+      "cooldownMs": 80,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -10,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/gameplay/heavy_crush_01.wav",
+          "ogg": "ogg/gameplay/heavy_crush_01.ogg",
+          "duration": 0.2519,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/heavy_crush_02.wav",
+          "ogg": "ogg/gameplay/heavy_crush_02.ogg",
+          "duration": 0.2561,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/heavy_crush_03.wav",
+          "ogg": "ogg/gameplay/heavy_crush_03.ogg",
+          "duration": 0.258,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "gameplay.multikill",
+      "category": "gameplay",
+      "name": "Multikill",
+      "trigger": "Multiple victims in one landing; replaces individual splats",
+      "source": "game/engine.ts: crushList killed > 1",
+      "priority": 50,
+      "cooldownMs": 80,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -8,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/gameplay/multikill_01.wav",
+          "ogg": "ogg/gameplay/multikill_01.ogg",
+          "duration": 0.2839,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/multikill_02.wav",
+          "ogg": "ogg/gameplay/multikill_02.ogg",
+          "duration": 0.2871,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/multikill_03.wav",
+          "ogg": "ogg/gameplay/multikill_03.ogg",
+          "duration": 0.2877,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "gameplay.obstacle_knock",
+      "category": "gameplay",
+      "name": "Obstacle Knock",
+      "trigger": "Blocked by rock or pit",
+      "source": "game/engine.ts: playKnock / tryRoll",
+      "priority": 50,
+      "cooldownMs": 80,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -14,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/gameplay/obstacle_knock_01.wav",
+          "ogg": "ogg/gameplay/obstacle_knock_01.ogg",
+          "duration": 0.1415,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/obstacle_knock_02.wav",
+          "ogg": "ogg/gameplay/obstacle_knock_02.ogg",
+          "duration": 0.1415,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/obstacle_knock_03.wav",
+          "ogg": "ogg/gameplay/obstacle_knock_03.ogg",
+          "duration": 0.1416,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "gameplay.armor_crack",
+      "category": "gameplay",
+      "name": "Armor Crack",
+      "trigger": "First hit breaks armored beetle shell",
+      "source": "game/engine.ts: playKnock / hp > 1",
+      "priority": 50,
+      "cooldownMs": 80,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -10,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/gameplay/armor_crack_01.wav",
+          "ogg": "ogg/gameplay/armor_crack_01.ogg",
+          "duration": 0.2129,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/armor_crack_02.wav",
+          "ogg": "ogg/gameplay/armor_crack_02.ogg",
+          "duration": 0.2185,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/armor_crack_03.wav",
+          "ogg": "ogg/gameplay/armor_crack_03.ogg",
+          "duration": 0.2093,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "gameplay.armor_deflect",
+      "category": "gameplay",
+      "name": "Armor Deflect",
+      "trigger": "Moving pillbug or giant acid block",
+      "source": "game/engine.ts: playKnock / CURLED or BLOCKED",
+      "priority": 50,
+      "cooldownMs": 80,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -13,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/gameplay/armor_deflect_01.wav",
+          "ogg": "ogg/gameplay/armor_deflect_01.ogg",
+          "duration": 0.2267,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/armor_deflect_02.wav",
+          "ogg": "ogg/gameplay/armor_deflect_02.ogg",
+          "duration": 0.2337,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/armor_deflect_03.wav",
+          "ogg": "ogg/gameplay/armor_deflect_03.ogg",
+          "duration": 0.2131,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "gameplay.parasite_latch",
+      "category": "gameplay",
+      "name": "Parasite Latch",
+      "trigger": "Parasite attaches to cube",
+      "source": "game/engine.ts: playLatch / attached transition",
+      "priority": 50,
+      "cooldownMs": 80,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -13,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/gameplay/parasite_latch_01.wav",
+          "ogg": "ogg/gameplay/parasite_latch_01.ogg",
+          "duration": 0.1589,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/parasite_latch_02.wav",
+          "ogg": "ogg/gameplay/parasite_latch_02.ogg",
+          "duration": 0.1586,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/parasite_latch_03.wav",
+          "ogg": "ogg/gameplay/parasite_latch_03.ogg",
+          "duration": 0.1588,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "gameplay.parasite_bite",
+      "category": "gameplay",
+      "name": "Parasite Bite",
+      "trigger": "Bite damage connects",
+      "source": "game/engine.ts: playBite / applyBite",
+      "priority": 70,
+      "cooldownMs": 80,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -10,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/gameplay/parasite_bite_01.wav",
+          "ogg": "ogg/gameplay/parasite_bite_01.ogg",
+          "duration": 0.2195,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/parasite_bite_02.wav",
+          "ogg": "ogg/gameplay/parasite_bite_02.ogg",
+          "duration": 0.2195,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/parasite_bite_03.wav",
+          "ogg": "ogg/gameplay/parasite_bite_03.ogg",
+          "duration": 0.2185,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "gameplay.player_hurt",
+      "category": "gameplay",
+      "name": "Player Hurt",
+      "trigger": "Generic damage fallback",
+      "source": "game/engine.ts: playHurt exported but currently unused",
+      "priority": 50,
+      "cooldownMs": 80,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -10,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/gameplay/player_hurt_01.wav",
+          "ogg": "ogg/gameplay/player_hurt_01.ogg",
+          "duration": 0.3134,
+          "channels": 1
+        },
+        {
+          "wav": "wav/gameplay/player_hurt_02.wav",
+          "ogg": "ogg/gameplay/player_hurt_02.ogg",
+          "duration": 0.3134,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "hazards.acid_spit",
+      "category": "hazards",
+      "name": "Acid Spit",
+      "trigger": "Spitter launches glob",
+      "source": "game/engine.ts: playSpit / launchSpit",
+      "priority": 45,
+      "cooldownMs": 150,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -13,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/hazards/acid_spit_01.wav",
+          "ogg": "ogg/hazards/acid_spit_01.ogg",
+          "duration": 0.1542,
+          "channels": 1
+        },
+        {
+          "wav": "wav/hazards/acid_spit_02.wav",
+          "ogg": "ogg/hazards/acid_spit_02.ogg",
+          "duration": 0.1523,
+          "channels": 1
+        },
+        {
+          "wav": "wav/hazards/acid_spit_03.wav",
+          "ogg": "ogg/hazards/acid_spit_03.ogg",
+          "duration": 0.1522,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "hazards.acid_land",
+      "category": "hazards",
+      "name": "Acid Land",
+      "trigger": "Acid misses and hits ground",
+      "source": "game/engine.ts: glob impact / dropHazard",
+      "priority": 45,
+      "cooldownMs": 150,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -15,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/hazards/acid_land_01.wav",
+          "ogg": "ogg/hazards/acid_land_01.ogg",
+          "duration": 0.4929,
+          "channels": 1
+        },
+        {
+          "wav": "wav/hazards/acid_land_02.wav",
+          "ogg": "ogg/hazards/acid_land_02.ogg",
+          "duration": 0.4961,
+          "channels": 1
+        },
+        {
+          "wav": "wav/hazards/acid_land_03.wav",
+          "ogg": "ogg/hazards/acid_land_03.ogg",
+          "duration": 0.4931,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "hazards.acid_hit",
+      "category": "hazards",
+      "name": "Acid Hit",
+      "trigger": "Acid damages player",
+      "source": "game/engine.ts: playBite / applySpitHit",
+      "priority": 75,
+      "cooldownMs": 150,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -10,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/hazards/acid_hit_01.wav",
+          "ogg": "ogg/hazards/acid_hit_01.ogg",
+          "duration": 0.4973,
+          "channels": 1
+        },
+        {
+          "wav": "wav/hazards/acid_hit_02.wav",
+          "ogg": "ogg/hazards/acid_hit_02.ogg",
+          "duration": 0.4963,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "hazards.web_snare",
+      "category": "hazards",
+      "name": "Web Snare",
+      "trigger": "Cube contacts a web",
+      "source": "game/engine.ts: playLatch / WEBBED",
+      "priority": 45,
+      "cooldownMs": 150,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -13,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/hazards/web_snare_01.wav",
+          "ogg": "ogg/hazards/web_snare_01.ogg",
+          "duration": 0.2437,
+          "channels": 1
+        },
+        {
+          "wav": "wav/hazards/web_snare_02.wav",
+          "ogg": "ogg/hazards/web_snare_02.ogg",
+          "duration": 0.2435,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "hazards.slime_stick",
+      "category": "hazards",
+      "name": "Slime Stick",
+      "trigger": "Cube contacts slime",
+      "source": "game/engine.ts: playLatch / STUCK",
+      "priority": 45,
+      "cooldownMs": 150,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -13,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/hazards/slime_stick_01.wav",
+          "ogg": "ogg/hazards/slime_stick_01.ogg",
+          "duration": 0.2651,
+          "channels": 1
+        },
+        {
+          "wav": "wav/hazards/slime_stick_02.wav",
+          "ogg": "ogg/hazards/slime_stick_02.ogg",
+          "duration": 0.2651,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "hazards.snare_release",
+      "category": "hazards",
+      "name": "Snare Release",
+      "trigger": "Slow or stall effect ends",
+      "source": "game/engine.ts: slowT / stallT transition to zero",
+      "priority": 45,
+      "cooldownMs": 150,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -18,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/hazards/snare_release_01.wav",
+          "ogg": "ogg/hazards/snare_release_01.ogg",
+          "duration": 0.1655,
+          "channels": 1
+        },
+        {
+          "wav": "wav/hazards/snare_release_02.wav",
+          "ogg": "ogg/hazards/snare_release_02.ogg",
+          "duration": 0.1833,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "hazards.poison_start",
+      "category": "hazards",
+      "name": "Poison Start",
+      "trigger": "Scorpion applies poison",
+      "source": "game/engine.ts: poisonT = POISON_TIME",
+      "priority": 45,
+      "cooldownMs": 150,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -13,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/hazards/poison_start_01.wav",
+          "ogg": "ogg/hazards/poison_start_01.ogg",
+          "duration": 0.4836,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "hazards.poison_tick",
+      "category": "hazards",
+      "name": "Poison Tick",
+      "trigger": "Optional poison feedback, at most once a second",
+      "source": "game/engine.ts: poisonT health drain",
+      "priority": 45,
+      "cooldownMs": 1000,
+      "maxVoices": 3,
+      "optional": true,
+      "loop": false,
+      "nominalPeakDbFS": -23,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/hazards/poison_tick_01.wav",
+          "ogg": "ogg/hazards/poison_tick_01.ogg",
+          "duration": 0.131,
+          "channels": 1
+        },
+        {
+          "wav": "wav/hazards/poison_tick_02.wav",
+          "ogg": "ogg/hazards/poison_tick_02.ogg",
+          "duration": 0.1322,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "hazards.daze_start",
+      "category": "hazards",
+      "name": "Daze Start",
+      "trigger": "Hornet reverses controls",
+      "source": "game/engine.ts: dazeT = DAZE_TIME",
+      "priority": 45,
+      "cooldownMs": 150,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -13,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/hazards/daze_start_01.wav",
+          "ogg": "ogg/hazards/daze_start_01.ogg",
+          "duration": 0.3657,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "hazards.egg_hatch",
+      "category": "hazards",
+      "name": "Egg Hatch",
+      "trigger": "Egg sac releases a brood",
+      "source": "game/engine.ts: playRampage / hatchEggSac",
+      "priority": 45,
+      "cooldownMs": 150,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -11,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/hazards/egg_hatch_01.wav",
+          "ogg": "ogg/hazards/egg_hatch_01.ogg",
+          "duration": 0.4479,
+          "channels": 1
+        },
+        {
+          "wav": "wav/hazards/egg_hatch_02.wav",
+          "ogg": "ogg/hazards/egg_hatch_02.ogg",
+          "duration": 0.4472,
+          "channels": 1
+        },
+        {
+          "wav": "wav/hazards/egg_hatch_03.wav",
+          "ogg": "ogg/hazards/egg_hatch_03.ogg",
+          "duration": 0.4479,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "hazards.locust_lunge",
+      "category": "hazards",
+      "name": "Locust Lunge",
+      "trigger": "Locust begins a two-tile dash nearby",
+      "source": "game/engine.ts: locust dashT",
+      "priority": 45,
+      "cooldownMs": 150,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -18,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/hazards/locust_lunge_01.wav",
+          "ogg": "ogg/hazards/locust_lunge_01.ogg",
+          "duration": 0.2108,
+          "channels": 1
+        },
+        {
+          "wav": "wav/hazards/locust_lunge_02.wav",
+          "ogg": "ogg/hazards/locust_lunge_02.ogg",
+          "duration": 0.2128,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "hazards.flea_hop",
+      "category": "hazards",
+      "name": "Flea Hop",
+      "trigger": "Optional nearby flea hop",
+      "source": "game/engine.ts: flea movement",
+      "priority": 45,
+      "cooldownMs": 150,
+      "maxVoices": 3,
+      "optional": true,
+      "loop": false,
+      "nominalPeakDbFS": -23,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/hazards/flea_hop_01.wav",
+          "ogg": "ogg/hazards/flea_hop_01.ogg",
+          "duration": 0.1207,
+          "channels": 1
+        },
+        {
+          "wav": "wav/hazards/flea_hop_02.wav",
+          "ogg": "ogg/hazards/flea_hop_02.ogg",
+          "duration": 0.12,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "hazards.termite_dig",
+      "category": "hazards",
+      "name": "Termite Dig",
+      "trigger": "Optional nearby termite pit creation",
+      "source": "game/engine.ts: dropHazard pit",
+      "priority": 45,
+      "cooldownMs": 150,
+      "maxVoices": 3,
+      "optional": true,
+      "loop": false,
+      "nominalPeakDbFS": -21,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/hazards/termite_dig_01.wav",
+          "ogg": "ogg/hazards/termite_dig_01.ogg",
+          "duration": 0.329,
+          "channels": 1
+        },
+        {
+          "wav": "wav/hazards/termite_dig_02.wav",
+          "ogg": "ogg/hazards/termite_dig_02.ogg",
+          "duration": 0.3315,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "hazards.pillbug_curl",
+      "category": "hazards",
+      "name": "Pillbug Curl",
+      "trigger": "Optional nearby pillbug movement start",
+      "source": "game/engine.ts: pillbug moveT",
+      "priority": 45,
+      "cooldownMs": 150,
+      "maxVoices": 3,
+      "optional": true,
+      "loop": false,
+      "nominalPeakDbFS": -22,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/hazards/pillbug_curl_01.wav",
+          "ogg": "ogg/hazards/pillbug_curl_01.ogg",
+          "duration": 0.1908,
+          "channels": 1
+        },
+        {
+          "wav": "wav/hazards/pillbug_curl_02.wav",
+          "ogg": "ogg/hazards/pillbug_curl_02.ogg",
+          "duration": 0.1905,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "hazards.low_health",
+      "category": "hazards",
+      "name": "Low Health",
+      "trigger": "Low-health threshold crossing; do not loop rapidly",
+      "source": "game/engine.ts: lives threshold",
+      "priority": 75,
+      "cooldownMs": 1000,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -17,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/hazards/low_health_01.wav",
+          "ogg": "ogg/hazards/low_health_01.ogg",
+          "duration": 0.3757,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "rewards.score_gain_1",
+      "category": "rewards",
+      "name": "Score Gain 1",
+      "trigger": "Positive score gain at combo tier 1; coalesce kills within 70 ms",
+      "source": "game/engine.ts:addKill after S.score += pts",
+      "priority": 30,
+      "cooldownMs": 70,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -20,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/score_gain_1_01.wav",
+          "ogg": "ogg/rewards/score_gain_1_01.ogg",
+          "duration": 0.2041,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "rewards.score_gain_2",
+      "category": "rewards",
+      "name": "Score Gain 2",
+      "trigger": "Positive score gain at combo tier 2; coalesce kills within 70 ms",
+      "source": "game/engine.ts:addKill after S.score += pts",
+      "priority": 30,
+      "cooldownMs": 70,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -20,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/score_gain_2_01.wav",
+          "ogg": "ogg/rewards/score_gain_2_01.ogg",
+          "duration": 0.2043,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "rewards.score_gain_3",
+      "category": "rewards",
+      "name": "Score Gain 3",
+      "trigger": "Positive score gain at combo tier 3; coalesce kills within 70 ms",
+      "source": "game/engine.ts:addKill after S.score += pts",
+      "priority": 30,
+      "cooldownMs": 70,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -20,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/score_gain_3_01.wav",
+          "ogg": "ogg/rewards/score_gain_3_01.ogg",
+          "duration": 0.2042,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "rewards.score_gain_4",
+      "category": "rewards",
+      "name": "Score Gain 4",
+      "trigger": "Positive score gain at combo tier 4; coalesce kills within 70 ms",
+      "source": "game/engine.ts:addKill after S.score += pts",
+      "priority": 30,
+      "cooldownMs": 70,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -20,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/score_gain_4_01.wav",
+          "ogg": "ogg/rewards/score_gain_4_01.ogg",
+          "duration": 0.2041,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "rewards.score_gain_5",
+      "category": "rewards",
+      "name": "Score Gain 5",
+      "trigger": "Positive score gain at combo tier 5; coalesce kills within 70 ms",
+      "source": "game/engine.ts:addKill after S.score += pts",
+      "priority": 30,
+      "cooldownMs": 70,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -20,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/score_gain_5_01.wav",
+          "ogg": "ogg/rewards/score_gain_5_01.ogg",
+          "duration": 0.2041,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "rewards.score_gain_6",
+      "category": "rewards",
+      "name": "Score Gain 6",
+      "trigger": "Positive score gain at combo tier 6; coalesce kills within 70 ms",
+      "source": "game/engine.ts:addKill after S.score += pts",
+      "priority": 30,
+      "cooldownMs": 70,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -20,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/score_gain_6_01.wav",
+          "ogg": "ogg/rewards/score_gain_6_01.ogg",
+          "duration": 0.2042,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "rewards.score_gain_7",
+      "category": "rewards",
+      "name": "Score Gain 7",
+      "trigger": "Positive score gain at combo tier 7; coalesce kills within 70 ms",
+      "source": "game/engine.ts:addKill after S.score += pts",
+      "priority": 30,
+      "cooldownMs": 70,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -20,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/score_gain_7_01.wav",
+          "ogg": "ogg/rewards/score_gain_7_01.ogg",
+          "duration": 0.2044,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "rewards.score_gain_8",
+      "category": "rewards",
+      "name": "Score Gain 8",
+      "trigger": "Positive score gain at combo tier 8; coalesce kills within 70 ms",
+      "source": "game/engine.ts:addKill after S.score += pts",
+      "priority": 30,
+      "cooldownMs": 70,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -20,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/score_gain_8_01.wav",
+          "ogg": "ogg/rewards/score_gain_8_01.ogg",
+          "duration": 0.2043,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "rewards.coin_pickup",
+      "category": "rewards",
+      "name": "Coin Pickup",
+      "trigger": "Small coin reward",
+      "source": "playCoin small reward fallback",
+      "priority": 45,
+      "cooldownMs": 80,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -15,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/coin_pickup_01.wav",
+          "ogg": "ogg/rewards/coin_pickup_01.ogg",
+          "duration": 0.2995,
+          "channels": 1
+        },
+        {
+          "wav": "wav/rewards/coin_pickup_02.wav",
+          "ogg": "ogg/rewards/coin_pickup_02.ogg",
+          "duration": 0.2995,
+          "channels": 1
+        },
+        {
+          "wav": "wav/rewards/coin_pickup_03.wav",
+          "ogg": "ogg/rewards/coin_pickup_03.ogg",
+          "duration": 0.2995,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "rewards.xp_tick",
+      "category": "rewards",
+      "name": "Xp Tick",
+      "trigger": "XP tally tick; capped rate",
+      "source": "Planned XP results UI",
+      "priority": 20,
+      "cooldownMs": 90,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -21,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/xp_tick_01.wav",
+          "ogg": "ogg/rewards/xp_tick_01.ogg",
+          "duration": 0.2181,
+          "channels": 1
+        },
+        {
+          "wav": "wav/rewards/xp_tick_02.wav",
+          "ogg": "ogg/rewards/xp_tick_02.ogg",
+          "duration": 0.218,
+          "channels": 1
+        },
+        {
+          "wav": "wav/rewards/xp_tick_03.wav",
+          "ogg": "ogg/rewards/xp_tick_03.ogg",
+          "duration": 0.218,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "rewards.coin_payout",
+      "category": "rewards",
+      "name": "Coin Payout",
+      "trigger": "Run coins awarded",
+      "source": "playCoin / gameOver",
+      "priority": 55,
+      "cooldownMs": 350,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -12,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/coin_payout_01.wav",
+          "ogg": "ogg/rewards/coin_payout_01.ogg",
+          "duration": 0.6449,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "rewards.xp_award",
+      "category": "rewards",
+      "name": "Xp Award",
+      "trigger": "XP tally completes",
+      "source": "Planned XP UI",
+      "priority": 55,
+      "cooldownMs": 350,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -14,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/xp_award_01.wav",
+          "ogg": "ogg/rewards/xp_award_01.ogg",
+          "duration": 0.6347,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "rewards.xp_level_up",
+      "category": "rewards",
+      "name": "Xp Level Up",
+      "trigger": "Player XP level increases",
+      "source": "Planned account progression",
+      "priority": 85,
+      "cooldownMs": 350,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -9,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/xp_level_up_01.wav",
+          "ogg": "ogg/rewards/xp_level_up_01.ogg",
+          "duration": 1.0883,
+          "channels": 2
+        }
+      ]
+    },
+    {
+      "id": "rewards.level_up",
+      "category": "rewards",
+      "name": "Level Up",
+      "trigger": "Gameplay level threshold crossed",
+      "source": "playRampage / announceLevel",
+      "priority": 85,
+      "cooldownMs": 350,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -10,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/level_up_01.wav",
+          "ogg": "ogg/rewards/level_up_01.ogg",
+          "duration": 0.8333,
+          "channels": 2
+        }
+      ]
+    },
+    {
+      "id": "rewards.personal_best",
+      "category": "rewards",
+      "name": "Personal Best",
+      "trigger": "A run beats the previous personal best",
+      "source": "gameOver / prevBest comparison",
+      "priority": 85,
+      "cooldownMs": 350,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -9,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/personal_best_01.wav",
+          "ogg": "ogg/rewards/personal_best_01.ogg",
+          "duration": 1.2484,
+          "channels": 2
+        }
+      ]
+    },
+    {
+      "id": "rewards.combo_2",
+      "category": "rewards",
+      "name": "Combo 2",
+      "trigger": "Combo reaches x2",
+      "source": "addKill / combo milestone",
+      "priority": 55,
+      "cooldownMs": 350,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -17,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/combo_2_01.wav",
+          "ogg": "ogg/rewards/combo_2_01.ogg",
+          "duration": 0.3294,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "rewards.combo_4",
+      "category": "rewards",
+      "name": "Combo 4",
+      "trigger": "Combo reaches x4",
+      "source": "addKill / combo milestone",
+      "priority": 55,
+      "cooldownMs": 350,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -16,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/combo_4_01.wav",
+          "ogg": "ogg/rewards/combo_4_01.ogg",
+          "duration": 0.4345,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "rewards.combo_8",
+      "category": "rewards",
+      "name": "Combo 8",
+      "trigger": "Combo reaches x8",
+      "source": "addKill / combo milestone",
+      "priority": 55,
+      "cooldownMs": 350,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -15,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/combo_8_01.wav",
+          "ogg": "ogg/rewards/combo_8_01.ogg",
+          "duration": 0.4745,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "rewards.tally_finish",
+      "category": "rewards",
+      "name": "Tally Finish",
+      "trigger": "Results count completes",
+      "source": "Results UI",
+      "priority": 55,
+      "cooldownMs": 350,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -15,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/tally_finish_01.wav",
+          "ogg": "ogg/rewards/tally_finish_01.ogg",
+          "duration": 0.4049,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "powerups.heal",
+      "category": "powerups",
+      "name": "Heal",
+      "trigger": "Heart pickup restores health",
+      "source": "playHeal / collectHeart",
+      "priority": 55,
+      "cooldownMs": 350,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -12,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/powerups/heal_01.wav",
+          "ogg": "ogg/powerups/heal_01.ogg",
+          "duration": 0.6049,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "powerups.spawn",
+      "category": "powerups",
+      "name": "Spawn",
+      "trigger": "A nearby pickup appears",
+      "source": "spawnHeart / spawnPowerup",
+      "priority": 55,
+      "cooldownMs": 350,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -21,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/powerups/spawn_01.wav",
+          "ogg": "ogg/powerups/spawn_01.ogg",
+          "duration": 0.3887,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "powerups.expire",
+      "category": "powerups",
+      "name": "Expire",
+      "trigger": "Speed or giant effect ends",
+      "source": "speedT / giantT crosses zero",
+      "priority": 55,
+      "cooldownMs": 350,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -18,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/powerups/expire_01.wav",
+          "ogg": "ogg/powerups/expire_01.ogg",
+          "duration": 0.4044,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "powerups.rampage_end",
+      "category": "powerups",
+      "name": "Rampage End",
+      "trigger": "Rampage ends",
+      "source": "endCombo / wasRampage",
+      "priority": 55,
+      "cooldownMs": 350,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -19,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/powerups/rampage_end_01.wav",
+          "ogg": "ogg/powerups/rampage_end_01.ogg",
+          "duration": 0.374,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "shop.purchase",
+      "category": "shop",
+      "name": "Purchase",
+      "trigger": "Purchase is confirmed",
+      "source": "playCoin / buildSkinItem, buildTrailItem, buildAuraItem onBuy",
+      "priority": 55,
+      "cooldownMs": 350,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -12,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/shop/purchase_01.wav",
+          "ogg": "ogg/shop/purchase_01.ogg",
+          "duration": 0.6251,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "shop.unlock",
+      "category": "shop",
+      "name": "Unlock",
+      "trigger": "New cosmetic reveal; replaces purchase cue when both occur",
+      "source": "Planned unlock reveal",
+      "priority": 85,
+      "cooldownMs": 350,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -10,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/shop/unlock_01.wav",
+          "ogg": "ogg/shop/unlock_01.ogg",
+          "duration": 0.998,
+          "channels": 2
+        }
+      ]
+    },
+    {
+      "id": "ui.save_success",
+      "category": "ui",
+      "name": "Save Success",
+      "trigger": "Server confirms save",
+      "source": "engine.ts scoreSaved = true / rename success",
+      "priority": 55,
+      "cooldownMs": 350,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -17,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/save_success_01.wav",
+          "ogg": "ogg/ui/save_success_01.ogg",
+          "duration": 0.3747,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.login_success",
+      "category": "ui",
+      "name": "Login Success",
+      "trigger": "Login completes",
+      "source": "Planned account login",
+      "priority": 55,
+      "cooldownMs": 350,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -16,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/login_success_01.wav",
+          "ogg": "ogg/ui/login_success_01.ogg",
+          "duration": 0.4248,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.reset_complete",
+      "category": "ui",
+      "name": "Reset Complete",
+      "trigger": "Reset completes successfully",
+      "source": "menus.ts resetProgress success",
+      "priority": 55,
+      "cooldownMs": 350,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -17,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/reset_complete_01.wav",
+          "ogg": "ogg/ui/reset_complete_01.ogg",
+          "duration": 0.404,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "session.ready",
+      "category": "session",
+      "name": "Ready",
+      "trigger": "Loading completes after user has enabled sound",
+      "source": "Loading screen",
+      "priority": 55,
+      "cooldownMs": 350,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -15,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/session/ready_01.wav",
+          "ogg": "ogg/session/ready_01.ogg",
+          "duration": 0.5447,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "session.start",
+      "category": "session",
+      "name": "Start",
+      "trigger": "Run begins",
+      "source": "resetGame success / S.running",
+      "priority": 85,
+      "cooldownMs": 350,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -10,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/session/start_01.wav",
+          "ogg": "ogg/session/start_01.ogg",
+          "duration": 0.7396,
+          "channels": 2
+        }
+      ]
+    },
+    {
+      "id": "session.restart",
+      "category": "session",
+      "name": "Restart",
+      "trigger": "Restarted run begins",
+      "source": "resetGame on replay",
+      "priority": 85,
+      "cooldownMs": 350,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -12,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/session/restart_01.wav",
+          "ogg": "ogg/session/restart_01.ogg",
+          "duration": 0.5596,
+          "channels": 2
+        }
+      ]
+    },
+    {
+      "id": "powerups.speed",
+      "category": "powerups",
+      "name": "Speed",
+      "trigger": "Speed pickup",
+      "source": "playHeal / bolt pickup",
+      "priority": 80,
+      "cooldownMs": 80,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -11,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/powerups/speed_01.wav",
+          "ogg": "ogg/powerups/speed_01.ogg",
+          "duration": 0.6691,
+          "channels": 2
+        }
+      ]
+    },
+    {
+      "id": "powerups.giant",
+      "category": "powerups",
+      "name": "Giant",
+      "trigger": "Giant pickup",
+      "source": "playRampage / star pickup",
+      "priority": 80,
+      "cooldownMs": 80,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -10,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/powerups/giant_01.wav",
+          "ogg": "ogg/powerups/giant_01.ogg",
+          "duration": 0.896,
+          "channels": 2
+        }
+      ]
+    },
+    {
+      "id": "powerups.rampage_start",
+      "category": "powerups",
+      "name": "Rampage Start",
+      "trigger": "Rampage begins",
+      "source": "playRampage / addKill wasRampage",
+      "priority": 90,
+      "cooldownMs": 500,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -9,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/powerups/rampage_start_01.wav",
+          "ogg": "ogg/powerups/rampage_start_01.ogg",
+          "duration": 0.9695,
+          "channels": 2
+        }
+      ]
+    },
+    {
+      "id": "session.game_over",
+      "category": "session",
+      "name": "Game Over",
+      "trigger": "Run ends",
+      "source": "gameOver / S.running false",
+      "priority": 95,
+      "cooldownMs": 1000,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -11,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/session/game_over_01.wav",
+          "ogg": "ogg/session/game_over_01.ogg",
+          "duration": 1.2078,
+          "channels": 2
+        }
+      ]
+    },
+    {
+      "id": "ui.hover",
+      "category": "ui",
+      "name": "Hover",
+      "trigger": "Optional navigation hover; no sound on every pointer movement",
+      "source": "menus.ts / itemModal.ts / planned redesigned interface",
+      "priority": 15,
+      "cooldownMs": 100,
+      "maxVoices": 1,
+      "optional": true,
+      "loop": false,
+      "nominalPeakDbFS": -26,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/hover_01.wav",
+          "ogg": "ogg/ui/hover_01.ogg",
+          "duration": 0.0953,
+          "channels": 1
+        },
+        {
+          "wav": "wav/ui/hover_02.wav",
+          "ogg": "ogg/ui/hover_02.ogg",
+          "duration": 0.0954,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.press",
+      "category": "ui",
+      "name": "Press",
+      "trigger": "Button commits an action",
+      "source": "menus.ts / itemModal.ts / planned redesigned interface",
+      "priority": 15,
+      "cooldownMs": 100,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -19,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/press_01.wav",
+          "ogg": "ogg/ui/press_01.ogg",
+          "duration": 0.1046,
+          "channels": 1
+        },
+        {
+          "wav": "wav/ui/press_02.wav",
+          "ogg": "ogg/ui/press_02.ogg",
+          "duration": 0.1046,
+          "channels": 1
+        },
+        {
+          "wav": "wav/ui/press_03.wav",
+          "ogg": "ogg/ui/press_03.ogg",
+          "duration": 0.1048,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.navigate",
+      "category": "ui",
+      "name": "Navigate",
+      "trigger": "Navigate to a new screen",
+      "source": "menus.ts / itemModal.ts / planned redesigned interface",
+      "priority": 15,
+      "cooldownMs": 100,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -19,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/navigate_01.wav",
+          "ogg": "ogg/ui/navigate_01.ogg",
+          "duration": 0.106,
+          "channels": 1
+        },
+        {
+          "wav": "wav/ui/navigate_02.wav",
+          "ogg": "ogg/ui/navigate_02.ogg",
+          "duration": 0.1054,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.back",
+      "category": "ui",
+      "name": "Back",
+      "trigger": "Return to previous screen",
+      "source": "menus.ts / itemModal.ts / planned redesigned interface",
+      "priority": 15,
+      "cooldownMs": 100,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -20,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/back_01.wav",
+          "ogg": "ogg/ui/back_01.ogg",
+          "duration": 0.1054,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.tab_switch",
+      "category": "ui",
+      "name": "Tab Switch",
+      "trigger": "Skins / Trails / Auras or All / Owned tab changes",
+      "source": "menus.ts / itemModal.ts / planned redesigned interface",
+      "priority": 15,
+      "cooldownMs": 100,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -20,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/tab_switch_01.wav",
+          "ogg": "ogg/ui/tab_switch_01.ogg",
+          "duration": 0.104,
+          "channels": 1
+        },
+        {
+          "wav": "wav/ui/tab_switch_02.wav",
+          "ogg": "ogg/ui/tab_switch_02.ogg",
+          "duration": 0.1034,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.toggle_on",
+      "category": "ui",
+      "name": "Toggle On",
+      "trigger": "Setting enabled",
+      "source": "menus.ts / itemModal.ts / planned redesigned interface",
+      "priority": 15,
+      "cooldownMs": 100,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -20,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/toggle_on_01.wav",
+          "ogg": "ogg/ui/toggle_on_01.ogg",
+          "duration": 0.1045,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.toggle_off",
+      "category": "ui",
+      "name": "Toggle Off",
+      "trigger": "Setting disabled; mute applies immediately",
+      "source": "menus.ts / itemModal.ts / planned redesigned interface",
+      "priority": 15,
+      "cooldownMs": 100,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -21,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/toggle_off_01.wav",
+          "ogg": "ogg/ui/toggle_off_01.ogg",
+          "duration": 0.1028,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.slider_tick",
+      "category": "ui",
+      "name": "Slider Tick",
+      "trigger": "Optional discrete slider step; rate limited",
+      "source": "menus.ts / itemModal.ts / planned redesigned interface",
+      "priority": 15,
+      "cooldownMs": 100,
+      "maxVoices": 1,
+      "optional": true,
+      "loop": false,
+      "nominalPeakDbFS": -27,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/slider_tick_01.wav",
+          "ogg": "ogg/ui/slider_tick_01.ogg",
+          "duration": 0.0944,
+          "channels": 1
+        },
+        {
+          "wav": "wav/ui/slider_tick_02.wav",
+          "ogg": "ogg/ui/slider_tick_02.ogg",
+          "duration": 0.0933,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.guide_select",
+      "category": "ui",
+      "name": "Guide Select",
+      "trigger": "Select another creature",
+      "source": "menus.ts / itemModal.ts / planned redesigned interface",
+      "priority": 15,
+      "cooldownMs": 100,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -21,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/guide_select_01.wav",
+          "ogg": "ogg/ui/guide_select_01.ogg",
+          "duration": 0.104,
+          "channels": 1
+        },
+        {
+          "wav": "wav/ui/guide_select_02.wav",
+          "ogg": "ogg/ui/guide_select_02.ogg",
+          "duration": 0.1038,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.notification",
+      "category": "ui",
+      "name": "Notification",
+      "trigger": "Noncritical notification",
+      "source": "menus.ts / itemModal.ts / planned redesigned interface",
+      "priority": 15,
+      "cooldownMs": 100,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -23,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/notification_01.wav",
+          "ogg": "ogg/ui/notification_01.ogg",
+          "duration": 0.1005,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.save_pending",
+      "category": "ui",
+      "name": "Save Pending",
+      "trigger": "Save request starts once; never loop while pending",
+      "source": "menus.ts / itemModal.ts / planned redesigned interface",
+      "priority": 15,
+      "cooldownMs": 100,
+      "maxVoices": 1,
+      "optional": true,
+      "loop": false,
+      "nominalPeakDbFS": -24,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/save_pending_01.wav",
+          "ogg": "ogg/ui/save_pending_01.ogg",
+          "duration": 0.0987,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.retry",
+      "category": "ui",
+      "name": "Retry",
+      "trigger": "User retries a failed save",
+      "source": "menus.ts / itemModal.ts / planned redesigned interface",
+      "priority": 15,
+      "cooldownMs": 100,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -21,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/retry_01.wav",
+          "ogg": "ogg/ui/retry_01.ogg",
+          "duration": 0.1028,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.logout",
+      "category": "ui",
+      "name": "Logout",
+      "trigger": "User signs out",
+      "source": "menus.ts / itemModal.ts / planned redesigned interface",
+      "priority": 15,
+      "cooldownMs": 100,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -22,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/logout_01.wav",
+          "ogg": "ogg/ui/logout_01.ogg",
+          "duration": 0.1024,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.modal_open",
+      "category": "ui",
+      "name": "Modal Open",
+      "trigger": "Open item, creature, or leaderboard modal",
+      "source": "Menu/modal or setPause transition",
+      "priority": 35,
+      "cooldownMs": 80,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -20,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/modal_open_01.wav",
+          "ogg": "ogg/ui/modal_open_01.ogg",
+          "duration": 0.1925,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.modal_close",
+      "category": "ui",
+      "name": "Modal Close",
+      "trigger": "Close modal",
+      "source": "Menu/modal or setPause transition",
+      "priority": 35,
+      "cooldownMs": 80,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -20,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/modal_close_01.wav",
+          "ogg": "ogg/ui/modal_close_01.ogg",
+          "duration": 0.1921,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "session.pause",
+      "category": "session",
+      "name": "Pause",
+      "trigger": "Pause begins",
+      "source": "Menu/modal or setPause transition",
+      "priority": 35,
+      "cooldownMs": 80,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -20,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/session/pause_01.wav",
+          "ogg": "ogg/session/pause_01.ogg",
+          "duration": 0.1909,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "session.resume",
+      "category": "session",
+      "name": "Resume",
+      "trigger": "Gameplay resumes",
+      "source": "Menu/modal or setPause transition",
+      "priority": 35,
+      "cooldownMs": 80,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -20,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/session/resume_01.wav",
+          "ogg": "ogg/session/resume_01.ogg",
+          "duration": 0.1934,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.error",
+      "category": "ui",
+      "name": "Error",
+      "trigger": "Action fails or form submitted with invalid input",
+      "source": "Existing menu / save validation paths",
+      "priority": 65,
+      "cooldownMs": 400,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -18,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/error_01.wav",
+          "ogg": "ogg/ui/error_01.ogg",
+          "duration": 0.248,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.save_failed",
+      "category": "ui",
+      "name": "Save Failed",
+      "trigger": "Server confirms save failure; never on ordinary typing",
+      "source": "Existing menu / save validation paths",
+      "priority": 65,
+      "cooldownMs": 400,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -18,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/save_failed_01.wav",
+          "ogg": "ogg/ui/save_failed_01.ogg",
+          "duration": 0.248,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "ui.reset_arm",
+      "category": "ui",
+      "name": "Reset Arm",
+      "trigger": "Destructive reset awaits confirmation",
+      "source": "Existing menu / save validation paths",
+      "priority": 65,
+      "cooldownMs": 400,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -18,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/ui/reset_arm_01.wav",
+          "ogg": "ogg/ui/reset_arm_01.ogg",
+          "duration": 0.248,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "shop.insufficient_coins",
+      "category": "shop",
+      "name": "Insufficient Coins",
+      "trigger": "Attempted purchase lacks coins; only on actual attempt",
+      "source": "Existing menu / save validation paths",
+      "priority": 65,
+      "cooldownMs": 400,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -18,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/shop/insufficient_coins_01.wav",
+          "ogg": "ogg/shop/insufficient_coins_01.ogg",
+          "duration": 0.248,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "shop.equip_skin",
+      "category": "shop",
+      "name": "Equip Skin",
+      "trigger": "equip skin",
+      "source": "menus.ts onEquip",
+      "priority": 50,
+      "cooldownMs": 80,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -16,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/shop/equip_skin_01.wav",
+          "ogg": "ogg/shop/equip_skin_01.ogg",
+          "duration": 0.3397,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "shop.equip_trail",
+      "category": "shop",
+      "name": "Equip Trail",
+      "trigger": "equip trail",
+      "source": "menus.ts onEquip",
+      "priority": 50,
+      "cooldownMs": 80,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -16,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/shop/equip_trail_01.wav",
+          "ogg": "ogg/shop/equip_trail_01.ogg",
+          "duration": 0.3399,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "shop.equip_aura",
+      "category": "shop",
+      "name": "Equip Aura",
+      "trigger": "equip aura",
+      "source": "menus.ts onEquip",
+      "priority": 50,
+      "cooldownMs": 80,
+      "maxVoices": 1,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -16,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/shop/equip_aura_01.wav",
+          "ogg": "ogg/shop/equip_aura_01.ogg",
+          "duration": 0.3397,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "rewards.tally_tick",
+      "category": "rewards",
+      "name": "Tally Tick",
+      "trigger": "Results score counter tick",
+      "source": "Results UI",
+      "priority": 15,
+      "cooldownMs": 60,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -24,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/tally_tick_01.wav",
+          "ogg": "ogg/rewards/tally_tick_01.ogg",
+          "duration": 0.0981,
+          "channels": 1
+        },
+        {
+          "wav": "wav/rewards/tally_tick_02.wav",
+          "ogg": "ogg/rewards/tally_tick_02.ogg",
+          "duration": 0.098,
+          "channels": 1
+        },
+        {
+          "wav": "wav/rewards/tally_tick_03.wav",
+          "ogg": "ogg/rewards/tally_tick_03.ogg",
+          "duration": 0.0989,
+          "channels": 1
+        }
+      ]
+    },
+    {
+      "id": "rewards.combo_break",
+      "category": "rewards",
+      "name": "Combo Break",
+      "trigger": "Combo expires without damage; suppress when a damage cue plays",
+      "source": "endCombo",
+      "priority": 20,
+      "cooldownMs": 80,
+      "maxVoices": 3,
+      "optional": false,
+      "loop": false,
+      "nominalPeakDbFS": -22,
+      "variantSelection": "shuffle bag; no immediate repeat",
+      "assets": [
+        {
+          "wav": "wav/rewards/combo_break_01.wav",
+          "ogg": "ogg/rewards/combo_break_01.ogg",
+          "duration": 0.1024,
+          "channels": 1
+        }
+      ]
+    }
+  ],
+  "previews": [
+    {
+      "file": "previews/gameplay_mix.wav",
+      "duration": 21,
+      "markers": [
+        {
+          "at": 0.2,
+          "cue": "ui.navigate",
+          "gain": 1
+        },
+        {
+          "at": 0.7,
+          "cue": "ui.tab_switch",
+          "gain": 1
+        },
+        {
+          "at": 1.2,
+          "cue": "shop.equip_skin",
+          "gain": 1
+        },
+        {
+          "at": 2,
+          "cue": "session.start",
+          "gain": 1
+        },
+        {
+          "at": 3.0,
+          "cue": "gameplay.cube_roll",
+          "gain": 1
+        },
+        {
+          "at": 3.36,
+          "cue": "gameplay.cube_roll",
+          "gain": 1
+        },
+        {
+          "at": 3.36,
+          "cue": "kills.worm",
+          "gain": 0.9
+        },
+        {
+          "at": 3.405,
+          "cue": "rewards.score_gain_1",
+          "gain": 1
+        },
+        {
+          "at": 3.7199999999999998,
+          "cue": "gameplay.cube_roll",
+          "gain": 1
+        },
+        {
+          "at": 4.08,
+          "cue": "gameplay.cube_roll",
+          "gain": 1
+        },
+        {
+          "at": 4.08,
+          "cue": "kills.bug",
+          "gain": 0.9
+        },
+        {
+          "at": 4.125,
+          "cue": "rewards.score_gain_3",
+          "gain": 1
+        },
+        {
+          "at": 4.4399999999999995,
+          "cue": "gameplay.cube_roll",
+          "gain": 1
+        },
+        {
+          "at": 4.4399999999999995,
+          "cue": "kills.spider",
+          "gain": 0.9
+        },
+        {
+          "at": 4.484999999999999,
+          "cue": "rewards.score_gain_4",
+          "gain": 1
+        },
+        {
+          "at": 4.8,
+          "cue": "gameplay.cube_roll",
+          "gain": 1
+        },
+        {
+          "at": 5.16,
+          "cue": "gameplay.cube_roll",
+          "gain": 1
+        },
+        {
+          "at": 5.16,
+          "cue": "kills.slug",
+          "gain": 0.9
+        },
+        {
+          "at": 5.205,
+          "cue": "rewards.score_gain_6",
+          "gain": 1
+        },
+        {
+          "at": 5.52,
+          "cue": "gameplay.cube_roll",
+          "gain": 1
+        },
+        {
+          "at": 5.52,
+          "cue": "kills.beetle",
+          "gain": 0.9
+        },
+        {
+          "at": 5.5649999999999995,
+          "cue": "rewards.score_gain_7",
+          "gain": 1
+        },
+        {
+          "at": 5.88,
+          "cue": "gameplay.cube_roll",
+          "gain": 1
+        },
+        {
+          "at": 5.88,
+          "cue": "kills.hornet",
+          "gain": 0.9
+        },
+        {
+          "at": 5.925,
+          "cue": "rewards.score_gain_8",
+          "gain": 1
+        },
+        {
+          "at": 6.24,
+          "cue": "gameplay.cube_roll",
+          "gain": 1
+        },
+        {
+          "at": 6.6,
+          "cue": "gameplay.cube_roll",
+          "gain": 1
+        },
+        {
+          "at": 6.96,
+          "cue": "gameplay.cube_roll",
+          "gain": 1
+        },
+        {
+          "at": 7.6,
+          "cue": "hazards.acid_spit",
+          "gain": 1
+        },
+        {
+          "at": 8.15,
+          "cue": "hazards.acid_hit",
+          "gain": 1
+        },
+        {
+          "at": 8.9,
+          "cue": "powerups.heal",
+          "gain": 1
+        },
+        {
+          "at": 10,
+          "cue": "powerups.speed",
+          "gain": 1
+        },
+        {
+          "at": 11,
+          "cue": "gameplay.multikill",
+          "gain": 1
+        },
+        {
+          "at": 11.15,
+          "cue": "powerups.rampage_start",
+          "gain": 1
+        },
+        {
+          "at": 12.3,
+          "cue": "gameplay.heavy_land",
+          "gain": 1
+        },
+        {
+          "at": 12.3,
+          "cue": "kills.scorpion",
+          "gain": 0.8
+        },
+        {
+          "at": 12.35,
+          "cue": "rewards.score_gain_8",
+          "gain": 1
+        },
+        {
+          "at": 13.1,
+          "cue": "rewards.level_up",
+          "gain": 1
+        },
+        {
+          "at": 14.6,
+          "cue": "session.pause",
+          "gain": 1
+        },
+        {
+          "at": 15.3,
+          "cue": "session.resume",
+          "gain": 1
+        },
+        {
+          "at": 16.2,
+          "cue": "gameplay.parasite_bite",
+          "gain": 1
+        },
+        {
+          "at": 16.55,
+          "cue": "session.game_over",
+          "gain": 1
+        },
+        {
+          "at": 18,
+          "cue": "rewards.coin_payout",
+          "gain": 1
+        },
+        {
+          "at": 19,
+          "cue": "rewards.xp_award",
+          "gain": 1
+        },
+        {
+          "at": 20,
+          "cue": "ui.save_success",
+          "gain": 1
+        }
+      ]
+    },
+    {
+      "file": "previews/all_14_creature_kills.wav",
+      "duration": 11.8,
+      "markers": [
+        {
+          "at": 0.25,
+          "cue": "kills.worm",
+          "gain": 1
+        },
+        {
+          "at": 1.05,
+          "cue": "kills.bug",
+          "gain": 1
+        },
+        {
+          "at": 1.85,
+          "cue": "kills.spider",
+          "gain": 1
+        },
+        {
+          "at": 2.6500000000000004,
+          "cue": "kills.scorpion",
+          "gain": 1
+        },
+        {
+          "at": 3.45,
+          "cue": "kills.beetle",
+          "gain": 1
+        },
+        {
+          "at": 4.25,
+          "cue": "kills.slug",
+          "gain": 1
+        },
+        {
+          "at": 5.050000000000001,
+          "cue": "kills.termite",
+          "gain": 1
+        },
+        {
+          "at": 5.8500000000000005,
+          "cue": "kills.hornet",
+          "gain": 1
+        },
+        {
+          "at": 6.65,
+          "cue": "kills.mosquito",
+          "gain": 1
+        },
+        {
+          "at": 7.45,
+          "cue": "kills.pillbug",
+          "gain": 1
+        },
+        {
+          "at": 8.25,
+          "cue": "kills.flea",
+          "gain": 1
+        },
+        {
+          "at": 9.05,
+          "cue": "kills.locust",
+          "gain": 1
+        },
+        {
+          "at": 9.850000000000001,
+          "cue": "kills.eggsac",
+          "gain": 1
+        },
+        {
+          "at": 10.65,
+          "cue": "kills.spitter",
+          "gain": 1
+        }
+      ]
+    }
+  ]
+}

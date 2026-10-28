@@ -1,0 +1,2 @@
+const fs=require('node:fs/promises'),sharp=require('sharp');
+(async()=>{const manifest=require('../design-assets/exploration/materials.json');await fs.mkdir('public/game-art/terrain',{recursive:true});for(const a of manifest.assets){const master='design-assets/exploration/'+a.id+'.png';try{await fs.access(master);}catch{await fs.copyFile(a.source,master);}await sharp(master).resize(1024,1024).webp({quality:91}).toFile('public/game-art/terrain/'+a.id+'.webp');}})().catch(e=>{console.error(e);process.exitCode=1});

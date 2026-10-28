@@ -1,0 +1,68 @@
+{
+  "defaultMasterGain": 0.65,
+  "buses": {
+    "ui": 1,
+    "gameplay": 1,
+    "kills": 1,
+    "hazards": 1,
+    "powerups": 1,
+    "rewards": 1,
+    "session": 1,
+    "shop": 1
+  },
+  "normalization": "Assets already have intentional category-dependent levels. Do not peak-normalize all files to the same volume.",
+  "runtimeHeadroom": "Keep one master dynamics stage as a safety net and profile real simultaneous events; static asset checks do not guarantee every game mix will remain unclipped.",
+  "voiceBudget": {
+    "total": 12,
+    "ui": 1,
+    "stoneImpact": 1,
+    "kill": 3,
+    "score": 1,
+    "damage": 2,
+    "heroStinger": 1,
+    "ambient": 2
+  },
+  "priorityOrder": [
+    "Critical damage and game-over",
+    "Rampage / level-up / personal best",
+    "Kills and impacts",
+    "Pickups",
+    "Score ticks",
+    "UI / optional movement"
+  ],
+  "eventRules": [
+    "Unlock Web Audio only after a user gesture; preload short essential effects after consent.",
+    "Use the catalog's per-cue cooldown and a shuffle bag with no consecutive variant repeat.",
+    "Use at most one stone impact, one splat, and one score tick per landing.",
+    "Multi-kills use gameplay.multikill instead of layering all killed creatures; its body replaces the separate thud.",
+    "For giant 3x3 squash, aggregate the whole landing before selecting sound; do not play nine separate multikill cues.",
+    "Coalesce score changes inside 70 ms. Use the current combo tier capped at 8.",
+    "Combo milestone cues replace the ordinary score tick; rampage and level-up replace combo cues.",
+    "If rampage and level-up happen together, play rampage immediately and delay level-up 300 ms or suppress the lower priority cue.",
+    "Damage cue replaces generic hurt and combo-break feedback for that event.",
+    "Poison and daze status cues play only when the status first starts; optional poison ticks are at most 1 Hz.",
+    "Low-health cue triggers on threshold crossing, with hysteresis; never every frame or every damage tick.",
+    "UI clicks are mutually exclusive: tab, navigation, equip or modal cue takes precedence over generic press.",
+    "Play success only after the corresponding save, login or purchase actually succeeds.",
+    "New unlock reveal replaces purchase sound; do not stack both.",
+    "Game-over interrupts ordinary movement and kill voices. Space results rewards after its transient.",
+    "Do not add sounds to every coin digit, DOM update, keystroke, or loading animation frame.",
+    "Pause suspends gameplay events; mute takes effect immediately, including active tails.",
+    "Optional hover, slider, poison ticks and incidental creature movement begin disabled.",
+    "Positional game sounds are mono; map pan and distance in the engine. Reward stingers have a subtle stereo tail.",
+    "Random pitch shifts are suitable for impacts within +/-3%; keep melodic score tiers and reward motifs in tune."
+  ],
+  "recommendedDucking": {
+    "heroStinger": {
+      "reduceScoreDb": 8,
+      "durationMs": 500
+    },
+    "damage": {
+      "reduceUiAndScoreDb": 8,
+      "durationMs": 200
+    }
+  },
+  "formatSelection": "Use decoded WAV as compatibility fallback; prefer Ogg when supported. Decode once into AudioBuffers and reuse them.",
+  "loops": "None in this pack. Continuous ambient or music loops are not required by the existing audio module.",
+  "review": "Audition preview.html on headphones and phone speakers, then review gameplay density during integration."
+}

@@ -1,0 +1,105 @@
+{
+  "generator": "Built-in image_gen",
+  "trails": [
+    {
+      "slug": "afterburn",
+      "name": "AFTERBURN",
+      "theme": "A bold tapering orange and gold fire trail, broad flowing flame tongues with ember particles, hot yellow core fading to deep orange at the tail. A clean energetic S-shaped streak, not an explosion.",
+      "color": "#FF9B57",
+      "price": "1,200",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium movement TRAIL cosmetic for CubeCrush game shop. Create one standalone polished 3D game effect asset, square canvas, genuinely transparent background. Show the trail sweeping diagonally from the lower-left foreground toward the upper-right, following a graceful shallow S curve. At the upper-right leading tip place one SMALL simple light-gray softly beveled cube with two tiny oval eyes, seen from above in three-quarter view, occupying only 18% of total canvas width. The neutral cube only demonstrates movement; the TRAIL is the main subject and occupies 75% of composition. Same clean high-end stylized 3D toy aesthetic across collection. Subject fills around 85% of image, entirely visible, equal breathing room. The trail must be bold, vivid and readable at 180 pixels. No environment, no floor, no backdrop, no text, no logo, no UI, no watermark, no bounding-box glow. Transparent outside the effect. No isolated unrelated objects. Theme: A bold tapering orange and gold fire trail, broad flowing flame tongues with ember particles, hot yellow core fading to deep orange at the tail. A clean energetic S-shaped streak, not an explosion.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-f49ba471-35ac-41a7-8b2f-33ccc12de3b4.png",
+      "file": "design-assets/cube-trails/afterburn.png"
+    },
+    {
+      "slug": "frostwake",
+      "name": "FROSTWAKE",
+      "theme": "A sparkling ice-blue frost trail with crystalline ice shards, a smooth translucent cyan icy ribbon and fine snow dust. Clear frozen facets and frosty white edge highlights. A single elegant sweeping path.",
+      "color": "#8CDBF7",
+      "price": "800",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium movement TRAIL cosmetic for CubeCrush game shop. Create one standalone polished 3D game effect asset, square canvas, genuinely transparent background. Show the trail sweeping diagonally from the lower-left foreground toward the upper-right, following a graceful shallow S curve. At the upper-right leading tip place one SMALL simple light-gray softly beveled cube with two tiny oval eyes, seen from above in three-quarter view, occupying only 18% of total canvas width. The neutral cube only demonstrates movement; the TRAIL is the main subject and occupies 75% of composition. Same clean high-end stylized 3D toy aesthetic across collection. Subject fills around 85% of image, entirely visible, equal breathing room. The trail must be bold, vivid and readable at 180 pixels. No environment, no floor, no backdrop, no text, no logo, no UI, no watermark, no bounding-box glow. Transparent outside the effect. No isolated unrelated objects. Theme: A sparkling ice-blue frost trail with crystalline ice shards, a smooth translucent cyan icy ribbon and fine snow dust. Clear frozen facets and frosty white edge highlights. A single elegant sweeping path.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-f514294d-b219-4bee-a85b-e22a407b96b3.png",
+      "file": "design-assets/cube-trails/frostwake.png"
+    },
+    {
+      "slug": "neon-surge",
+      "name": "NEON SURGE",
+      "theme": "A vivid electric cyan lightning trail with a bright smooth central energy ribbon and a few sharp branching blue-white lightning forks, sparse electric sparks. Clean powerful electric silhouette.",
+      "color": "#68E4FA",
+      "price": "1,200",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium movement TRAIL cosmetic for CubeCrush game shop. Create one standalone polished 3D game effect asset, square canvas, genuinely transparent background. Show the trail sweeping diagonally from the lower-left foreground toward the upper-right, following a graceful shallow S curve. At the upper-right leading tip place one SMALL simple light-gray softly beveled cube with two tiny oval eyes, seen from above in three-quarter view, occupying only 18% of total canvas width. The neutral cube only demonstrates movement; the TRAIL is the main subject and occupies 75% of composition. Same clean high-end stylized 3D toy aesthetic across collection. Subject fills around 85% of image, entirely visible, equal breathing room. The trail must be bold, vivid and readable at 180 pixels. No environment, no floor, no backdrop, no text, no logo, no UI, no watermark, no bounding-box glow. Transparent outside the effect. No isolated unrelated objects. Theme: A vivid electric cyan lightning trail with a bright smooth central energy ribbon and a few sharp branching blue-white lightning forks, sparse electric sparks. Clean powerful electric silhouette.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-a7a83e2d-8ad7-46df-9024-da9e73dd827d.png",
+      "file": "design-assets/cube-trails/neon-surge.png"
+    },
+    {
+      "slug": "starfall",
+      "name": "STARFALL",
+      "theme": "A luminous violet and gold stardust trail; soft purple cosmic ribbon with several clearly shaped glowing five-point gold stars and fine pinprick glitter following one graceful curve. Magical premium sparkle.",
+      "color": "#C8A3FF",
+      "price": "1,200",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium movement TRAIL cosmetic for CubeCrush game shop. Create one standalone polished 3D game effect asset, square canvas, genuinely transparent background. Show the trail sweeping diagonally from the lower-left foreground toward the upper-right, following a graceful shallow S curve. At the upper-right leading tip place one SMALL simple light-gray softly beveled cube with two tiny oval eyes, seen from above in three-quarter view, occupying only 18% of total canvas width. The neutral cube only demonstrates movement; the TRAIL is the main subject and occupies 75% of composition. Same clean high-end stylized 3D toy aesthetic across collection. Subject fills around 85% of image, entirely visible, equal breathing room. The trail must be bold, vivid and readable at 180 pixels. No environment, no floor, no backdrop, no text, no logo, no UI, no watermark, no bounding-box glow. Transparent outside the effect. No isolated unrelated objects. Theme: A luminous violet and gold stardust trail; soft purple cosmic ribbon with several clearly shaped glowing five-point gold stars and fine pinprick glitter following one graceful curve. Magical premium sparkle.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-21859fcd-196b-4cad-a726-a2dfbee59e6d.png",
+      "file": "design-assets/cube-trails/starfall.png"
+    },
+    {
+      "slug": "petal-drift",
+      "name": "PETAL DRIFT",
+      "theme": "An airy flowing trail of soft pink cherry blossom petals, a few delicate five-petal blossoms interspersed along a sweeping pale rose ribbon. Petals look light and tactile, pink and ivory with warm highlights. A clean curved stream not a dense cloud.",
+      "color": "#F7ABC7",
+      "price": "800",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium movement TRAIL cosmetic for CubeCrush game shop. Create one standalone polished 3D game effect asset, square canvas, genuinely transparent background. Show the trail sweeping diagonally from the lower-left foreground toward the upper-right, following a graceful shallow S curve. At the upper-right leading tip place one SMALL simple light-gray softly beveled cube with two tiny oval eyes, seen from above in three-quarter view, occupying only 18% of total canvas width. The neutral cube only demonstrates movement; the TRAIL is the main subject and occupies 75% of composition. Same clean high-end stylized 3D toy aesthetic across collection. Subject fills around 85% of image, entirely visible, equal breathing room. The trail must be bold, vivid and readable at 180 pixels. No environment, no floor, no backdrop, no text, no logo, no UI, no watermark, no bounding-box glow. Transparent outside the effect. No isolated unrelated objects. Theme: An airy flowing trail of soft pink cherry blossom petals, a few delicate five-petal blossoms interspersed along a sweeping pale rose ribbon. Petals look light and tactile, pink and ivory with warm highlights. A clean curved stream not a dense cloud.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-e65c387b-3da6-4859-b473-d565944250bf.png",
+      "file": "design-assets/cube-trails/petal-drift.png"
+    },
+    {
+      "slug": "bubble-pop",
+      "name": "BUBBLE POP",
+      "theme": "A whimsical trail of glossy translucent aqua and pink soap bubbles, different sizes arranged along one sweeping curve, beautiful thin iridescent rainbow reflections, a little watery sparkle. Clearly spherical bubbles, not planets.",
+      "color": "#8EE4DE",
+      "price": "600",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium movement TRAIL cosmetic for CubeCrush game shop. Create one standalone polished 3D game effect asset, square canvas, genuinely transparent background. Show the trail sweeping diagonally from the lower-left foreground toward the upper-right, following a graceful shallow S curve. At the upper-right leading tip place one SMALL simple light-gray softly beveled cube with two tiny oval eyes, seen from above in three-quarter view, occupying only 18% of total canvas width. The neutral cube only demonstrates movement; the TRAIL is the main subject and occupies 75% of composition. Same clean high-end stylized 3D toy aesthetic across collection. Subject fills around 85% of image, entirely visible, equal breathing room. The trail must be bold, vivid and readable at 180 pixels. No environment, no floor, no backdrop, no text, no logo, no UI, no watermark, no bounding-box glow. Transparent outside the effect. No isolated unrelated objects. Theme: A whimsical trail of glossy translucent aqua and pink soap bubbles, different sizes arranged along one sweeping curve, beautiful thin iridescent rainbow reflections, a little watery sparkle. Clearly spherical bubbles, not planets.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-ff0b6df7-04bc-41bd-b051-f298d4cab9d0.png",
+      "file": "design-assets/cube-trails/bubble-pop.png"
+    },
+    {
+      "slug": "pixel-rush",
+      "name": "PIXEL RUSH",
+      "theme": "An exciting retro pixel trail made of chunky luminous mint-green and turquoise voxel squares, organized in a clean sweeping path with little blocky pixels breaking off and fading toward tail. Sharp square pixel geometry, no text.",
+      "color": "#A8F5A0",
+      "price": "600",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium movement TRAIL cosmetic for CubeCrush game shop. Create one standalone polished 3D game effect asset, square canvas, genuinely transparent background. Show the trail sweeping diagonally from the lower-left foreground toward the upper-right, following a graceful shallow S curve. At the upper-right leading tip place one SMALL simple light-gray softly beveled cube with two tiny oval eyes, seen from above in three-quarter view, occupying only 18% of total canvas width. The neutral cube only demonstrates movement; the TRAIL is the main subject and occupies 75% of composition. Same clean high-end stylized 3D toy aesthetic across collection. Subject fills around 85% of image, entirely visible, equal breathing room. The trail must be bold, vivid and readable at 180 pixels. No environment, no floor, no backdrop, no text, no logo, no UI, no watermark, no bounding-box glow. Transparent outside the effect. No isolated unrelated objects. Theme: An exciting retro pixel trail made of chunky luminous mint-green and turquoise voxel squares, organized in a clean sweeping path with little blocky pixels breaking off and fading toward tail. Sharp square pixel geometry, no text.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-398f615c-e8c6-403a-b224-7ed9bf869ab3.png",
+      "file": "design-assets/cube-trails/pixel-rush.png"
+    },
+    {
+      "slug": "gold-rush",
+      "name": "GOLD RUSH",
+      "theme": "A luxurious flowing golden metallic ribbon trail with small gold geometric sparkles and bright champagne light streaks, rich gold reflective material contrasting with fine amber glitter. Clean fluid motion and readable long elegant sweep.",
+      "color": "#EECF75",
+      "price": "1,000",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium movement TRAIL cosmetic for CubeCrush game shop. Create one standalone polished 3D game effect asset, square canvas, genuinely transparent background. Show the trail sweeping diagonally from the lower-left foreground toward the upper-right, following a graceful shallow S curve. At the upper-right leading tip place one SMALL simple light-gray softly beveled cube with two tiny oval eyes, seen from above in three-quarter view, occupying only 18% of total canvas width. The neutral cube only demonstrates movement; the TRAIL is the main subject and occupies 75% of composition. Same clean high-end stylized 3D toy aesthetic across collection. Subject fills around 85% of image, entirely visible, equal breathing room. The trail must be bold, vivid and readable at 180 pixels. No environment, no floor, no backdrop, no text, no logo, no UI, no watermark, no bounding-box glow. Transparent outside the effect. No isolated unrelated objects. Theme: A luxurious flowing golden metallic ribbon trail with small gold geometric sparkles and bright champagne light streaks, rich gold reflective material contrasting with fine amber glitter. Clean fluid motion and readable long elegant sweep.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-de92baf0-6890-4c1e-bec0-9c156400f777.png",
+      "file": "design-assets/cube-trails/gold-rush.png"
+    },
+    {
+      "slug": "void-rift",
+      "name": "VOID RIFT",
+      "theme": "A dramatic inky midnight-violet smoke ribbon edged with luminous magenta energy, a few small black-purple angular shards floating along the sweeping trail. Dark core with brilliant purple edge makes silhouette visible on charcoal. No large cloud or portal.",
+      "color": "#BB8CFF",
+      "price": "1,200",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium movement TRAIL cosmetic for CubeCrush game shop. Create one standalone polished 3D game effect asset, square canvas, genuinely transparent background. Show the trail sweeping diagonally from the lower-left foreground toward the upper-right, following a graceful shallow S curve. At the upper-right leading tip place one SMALL simple light-gray softly beveled cube with two tiny oval eyes, seen from above in three-quarter view, occupying only 18% of total canvas width. The neutral cube only demonstrates movement; the TRAIL is the main subject and occupies 75% of composition. Same clean high-end stylized 3D toy aesthetic across collection. Subject fills around 85% of image, entirely visible, equal breathing room. The trail must be bold, vivid and readable at 180 pixels. No environment, no floor, no backdrop, no text, no logo, no UI, no watermark, no bounding-box glow. Transparent outside the effect. No isolated unrelated objects. Theme: A dramatic inky midnight-violet smoke ribbon edged with luminous magenta energy, a few small black-purple angular shards floating along the sweeping trail. Dark core with brilliant purple edge makes silhouette visible on charcoal. No large cloud or portal.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-b9c0d312-7df5-470c-8245-fc3ed5f5fc33.png",
+      "file": "design-assets/cube-trails/void-rift.png"
+    },
+    {
+      "slug": "rainbow-run",
+      "name": "RAINBOW RUN",
+      "theme": "A bright playful rainbow ribbon trail with distinct parallel red, orange, yellow, mint, cyan and violet bands following one smooth curve, glossy soft light and a few tiny multicolored sparkles. Premium saturated candy-like color, clean orderly bands.",
+      "color": "#F5A9DD",
+      "price": "1,000",
+      "prompt": "Use case: stylized-concept. Asset type: individual premium movement TRAIL cosmetic for CubeCrush game shop. Create one standalone polished 3D game effect asset, square canvas, genuinely transparent background. Show the trail sweeping diagonally from the lower-left foreground toward the upper-right, following a graceful shallow S curve. At the upper-right leading tip place one SMALL simple light-gray softly beveled cube with two tiny oval eyes, seen from above in three-quarter view, occupying only 18% of total canvas width. The neutral cube only demonstrates movement; the TRAIL is the main subject and occupies 75% of composition. Same clean high-end stylized 3D toy aesthetic across collection. Subject fills around 85% of image, entirely visible, equal breathing room. The trail must be bold, vivid and readable at 180 pixels. No environment, no floor, no backdrop, no text, no logo, no UI, no watermark, no bounding-box glow. Transparent outside the effect. No isolated unrelated objects. Theme: A bright playful rainbow ribbon trail with distinct parallel red, orange, yellow, mint, cyan and violet bands following one smooth curve, glossy soft light and a few tiny multicolored sparkles. Premium saturated candy-like color, clean orderly bands.",
+      "sourcePath": "C:\\Users\\ishan\\.codex\\generated_images\\01a0a9f4-4360-7511-b620-dba153b9682a\\exec-4b956683-dac5-485c-8449-218157868c4c.png",
+      "file": "design-assets/cube-trails/rainbow-run.png"
+    }
+  ]
+}

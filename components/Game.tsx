@@ -2,16 +2,25 @@
 
 import { useEffect, useRef } from "react";
 import { startGame } from "@/game/engine";
+import { preloadTrailArt } from "@/game/trail-art";
+import { preloadWorldArt } from "@/game/terrain";
+import { preloadSkinArt } from "@/game/skin-materials";
 
 export default function Game() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!ref.current) return;
-    // startGame appends its own <canvas> to the container and returns a
-    // disposer. Returning it from useEffect kills the RAF loop, listeners,
-    // and GL context on unmount — required for React StrictMode double-mount.
-    return startGame(ref.current);
+    let cancelled=false;
+    let dispose: (()=>void) | undefined;
+    const buttons=Array.from(document.querySelectorAll<HTMLButtonElement>("#start-screen button"));
+    for(const button of buttons){button.disabled=true;button.setAttribute("aria-busy","true");}
+    void Promise.all([preloadSkinArt(),preloadWorldArt(),preloadTrailArt()]).then(()=>{
+      if(cancelled||!ref.current)return;
+      dispose=startGame(ref.current);
+      for(const button of buttons){button.disabled=false;button.removeAttribute("aria-busy");}
+    });
+    return()=>{cancelled=true;dispose?.();};
   }, []);
 
   return <div ref={ref} />;

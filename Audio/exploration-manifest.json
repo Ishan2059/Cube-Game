@@ -1,0 +1,254 @@
+{
+  "exploration.roll_grass": {
+    "files": [
+      "/audio/exploration/roll_grass_01",
+      "/audio/exploration/roll_grass_02",
+      "/audio/exploration/roll_grass_03",
+      "/audio/exploration/roll_grass_04"
+    ],
+    "cooldownMs": 120,
+    "maxVoices": 1,
+    "priority": 35
+  },
+  "exploration.roll_stone": {
+    "files": [
+      "/audio/exploration/roll_stone_01",
+      "/audio/exploration/roll_stone_02",
+      "/audio/exploration/roll_stone_03",
+      "/audio/exploration/roll_stone_04"
+    ],
+    "cooldownMs": 120,
+    "maxVoices": 1,
+    "priority": 35
+  },
+  "exploration.roll_wood": {
+    "files": [
+      "/audio/exploration/roll_wood_01",
+      "/audio/exploration/roll_wood_02",
+      "/audio/exploration/roll_wood_03",
+      "/audio/exploration/roll_wood_04"
+    ],
+    "cooldownMs": 120,
+    "maxVoices": 1,
+    "priority": 35
+  },
+  "exploration.roll_mud": {
+    "files": [
+      "/audio/exploration/roll_mud_01",
+      "/audio/exploration/roll_mud_02",
+      "/audio/exploration/roll_mud_03",
+      "/audio/exploration/roll_mud_04"
+    ],
+    "cooldownMs": 120,
+    "maxVoices": 1,
+    "priority": 35
+  },
+  "exploration.roll_water": {
+    "files": [
+      "/audio/exploration/roll_water_01",
+      "/audio/exploration/roll_water_02",
+      "/audio/exploration/roll_water_03",
+      "/audio/exploration/roll_water_04"
+    ],
+    "cooldownMs": 120,
+    "maxVoices": 1,
+    "priority": 35
+  },
+  "exploration.roll_ash": {
+    "files": [
+      "/audio/exploration/roll_ash_01",
+      "/audio/exploration/roll_ash_02",
+      "/audio/exploration/roll_ash_03",
+      "/audio/exploration/roll_ash_04"
+    ],
+    "cooldownMs": 120,
+    "maxVoices": 1,
+    "priority": 35
+  },
+  "exploration.bush_rustle": {
+    "files": [
+      "/audio/exploration/bush_rustle_01",
+      "/audio/exploration/bush_rustle_02",
+      "/audio/exploration/bush_rustle_03"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 2,
+    "priority": 35
+  },
+  "exploration.water_exit": {
+    "files": [
+      "/audio/exploration/water_exit_01",
+      "/audio/exploration/water_exit_02",
+      "/audio/exploration/water_exit_03"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 2,
+    "priority": 35
+  },
+  "exploration.door_open": {
+    "files": [
+      "/audio/exploration/door_open_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.door_close": {
+    "files": [
+      "/audio/exploration/door_close_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.chest_open": {
+    "files": [
+      "/audio/exploration/chest_open_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.portal_enter": {
+    "files": [
+      "/audio/exploration/portal_enter_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.portal_exit": {
+    "files": [
+      "/audio/exploration/portal_exit_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.portal_locked": {
+    "files": [
+      "/audio/exploration/portal_locked_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.splash": {
+    "files": [
+      "/audio/exploration/splash_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.mud_release": {
+    "files": [
+      "/audio/exploration/mud_release_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.lava_burn": {
+    "files": [
+      "/audio/exploration/lava_burn_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.loot": {
+    "files": [
+      "/audio/exploration/loot_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.coin_boost": {
+    "files": [
+      "/audio/exploration/coin_boost_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.bridge_creak": {
+    "files": [
+      "/audio/exploration/bridge_creak_01"
+    ],
+    "cooldownMs": 250,
+    "maxVoices": 2,
+    "priority": 65
+  },
+  "exploration.jump": {
+    "files": [
+      "/audio/exploration/jump_01"
+    ],
+    "cooldownMs": 150,
+    "maxVoices": 2,
+    "priority": 45
+  },
+  "exploration.break_wood": {
+    "files": [
+      "/audio/exploration/break_wood_01",
+      "/audio/exploration/break_wood_02",
+      "/audio/exploration/break_wood_03"
+    ],
+    "cooldownMs": 90,
+    "maxVoices": 2,
+    "priority": 75
+  },
+  "exploration.break_stone": {
+    "files": [
+      "/audio/exploration/break_stone_01",
+      "/audio/exploration/break_stone_02",
+      "/audio/exploration/break_stone_03"
+    ],
+    "cooldownMs": 90,
+    "maxVoices": 2,
+    "priority": 75
+  },
+  "exploration.break_metal": {
+    "files": [
+      "/audio/exploration/break_metal_01",
+      "/audio/exploration/break_metal_02",
+      "/audio/exploration/break_metal_03"
+    ],
+    "cooldownMs": 90,
+    "maxVoices": 2,
+    "priority": 75
+  },
+  "exploration.ambient_meadow": {
+    "files": [
+      "/audio/exploration/ambient_meadow_01"
+    ],
+    "cooldownMs": 6500,
+    "maxVoices": 2,
+    "priority": 1
+  },
+  "exploration.ambient_mire": {
+    "files": [
+      "/audio/exploration/ambient_mire_01"
+    ],
+    "cooldownMs": 6500,
+    "maxVoices": 2,
+    "priority": 1
+  },
+  "exploration.ambient_cinder": {
+    "files": [
+      "/audio/exploration/ambient_cinder_01"
+    ],
+    "cooldownMs": 6500,
+    "maxVoices": 2,
+    "priority": 1
+  },
+  "exploration.ambient_cabin": {
+    "files": [
+      "/audio/exploration/ambient_cabin_01"
+    ],
+    "cooldownMs": 6500,
+    "maxVoices": 2,
+    "priority": 1
+  }
+}

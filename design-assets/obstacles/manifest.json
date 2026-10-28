@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "status": "Concept renders and Figma components; runtime 3D meshes and texture maps are not yet implemented.",
+  "style": "Grounded semi-realistic environmental props; restrained wood, clay, iron, canvas and concrete.",
+  "source": {
+    "file": "game/engine.ts",
+    "tileSize": 1,
+    "occupancy": "isObstacle(ix, iz)",
+    "visualFactory": "buildTileProp(ix, iz)",
+    "spawnFraction": 0.065,
+    "startSafety": "abs(ix) <= 1 and abs(iz) <= 1 remains clear"
+  },
+  "implementation": {
+    "behavior": "All five are static, impassable one-tile blockers for the cube and insects. Visual variation only; no pushing, destruction, damage, loot or new scoring.",
+    "maxFootprint": [
+      0.88,
+      0.88
+    ],
+    "pivot": "Ground-center; base at local y=0",
+    "selection": "Use a separate deterministic hash salt to select one of five visuals, preserving current occupancy and safe start area.",
+    "geometry": "Model the broad silhouettes in actual 3D; use baked base-color, normal and roughness textures for bark, rust, weave and aggregate. The PNGs are concept/guide portraits, not runtime geometry or texture maps.",
+    "budget": "Target 600–1800 triangles per model (valve up to 2400); 1–2 materials per model, shared atlas and shared geometry. Final budgets require profiling.",
+    "lighting": "MeshStandardMaterial, smooth normals, predominantly rough surfaces; no emissive surfaces. Match existing arena light.",
+    "repetition": "Seed quarter-turn rotation and slight material tint; prevent scaling beyond tile boundary.",
+    "streaming": "Integrate with existing worldMeshes tile streaming; share resources and dispose them once at their owning lifecycle boundary.",
+    "validation": [
+      "Readability at gameplay camera distance",
+      "No neighboring tile overlap",
+      "Collision agrees with visible base",
+      "Repeated-prop performance on mobile",
+      "Baked detail survives mipmaps without shimmer",
+      "Matching silhouette from all four gameplay directions"
+    ]
+  },
+  "obstacles": [
+    {
+      "id": "rooted-stump",
+      "name": "ROOTED STUMP",
+      "material": "wood",
+      "heightInTiles": 0.65,
+      "modelParts": [
+        "tapered irregular trunk",
+        "cut top cap",
+        "five compact root buttresses"
+      ],
+      "portrait": "design-assets/obstacles/rooted-stump.png"
+    },
+    {
+      "id": "broken-planter",
+      "name": "BROKEN PLANTER",
+      "material": "terracotta",
+      "heightInTiles": 0.58,
+      "modelParts": [
+        "tapered ceramic shell",
+        "thick broken rim",
+        "soil cap",
+        "one embedded root"
+      ],
+      "portrait": "design-assets/obstacles/broken-planter.png"
+    },
+    {
+      "id": "rusted-valve",
+      "name": "RUSTED VALVE",
+      "material": "cast iron",
+      "heightInTiles": 0.72,
+      "modelParts": [
+        "short capped pipe body",
+        "valve bonnet",
+        "six-spoke handwheel",
+        "base flange",
+        "six bolts"
+      ],
+      "portrait": "design-assets/obstacles/rusted-valve.png"
+    },
+    {
+      "id": "sandbag-block",
+      "name": "SANDBAG BLOCK",
+      "material": "canvas",
+      "heightInTiles": 0.5,
+      "modelParts": [
+        "four compressed sack meshes",
+        "subtle stitched seam strips"
+      ],
+      "portrait": "design-assets/obstacles/sandbag-block.png"
+    },
+    {
+      "id": "concrete-footing",
+      "name": "CONCRETE FOOTING",
+      "material": "concrete",
+      "heightInTiles": 0.62,
+      "modelParts": [
+        "chipped beveled concrete block",
+        "two short embedded rebar stubs"
+      ],
+      "portrait": "design-assets/obstacles/concrete-footing.png"
+    }
+  ]
+}

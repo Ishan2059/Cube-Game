@@ -1,0 +1,109 @@
+{
+  "scope": "Audio asset preparation. No runtime integration performed.",
+  "sourceFiles": [
+    "game/audio.ts",
+    "game/engine.ts",
+    "game/menus.ts",
+    "game/itemModal.ts",
+    "game/bestiary.ts"
+  ],
+  "existingFunctions": {
+    "playThud": {
+      "normalRoll": "gameplay.cube_roll",
+      "normalCrush": "gameplay.crush_impact",
+      "strongCrush": "gameplay.heavy_crush",
+      "giantLanding": "gameplay.heavy_land",
+      "note": "Choose exactly one stone impact for a landing. Current engine can call both roll and crush thuds; do not duplicate them."
+    },
+    "playSplat": {
+      "perCreature": "kills.<ParasiteType>",
+      "fallback": "kills.generic",
+      "multipleVictims": "gameplay.multikill",
+      "note": "Aggregate victims per landing, not one full-volume voice per victim."
+    },
+    "playKnock": {
+      "obstacle": "gameplay.obstacle_knock",
+      "beetleFirstHit": "gameplay.armor_crack",
+      "pillbugCurled": "gameplay.armor_deflect",
+      "giantAcidBlock": "gameplay.armor_deflect"
+    },
+    "playLatch": {
+      "parasiteAttachment": "gameplay.parasite_latch",
+      "webContact": "hazards.web_snare",
+      "slimeContact": "hazards.slime_stick"
+    },
+    "playHurt": {
+      "fallback": "gameplay.player_hurt",
+      "currentlyUsed": false
+    },
+    "playBite": {
+      "parasiteBite": "gameplay.parasite_bite",
+      "acidDamage": "hazards.acid_hit"
+    },
+    "playHeal": {
+      "heart": "powerups.heal",
+      "speed": "powerups.speed"
+    },
+    "playCoin": {
+      "runPayout": "rewards.coin_payout",
+      "purchase": "shop.purchase",
+      "smallCoinReward": "rewards.coin_pickup",
+      "note": "A purchase and earned coins intentionally use different cues."
+    },
+    "playSpit": {
+      "launch": "hazards.acid_spit"
+    },
+    "playRampage": {
+      "enterRampage": "powerups.rampage_start",
+      "levelThreshold": "rewards.level_up",
+      "giantPickup": "powerups.giant",
+      "eggHatching": "hazards.egg_hatch"
+    }
+  },
+  "additionalCurrentGameHooks": {
+    "addKill after score increment": "rewards.score_gain_1 through rewards.score_gain_8",
+    "addKill combo threshold": "rewards.combo_2 / combo_4 / combo_8; suppress if level-up or rampage plays",
+    "endCombo": "rewards.combo_break or powerups.rampage_end, not both; suppress after damage",
+    "gameOver": "session.game_over then rewards.coin_payout after 700 ms",
+    "gameOver best > prevBest": "rewards.personal_best; prefer over generic positive stinger",
+    "setPause": "session.pause / session.resume",
+    "resetGame successfully starts": "session.start or session.restart",
+    "server-confirmed score save": "ui.save_success",
+    "failed save": "ui.save_failed",
+    "menus show / backFrom": "ui.navigate / ui.back",
+    "switchShopTab": "ui.tab_switch",
+    "openItemModal / closeItemModal": "ui.modal_open / ui.modal_close",
+    "onBestiaryClick": "ui.guide_select, replacing generic click",
+    "toggleSetting": "ui.toggle_on / ui.toggle_off; mute instantly",
+    "onEquip": "shop.equip_skin / shop.equip_trail / shop.equip_aura",
+    "poison and daze application": "hazards.poison_start / hazards.daze_start",
+    "effect timer crosses zero": "powerups.expire / hazards.snare_release",
+    "acid ground impact": "hazards.acid_land",
+    "low health threshold": "hazards.low_health",
+    "cosmetic unlock": "shop.unlock instead of purchase if a reveal is shown"
+  },
+  "futureDesignHooks": [
+    "rewards.xp_tick",
+    "rewards.xp_award",
+    "rewards.xp_level_up",
+    "ui.login_success",
+    "ui.logout",
+    "session.ready"
+  ],
+  "creatureIds": [
+    "worm",
+    "bug",
+    "spider",
+    "scorpion",
+    "beetle",
+    "slug",
+    "termite",
+    "hornet",
+    "mosquito",
+    "pillbug",
+    "flea",
+    "locust",
+    "eggsac",
+    "spitter"
+  ]
+}

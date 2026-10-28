@@ -1,0 +1,260 @@
+{
+  "version": 1,
+  "status": "Field Guide render assets and 3D implementation references; runtime meshes are not yet replaced.",
+  "sourceFiles": [
+    "game/parasites.ts",
+    "game/bestiary.ts",
+    "lib/game-rules.ts"
+  ],
+  "render": {
+    "format": "PNG",
+    "alpha": true,
+    "targetLongEdge": 1254,
+    "guideHeroDisplay": 520,
+    "selectorDisplay": 96
+  },
+  "runtimePlan": {
+    "renderer": "Three.js",
+    "approach": "Rebuild each silhouette as smooth articulated meshes matching these references; keep the PNGs for Field Guide portraits.",
+    "preserve": [
+      "Creature type IDs",
+      "Scoring and attack behaviors",
+      "Hitboxes",
+      "Object pooling",
+      "Local +X facing and ground y=0",
+      "Existing animate(t) interface"
+    ],
+    "geometry": "Smooth normals, rounded body meshes and jointed limbs; share geometries and materials across pooled creatures.",
+    "quality": "Judge silhouettes at gameplay camera distance; use LOD for distant creatures, not flat sprite replacements.",
+    "verification": [
+      "Compare each 3D model with its portrait",
+      "Check limb animation and cube-face attachment",
+      "Profile desktop and mobile crowd scenes"
+    ],
+    "beetleArmor": "Armor applies in late levels (15–20), not every beetle."
+  },
+  "creatures": [
+    {
+      "id": "worm",
+      "name": "WORM",
+      "points": 10,
+      "color": "#77C04A",
+      "trait": "Slow crawler",
+      "counter": "Roll over it.",
+      "rig": [
+        "five body segments",
+        "eyes"
+      ],
+      "animation": "Segmented crawl wave",
+      "file": "design-assets/creatures/worm.png"
+    },
+    {
+      "id": "bug",
+      "name": "BUG",
+      "points": 25,
+      "color": "#B03A28",
+      "trait": "Climbs your cube",
+      "counter": "Roll to crush it.",
+      "rig": [
+        "oval split shell",
+        "head",
+        "six legs",
+        "two antennae"
+      ],
+      "animation": "Six-leg crawl and antenna motion",
+      "file": "design-assets/creatures/bug.png"
+    },
+    {
+      "id": "spider",
+      "name": "SPIDER",
+      "points": 40,
+      "color": "#7A4FA8",
+      "trait": "Slowing webs",
+      "counter": "Avoid web tiles.",
+      "rig": [
+        "abdomen",
+        "head",
+        "eight jointed legs"
+      ],
+      "animation": "Eight-leg crawl",
+      "file": "design-assets/creatures/spider.png"
+    },
+    {
+      "id": "scorpion",
+      "name": "SCORPION",
+      "points": 80,
+      "color": "#9A4433",
+      "trait": "Poison sting",
+      "counter": "Crush before it bites.",
+      "rig": [
+        "three-segment body",
+        "two pincers",
+        "walking legs",
+        "five-segment tail",
+        "stinger"
+      ],
+      "animation": "Walking legs, claw and tail anticipation",
+      "file": "design-assets/creatures/scorpion.png"
+    },
+    {
+      "id": "beetle",
+      "name": "BEETLE",
+      "points": 120,
+      "color": "#2FA057",
+      "trait": "Late-game armor",
+      "counter": "Crack the shell. Roll again.",
+      "rig": [
+        "two shell plates",
+        "head",
+        "horn",
+        "six legs"
+      ],
+      "animation": "Heavy crawl, crack and stun states",
+      "file": "design-assets/creatures/beetle.png"
+    },
+    {
+      "id": "slug",
+      "name": "SLUG",
+      "points": 20,
+      "color": "#9AB04A",
+      "trait": "Sticky slime",
+      "counter": "Avoid its slime trail.",
+      "rig": [
+        "soft body",
+        "four movement lobes",
+        "two eye stalks"
+      ],
+      "animation": "Body squash and gentle crawl",
+      "file": "design-assets/creatures/slug.png"
+    },
+    {
+      "id": "termite",
+      "name": "TERMITE",
+      "points": 35,
+      "color": "#D8C088",
+      "trait": "Blocking pits",
+      "counter": "Roll around the pits.",
+      "rig": [
+        "three cream segments",
+        "amber head",
+        "two mandibles",
+        "six legs"
+      ],
+      "animation": "Crawl and mandible gnash",
+      "file": "design-assets/creatures/termite.png"
+    },
+    {
+      "id": "hornet",
+      "name": "HORNET",
+      "points": 60,
+      "color": "#E0B83A",
+      "trait": "Reverses controls",
+      "counter": "Crush before it bites.",
+      "rig": [
+        "striped abdomen",
+        "thorax",
+        "head",
+        "two wings",
+        "legs",
+        "stinger"
+      ],
+      "animation": "Wing flap and hover",
+      "file": "design-assets/creatures/hornet.png"
+    },
+    {
+      "id": "mosquito",
+      "name": "MOSQUITO",
+      "points": 45,
+      "color": "#A83A3A",
+      "trait": "Double bite damage",
+      "counter": "Take it down quickly.",
+      "rig": [
+        "slender abdomen",
+        "head",
+        "proboscis",
+        "six legs",
+        "two wings"
+      ],
+      "animation": "Fast wing flutter and leg sway",
+      "file": "design-assets/creatures/mosquito.png"
+    },
+    {
+      "id": "pillbug",
+      "name": "PILLBUG",
+      "points": 55,
+      "color": "#8A7A6A",
+      "trait": "Armored while moving",
+      "counter": "Crush when it stops.",
+      "rig": [
+        "five overlapping armor plates",
+        "head",
+        "small paired legs"
+      ],
+      "animation": "Crawl and curled defensive state",
+      "file": "design-assets/creatures/pillbug.png"
+    },
+    {
+      "id": "flea",
+      "name": "FLEA",
+      "points": 35,
+      "color": "#805039",
+      "trait": "Erratic jumps",
+      "counter": "Corner it before rolling.",
+      "rig": [
+        "compact tall body",
+        "head",
+        "oversized hind legs",
+        "front legs"
+      ],
+      "animation": "Hind-leg spring and hop",
+      "file": "design-assets/creatures/flea.png"
+    },
+    {
+      "id": "locust",
+      "name": "LOCUST",
+      "points": 70,
+      "color": "#8AA84A",
+      "trait": "Two-tile lunge",
+      "counter": "Dodge across its path.",
+      "rig": [
+        "elongated body",
+        "head",
+        "antennae",
+        "folded hind legs",
+        "front legs"
+      ],
+      "animation": "Crawl and two-tile jump lunge",
+      "file": "design-assets/creatures/locust.png"
+    },
+    {
+      "id": "eggsac",
+      "name": "EGG SAC",
+      "points": 40,
+      "color": "#E4DCC4",
+      "trait": "Hatches a brood",
+      "counter": "Crush before it opens.",
+      "rig": [
+        "six egg forms"
+      ],
+      "animation": "Subtle pulse followed by hatch",
+      "file": "design-assets/creatures/eggsac.png"
+    },
+    {
+      "id": "spitter",
+      "name": "SPITTER",
+      "points": 90,
+      "color": "#5AA832",
+      "trait": "Ranged acid",
+      "counter": "Keep moving. Close the gap.",
+      "rig": [
+        "squat body",
+        "tube snout",
+        "inflating throat sac",
+        "four legs",
+        "eyes"
+      ],
+      "animation": "Throat charge pulse, spit recoil and crawl",
+      "file": "design-assets/creatures/spitter.png"
+    }
+  ]
+}

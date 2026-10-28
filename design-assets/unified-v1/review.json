@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-27",
+  "scope": "66519:15544",
+  "revisedAssets": 25,
+  "retainedCreatureStyleAnchors": 14,
+  "updatedImageNodes": 82,
+  "scopedReplacementFailures": 0,
+  "originalMastersPreserved": 25,
+  "fonts": [
+    "Barlow Condensed Bold",
+    "Inter Regular",
+    "Inter Semi Bold"
+  ],
+  "screenshotsReviewed": [
+    ".qa/figma-redesign/unified-final-0.png",
+    ".qa/figma-redesign/unified-final-1.png",
+    ".qa/figma-redesign/unified-final-2.png",
+    ".qa/figma-redesign/unified-detail-0.png",
+    ".qa/figma-redesign/unified-detail-1.png",
+    ".qa/figma-redesign/unified-detail-2.png"
+  ],
+  "visualReview": "Collection cards, hero previews and 96px obstacle layout render without clipping or opaque asset backdrops. Material families and simpler effects read consistently.",
+  "imageAlphaNote": "Bubble Pop has one corner at alpha 1/255; visually transparent. All other tested corner samples are zero. No visible rectangular backdrop in the Figma preview.",
+  "runtimePerformanceTested": false
+}

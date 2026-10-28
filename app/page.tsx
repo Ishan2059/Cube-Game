@@ -3,11 +3,13 @@ import Game from "@/components/Game";
 export default function Home() {
   return (
     <>
+      <div id="world-fade" aria-hidden="true"></div>
       <div id="hud">
         <div id="hud-left">
           <div id="score">0</div>
           <div id="best">BEST 0</div>
-          <div id="level">LVL 1 · SPROUT</div>
+          <div id="region">GREENWILD 0:00</div>
+          <div id="run-coins" aria-label="Coins earned this run">◈ 0</div>
           <div id="buffs"></div>
           <div id="combo-wrap">
             <div id="combo-label"></div>
@@ -26,6 +28,7 @@ export default function Home() {
         </div>
       </div>
 
+      <button id="jump-btn" aria-label="Jump" title="Jump (Space)">↟</button>
       <button id="pause-btn" aria-label="Pause">❚❚</button>
 
       {/* Touch-only D-pad. Hidden by default — engine.ts shows it only on a
@@ -42,7 +45,6 @@ export default function Home() {
       <div id="bite-glow"></div>
       <div id="poison-glow"></div>
       <div id="popups"></div>
-      <div id="levelup"></div>
       <div id="toast"></div>
 
       {/* ============ START / HOME ============ */}
@@ -149,7 +151,7 @@ export default function Home() {
               <p>
                 Roll to move — land on parasites to squash them. On mobile,{" "}
                 <b>swipe</b> to roll. Desktop: arrows / WASD, <b>P</b> to
-                pause.
+                pause. <b>Space</b> to jump.
               </p>
             </div>
           </div>
@@ -174,6 +176,11 @@ export default function Home() {
                 <span className="powerup-icon star">★</span>
                 <b>GIANT</b>
                 <span>Crush 3×3 for 8s</span>
+              </div>
+              <div className="powerup-card">
+                <span className="powerup-icon coin">◈</span>
+                <b>2× COINS</b>
+                <span>Double coins for 12s</span>
               </div>
               <div className="powerup-card">
                 <span className="powerup-icon heart">♥</span>
@@ -214,7 +221,6 @@ export default function Home() {
           <div className="seg-tabs">
             <button className="seg active" id="tab-skins">SKINS</button>
             <button className="seg" id="tab-trails">TRAILS</button>
-            <button className="seg" id="tab-auras">AURAS</button>
           </div>
 
           <div id="skin-list"></div>
@@ -303,6 +309,8 @@ export default function Home() {
         </div>
       </div>
 
+
+
       {/* ============ PAUSE ============ */}
       <div id="pause-screen" className="overlay translucent hidden">
         <div className="screen-scroll">
@@ -366,7 +374,7 @@ export default function Home() {
 
           <div className="stat-grid">
             <div className="stat-cell">
-              <span>LEVEL</span><b id="go-level">1</b>
+              <span>REGION</span><b id="go-region">1</b>
             </div>
             <div className="stat-cell">
               <span>BUGS</span><b id="go-bugs">0</b>
@@ -444,7 +452,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ============ ITEM PREVIEW MODAL (skins / trails / auras) ============ */}
+      {/* ============ ITEM PREVIEW MODAL (skins / trails) ============ */}
       <div
         id="item-modal"
         className="modal hidden"

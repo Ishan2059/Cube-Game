@@ -1,11 +1,6 @@
-/* ================= bestiary =================
- * Guide-screen bug gallery. Thumbnails are the ACTUAL in-game meshes,
- * rendered once to data URLs by a throwaway offscreen WebGL renderer the
- * first time the Guide opens, then cached for the session.
- */
+/* Creature field guide. */
 
-import * as THREE from "three";
-import { makeParasiteMesh, type ParasiteType } from "./parasites";
+import { type ParasiteType } from "./parasites";
 
 export interface BeastInfo {
   type: ParasiteType;
@@ -30,54 +25,7 @@ export const BEASTS: BeastInfo[] = [
   { type: "spitter", name: "SPITTER", desc: "Lobs acid globs from range — keep moving or eat the splat. Close the gap and crush it." },
 ];
 
-let cache: Record<string, string> | null = null;
-
-/** Render each bug mesh once to a PNG data URL (cached per session). */
+/** Approved portraits; no additional WebGL context for the guide. */
 export function getBugThumbs(): Record<string, string> {
-  if (cache) return cache;
-  const SIZE = 148;
-  const renderer = new THREE.WebGLRenderer({
-    alpha: true,
-    antialias: true,
-    preserveDrawingBuffer: true,
-  });
-  renderer.setSize(SIZE, SIZE);
-  renderer.setPixelRatio(1);
-
-  const scene = new THREE.Scene();
-  scene.add(new THREE.HemisphereLight(0xfff2dc, 0x2c2418, 1.15));
-  const sun = new THREE.DirectionalLight(0xffe6c0, 1.7);
-  sun.position.set(2, 3, 2);
-  scene.add(sun);
-
-  const cam = new THREE.PerspectiveCamera(35, 1, 0.02, 20);
-  const box = new THREE.Box3();
-  const center = new THREE.Vector3();
-  const size = new THREE.Vector3();
-
-  cache = {};
-  for (const b of BEASTS) {
-    const mesh = makeParasiteMesh(b.type);
-    mesh.userData.animate?.(0.4); // natural mid-crawl pose
-    scene.add(mesh);
-    box.setFromObject(mesh);
-    box.getCenter(center);
-    box.getSize(size);
-    const d = Math.max(size.length() * 1.15, 0.4);
-    cam.position.set(center.x + d * 0.7, center.y + d * 0.85, center.z + d);
-    cam.lookAt(center);
-    renderer.render(scene, cam);
-    cache[b.type] = renderer.domElement.toDataURL("image/png");
-    scene.remove(mesh);
-    // thumbnails are one-shot: free the mesh's GPU resources right away
-    mesh.traverse((o) => {
-      const m = o as THREE.Mesh;
-      if (m.geometry) m.geometry.dispose();
-      const mat = m.material as THREE.Material | THREE.Material[] | undefined;
-      if (Array.isArray(mat)) mat.forEach((x) => x.dispose());
-      else mat?.dispose();
-    });
-  }
-  renderer.dispose();
-  return cache;
+  return Object.fromEntries(BEASTS.map(b => [b.type, `/game-art/creatures/${b.type}.webp`]));
 }

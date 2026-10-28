@@ -47,6 +47,8 @@ html, body {
 
 canvas { display: block; touch-action: none; }
 
+/* Level-up choices use the existing dark surfaces and bright game accents. */
+
 /* ================= in-game HUD =================
  * Gameplay HUD is intentionally unchanged visually on desktop; the flex
  * constraints below fix the mobile bug where the wide center warning pushed
@@ -84,7 +86,7 @@ canvas { display: block; touch-action: none; }
   font-family: var(--font-m);
 }
 
-#level {
+#region {
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 2px;
@@ -92,31 +94,7 @@ canvas { display: block; touch-action: none; }
   margin-top: 3px;
 }
 
-#levelup {
-  position: fixed;
-  top: 38%; left: 50%;
-  transform: translate(-50%, -50%) scale(0.7);
-  /* vw-scaled so long "LEVEL N — TIERNAME" strings never overflow narrow
-   * viewports (was a fixed 40px/6px that only fit on desktop); caps at the
-   * original 40px/6px once the viewport is wide enough to afford it. */
-  font-size: clamp(16px, 5vw, 40px);
-  letter-spacing: clamp(1px, 0.6vw, 6px);
-  max-width: 94vw;
-  color: #a3d977;
-  text-shadow: 0 4px 26px rgba(143, 191, 106, 0.55);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 15;
-  white-space: nowrap;
-  font-family: var(--font-d);
-}
-#levelup.show { animation: levelup 1.7s ease-out; }
-@keyframes levelup {
-  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
-  14%  { opacity: 1; transform: translate(-50%, -50%) scale(1.06); }
-  72%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  100% { opacity: 0; transform: translate(-50%, -62%) scale(1); }
-}
+
 
 #buffs {
   font-size: 13px;
@@ -207,7 +185,7 @@ canvas { display: block; touch-action: none; }
 @media (max-width: 640px) {
   #hud { padding-left: calc(12px + env(safe-area-inset-left)); padding-right: calc(12px + env(safe-area-inset-right)); gap: 6px; }
   #score { font-size: 30px; }
-  #best, #level { font-size: 10px; letter-spacing: 1.5px; }
+  #best, #region { font-size: 10px; letter-spacing: 1.5px; }
   #buffs { font-size: 11px; }
   #combo-label { font-size: 14px; }
   #combo-bar-outer { width: 90px; }
@@ -316,7 +294,7 @@ body[data-colorblind="1"] #poison-glow {
 }
 body[data-colorblind="1"] .popup { color: #7ec8ff; }
 body[data-colorblind="1"] #streak,
-body[data-colorblind="1"] #level { color: #d8e6f2; }
+body[data-colorblind="1"] #region { color: #d8e6f2; }
 
 /* ---------- score popups ---------- */
 #popups { position: fixed; inset: 0; pointer-events: none; z-index: 8; }
@@ -600,7 +578,6 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
 .hero-cube {
   position: relative;
   width: 132px; height: 132px;
-  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
   background: conic-gradient(from 0deg at 50% 50%, #ded8cc 0deg 63.43deg, #7f7a6f 63.43deg 180deg, #4e4a42 180deg 296.57deg, #ded8cc 296.57deg 360deg);
   filter: drop-shadow(0 14px 10px rgba(0, 0, 0, 0.45));
   animation: crush-float 4.6s ease-in-out infinite;
@@ -1011,7 +988,7 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
   text-align: center;
 }
 
-/* ---------- item preview modal (skins / trails / auras) ---------- */
+/* ---------- item preview modal (skins / trails) ---------- */
 .item-modal-card { width: min(100%, 300px); padding: 24px 20px 20px; }
 .item-modal-preview {
   width: min(46vw, 168px);
@@ -1067,7 +1044,7 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
   background: rgba(183, 243, 43, 0.16);
   box-shadow: inset 0 0 0 1px rgba(183, 243, 43, 0.3);
 }
-/* ---------- shop cards (skins / trails / auras share this grid) ---------- */
+/* ---------- shop cards (skins / trails share this grid) ---------- */
 #skin-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1108,7 +1085,6 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
 .skin-cube {
   display: block;
   width: 52px; height: 52px;
-  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
   filter: drop-shadow(0 6px 5px rgba(0, 0, 0, 0.4));
 }
 .skin-name {
@@ -1547,3 +1523,12 @@ body[data-colorblind="1"] #level { color: #d8e6f2; }
 .name-error:empty { display: none; }
 input[aria-invalid="true"] { border-color: #ffa59a !important; }
 #board-save-btn:disabled, #username-save-btn:disabled { opacity: .45; cursor: not-allowed; }
+
+
+#run-coins { margin-top: 8px; color: #f2c45e; font: 700 13px var(--font-b); }
+.coin-popup, .powerup-icon.coin { color: #f2c45e; text-shadow: 0 0 12px #d1973440; }
+
+#world-fade { position:fixed; inset:0; background:#070706; opacity:0; z-index:50; pointer-events:none; }
+
+#jump-btn { position:fixed;right:calc(20px + env(safe-area-inset-right));bottom:calc(86px + env(safe-area-inset-bottom));z-index:12;width:56px;height:56px;border:1px solid #a3d97766;border-radius:50%;background:#1d2a1cdd;color:#d3edb7;font:700 29px var(--font-b);touch-action:none;cursor:pointer;box-shadow:0 3px 12px #0004; }
+#jump-btn:active {transform:scale(.92);background:#35472d;}
